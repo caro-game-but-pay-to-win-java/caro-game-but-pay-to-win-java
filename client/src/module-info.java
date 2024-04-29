@@ -4,5 +4,6 @@
 /**
  * 
  */
-module client {
+module CaroGameButPayToWin {
+	requires java.desktop;
 }
