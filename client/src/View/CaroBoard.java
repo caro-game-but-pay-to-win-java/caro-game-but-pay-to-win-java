@@ -14,13 +14,31 @@ public class CaroBoard extends JFrame {
     boolean playerPlay = false;
     private JTextField textField;
     public CaroBoard() {
+    
         setTitle("Caro Game");
         setSize(1000,800);
+        
+        JPanel panelContainer = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                initBG(g);
+            }
+        };
+        panelContainer.setBounds(0, 0, 1000, 800);
+        this.add(panelContainer);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         JButton btnXoa = new JButton("Xóa nước đi đối phương");
 		btnXoa.setBackground(Color.WHITE);
-        CaroBoard = new JPanel(new GridLayout(19, 19));
+		
+        CaroBoard = new JPanel(new GridLayout(19, 19)){
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    initBG(g);
+                }
+            };
         CaroBoard.setBorder(new LineBorder(new Color(0, 0, 0), 2));
         CaroBoard.setBounds(0, 0, 800,600);
         squares = new JButton[19][19];
@@ -29,9 +47,11 @@ public class CaroBoard extends JFrame {
         for (int i = 0; i < 19; i++) {
             for (int j = 0; j <19; j++) {
             	squares[i][j] = new JButton();
-            	squares[i][j].setPreferredSize(new Dimension(40, 40)); 
-            	squares[i][j].setMargin(new Insets(0, 0, 0, 0)); // Tắt margin
-            	squares[i][j].setContentAreaFilled(false); // Tắt padding
+            	squares[i][j].setContentAreaFilled(false);
+            	squares[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+            	squares[i][j].setPreferredSize(new Dimension(40,40)); 
+            	squares[i][j].setMargin(new Insets(0, 0, 0, 0)); // remove margin
+            	squares[i][j].setContentAreaFilled(false); // remove padding
             	squares[i][j].setFocusable(false);
         		squares[i][j].setFont(new Font("Arial",Font.PLAIN,20));
               //  map.put(squares[i][j], false);
@@ -40,7 +60,7 @@ public class CaroBoard extends JFrame {
                 // Set button colors based on chess board pattern
                
                     squares[i][j].setBackground(Color.WHITE);        
-              
+                    squares[i][j].setText("");
                 // Add action listener to handle button clicks
                 final int row = i;
                 final int col = j;
@@ -51,12 +71,12 @@ public class CaroBoard extends JFrame {
                     		if(	squares[row][col].getText()!= " ")
                     		{
                         		String text = playerPlay != false && playerPlay ? "O" : "X";
-                        		System.out.println("Người chơi "+text+" vừa nạp 100k để xóa nước cờ: [" + row +","+ col +"] của bạn");
+                        		System.out.println("Người chơi DIỆU DƠ vừa nạp 100k để xóa nước cờ: [" + row +","+ col +"] của bạn");
                     	   		squares[row][col].setText(" ");
+                    	   	//	squares[row][col].setIcon(new ImageIcon());
                         		squares[row][col].setBackground(Color.WHITE);
                     		}
-                    		else {
-                    			
+                    		else {               	
                     		}
                     	}
                     	else {
@@ -71,12 +91,12 @@ public class CaroBoard extends JFrame {
                         		color = Color.black;
                         		playerPlay=false;
                         	}
-                        	if(squares[row][col].getBackground()==Color.WHITE)
+                        	if(squares[row][col].getText().isEmpty())
                     		{           
                         		String text = playerPlay != false && playerPlay ? "X" : "O";
                         		Color colorText = text.equals("X") ? Color.red : Color.black;
                         		squares[row][col].setText(text);
-                        		squares[row][col].setBackground(color);
+                        		squares[row][col].setFont(new Font("Tahoma",Font.PLAIN,25));
                         		squares[row][col].setForeground(colorText);
                         		System.out.println("Người chơi đánh: "+ squares[row][col].getText());
                         		//map.put(squares[row][col], true);                    	
@@ -91,9 +111,9 @@ public class CaroBoard extends JFrame {
                 });
             }
         }
-        getContentPane().setLayout(null);
+        panelContainer.setLayout(null);
 
-        getContentPane().add(CaroBoard);
+        panelContainer.add(CaroBoard);
         
         btnXoa.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -116,7 +136,7 @@ public class CaroBoard extends JFrame {
         	}
         });
         btnXoa.setBounds(828, 23, 148, 42);
-        getContentPane().add(btnXoa);
+        panelContainer.add(btnXoa);
         
         JButton btnThoatTran = new JButton("Thoát trận");
         btnThoatTran.addActionListener(new ActionListener() {
@@ -140,12 +160,12 @@ public class CaroBoard extends JFrame {
         	}
         });
         btnThoatTran.setBounds(828, 558, 148, 42);
-        getContentPane().add(btnThoatTran);
+        panelContainer.add(btnThoatTran);
         
         JPanel panel = new JPanel();
         panel.setBackground(new Color(255, 255, 255));
         panel.setBounds(10, 610, 792, 143);
-        getContentPane().add(panel);
+        panelContainer.add(panel);
         panel.setLayout(null);
         
         textField = new JTextField();
@@ -158,15 +178,24 @@ public class CaroBoard extends JFrame {
         panel.add(btnNewButton);
         
         Label label = new Label("Thời gian");
+        
         label.setBounds(828, 101, 134, 42);
-        getContentPane().add(label);
+        panelContainer.add(label);
         setVisible(true);
     }
 
     private void squareClicked(int row, int col) {
         JOptionPane.showMessageDialog(this, "Square clicked: " + (char)('A' + col) + (19 - row));
     }
-
+    void initBG(Graphics g)
+    {
+    	 Graphics2D g2d = (Graphics2D) g;
+         GradientPaint gradient = new GradientPaint(0, 0, new Color(0x5170FF), // Màu bắt đầu (#ff8a00)#5170ff
+         		getWidth(), getHeight(), new Color(0xff66c4));
+		 // Sơn gradient trên JPanel
+		 g2d.setPaint(gradient);
+		 g2d.fillRect(0, 0, getWidth(), getHeight());
+     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -174,4 +203,5 @@ public class CaroBoard extends JFrame {
             }
         });
     }
+    
 }

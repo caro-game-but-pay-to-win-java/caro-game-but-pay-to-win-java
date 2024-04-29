@@ -225,6 +225,15 @@ public class LobbyFrame extends JFrame {
 		
 		
 		rdvsBot = new RadiusButton();
+		rdvsBot.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CaroBoard bc = new CaroBoard();
+				bc.setVisible(true);
+				dispose();
+				
+			}
+		});
 		rdvsBot.setForeground(Color.WHITE);
 		rdvsBot.setBorderColor(new Color(0xFFFFFF));
 		rdvsBot.setText("VS BOT");
