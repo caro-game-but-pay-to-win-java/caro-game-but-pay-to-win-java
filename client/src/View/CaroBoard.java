@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.border.LineBorder;
 
+import CustomComponents.ButtonBoard;
+
 public class CaroBoard extends JFrame {
     private JPanel CaroBoard;
-    private JButton[][] squares;
+    private ButtonBoard[][] squares;
     boolean playerPlay = false;
     private JTextField textField;
     public CaroBoard() {
@@ -41,12 +43,12 @@ public class CaroBoard extends JFrame {
             };
         CaroBoard.setBorder(new LineBorder(new Color(0, 0, 0), 2));
         CaroBoard.setBounds(0, 0, 800,600);
-        squares = new JButton[19][19];
+        squares = new ButtonBoard[19][19];
        // Map<JButton, Boolean> map = new HashMap<>();
         // Create chess board with buttons representing squares
         for (int i = 0; i < 19; i++) {
             for (int j = 0; j <19; j++) {
-            	squares[i][j] = new JButton();
+            	squares[i][j] = new ButtonBoard();
             	squares[i][j].setContentAreaFilled(false);
             	squares[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
             	squares[i][j].setPreferredSize(new Dimension(40,40)); 
@@ -59,8 +61,8 @@ public class CaroBoard extends JFrame {
                 	
                 // Set button colors based on chess board pattern
                
-                    squares[i][j].setBackground(Color.WHITE);        
-                    squares[i][j].setText("");
+               // squares[i][j].setBackground(Color.WHITE);        
+                 squares[i][j].setText("");
                 // Add action listener to handle button clicks
                 final int row = i;
                 final int col = j;
@@ -73,7 +75,6 @@ public class CaroBoard extends JFrame {
                         		String text = playerPlay != false && playerPlay ? "O" : "X";
                         		System.out.println("Người chơi DIỆU DƠ vừa nạp 100k để xóa nước cờ: [" + row +","+ col +"] của bạn");
                     	   		squares[row][col].setText(" ");
-                    	   	//	squares[row][col].setIcon(new ImageIcon());
                         		squares[row][col].setBackground(Color.WHITE);
                     		}
                     		else {               	
@@ -97,7 +98,8 @@ public class CaroBoard extends JFrame {
                         		Color colorText = text.equals("X") ? Color.red : Color.black;
                         		squares[row][col].setText(text);
                         		squares[row][col].setFont(new Font("Tahoma",Font.PLAIN,25));
-                        		squares[row][col].setForeground(colorText);
+                       // 		squares[row][col].setBackground(color);
+                       // 		squares[row][col].setForeground(colorText);
                         		System.out.println("Người chơi đánh: "+ squares[row][col].getText());
                         		//map.put(squares[row][col], true);                    	
                     		}
