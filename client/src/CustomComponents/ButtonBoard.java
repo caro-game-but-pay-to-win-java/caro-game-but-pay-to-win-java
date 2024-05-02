@@ -64,10 +64,10 @@ public class ButtonBoard extends JButton{
     
 	//    g2d.fillRect(shadowSize, shadowSize, getWidth() - shadowSize * 2, getHeight() - shadowSize * 2);
 	//    g2d.setColor(new Color(0xabc4c4));
-	    int shadowOpacity = 90;
+	    int shadowOpacity = 50;
         Color shadowColor = new Color(0, 0, 0, shadowOpacity);
         g2d.setColor(shadowColor);
-		g2d.fillRoundRect(0,0, getWidth(), getHeight(),25,25);	
+		g2d.fillRoundRect(0,0, getWidth(), getHeight(),15,15);	
 		
 		super.paintComponent(g);
 	}

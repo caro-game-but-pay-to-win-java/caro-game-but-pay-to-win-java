@@ -118,7 +118,7 @@ public class CaroBoard extends JFrame {
                         	if(squares[row][col].getText().isEmpty())
                     		{           
                         		String text = playerPlay != false && playerPlay ? "X" : "O";
-                        		Color colorText = text.equals("X") ? Color.red : Color.black;
+                        		Color colorText = text.equals("X") ? new Color(0xff0040) : Color.black;
                         		squares[row][col].setText(text);
                         		squares[row][col].setFont(new Font("Tahoma",Font.PLAIN,25));
                        // 		squares[row][col].setBackground(color);
@@ -166,6 +166,8 @@ public class CaroBoard extends JFrame {
          lblNamePlayer2 = new JLabel();        
          lblNamePlayer2.setBounds(844,432, 162, 28);
          lblNamePlayer2.setText("MASTER JAVA");
+         lblNamePlayer2.setForeground(Color.WHITE);
+
          lblNamePlayer2.setFont(new Font("Tahoma",Font.BOLD,10));
          lblNamePlayer2.setHorizontalAlignment(JLabel.CENTER);
          lblNamePlayer2.setVerticalAlignment(JLabel.CENTER);
@@ -182,6 +184,7 @@ public class CaroBoard extends JFrame {
           
          lblNamePlayer1 = new JLabel("MASTER ");
          lblNamePlayer1.setBounds(843,264, 162, 28);
+         lblNamePlayer1.setForeground(Color.WHITE);
          lblNamePlayer1.setHorizontalAlignment(JLabel.CENTER);
          lblNamePlayer1.setVerticalAlignment(JLabel.CENTER);
          lblNamePlayer1.setFont(new Font("Tahoma",Font.BOLD,10));
