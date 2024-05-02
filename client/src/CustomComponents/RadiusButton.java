@@ -50,7 +50,8 @@ public class RadiusButton extends JButton{
 	public RadiusButton() {
 		// TODO Auto-generated constructor stub
 
-		setColor(Color.white);
+		//setColor(Color.white);
+		setBorder(null);
 		colorOver = new Color(179,250,160);
 		colorClick =  new Color(152,184,144);
 		borderColor = new Color(30,135,56);
@@ -61,12 +62,11 @@ public class RadiusButton extends JButton{
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		Graphics2D g2d = (Graphics2D)g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		g2d.setColor(borderColor);
-		g2d.fillRoundRect(0,0, getWidth(), getHeight(),radius,radius);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
+//		g2d.setColor(borderColor);
+//		g2d.fillRoundRect(0,0, getWidth(), getHeight(),radius,radius);
 		g2d.setColor(getBackground());
-		g2d.fillRoundRect(2,2, getWidth()-4, getHeight()-4,radius,radius);	
+		g2d.fillRoundRect(0,0, getWidth(), getHeight(),radius,radius);	
 		super.paintComponent(g);
 	}
 	public Color getBorderColor() {

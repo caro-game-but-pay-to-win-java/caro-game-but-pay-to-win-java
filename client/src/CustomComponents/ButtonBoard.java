@@ -49,7 +49,6 @@ public class ButtonBoard extends JButton{
 	private Color borderColor;
 	public ButtonBoard() {
 		// TODO Auto-generated constructor stub
-
 		setColor(Color.white);
 		colorOver = new Color(179,250,160);
 		colorClick =  new Color(152,184,144);
@@ -60,12 +59,16 @@ public class ButtonBoard extends JButton{
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
-		Graphics2D g2d = (Graphics2D)g;
+		Graphics2D g2d = (Graphics2D)g.create();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    g2d.fillRect(shadowSize, shadowSize, getWidth() - shadowSize * 2, getHeight() - shadowSize * 2);
-	    g2d.setColor(new Color(0xd1d1e0));
-	//	g2d.fillRoundRect(0,0, getWidth(), getHeight(),30,30);
-		g2d.fillRoundRect(2,2, getWidth()-4, getHeight()-4,30,30);	
+    
+	//    g2d.fillRect(shadowSize, shadowSize, getWidth() - shadowSize * 2, getHeight() - shadowSize * 2);
+	//    g2d.setColor(new Color(0xabc4c4));
+	    int shadowOpacity = 90;
+        Color shadowColor = new Color(0, 0, 0, shadowOpacity);
+        g2d.setColor(shadowColor);
+		g2d.fillRoundRect(0,0, getWidth(), getHeight(),25,25);	
+		
 		super.paintComponent(g);
 	}
 	public Color getBorderColor() {

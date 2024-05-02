@@ -40,15 +40,15 @@ public class LobbyFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Image img_Rank = new ImageIcon(LobbyFrame.class.getResource("/img/rank_png.png")).getImage().getScaledInstance(62, 62,Image.SCALE_SMOOTH);
+	private Image img_Rank = new ImageIcon(LobbyFrame.class.getResource("/img/rank_img.png")).getImage().getScaledInstance(62, 62,Image.SCALE_SMOOTH);
 	private Image img_Add_friend = new ImageIcon(LobbyFrame.class.getResource("/img/add_user.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
-	private Image img_Message = new ImageIcon(LobbyFrame.class.getResource("/img/message_png.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
-	private Image img_friends = new ImageIcon(LobbyFrame.class.getResource("/img/friends_png.png")).getImage().getScaledInstance(53,53,Image.SCALE_SMOOTH);
-	private Image img_logout = new ImageIcon(LobbyFrame.class.getResource("/img/logout_png.png")).getImage().getScaledInstance(59, 60,Image.SCALE_SMOOTH);
-	private Image img_setting = new ImageIcon(LobbyFrame.class.getResource("/img/setting_png.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
+	private Image img_Message = new ImageIcon(LobbyFrame.class.getResource("/img/message_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
+	private Image img_friends = new ImageIcon(LobbyFrame.class.getResource("/img/friends_img.png")).getImage().getScaledInstance(53,53,Image.SCALE_SMOOTH);
+	private Image img_logout = new ImageIcon(LobbyFrame.class.getResource("/img/logout_img.png")).getImage().getScaledInstance(59, 60,Image.SCALE_SMOOTH);
+	private Image img_setting = new ImageIcon(LobbyFrame.class.getResource("/img/setting_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
 	private Image img_man = new ImageIcon(LobbyFrame.class.getResource("/img/man_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
 	private Image img_token = new ImageIcon(LobbyFrame.class.getResource("/img/token_img.png")).getImage().getScaledInstance(45, 45,Image.SCALE_SMOOTH);
-	private Image img_Shop = new ImageIcon(LobbyFrame.class.getResource("/img/shop_png.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
+	private Image img_Shop = new ImageIcon(LobbyFrame.class.getResource("/img/shop_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
 	private Image img_BackGroundMain = new ImageIcon(LobbyFrame.class.getResource("/img/main_lobby_img.png")).getImage().getScaledInstance(1000, 800,Image.SCALE_SMOOTH);
 	private RadiusButton rdvsBot;
 	private RadiusButton rdvsPlayer;
