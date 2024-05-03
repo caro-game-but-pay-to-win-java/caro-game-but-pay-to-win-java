@@ -18,6 +18,7 @@ import CustomComponents.RadiusButton;
 
 public class CaroBoard extends JFrame {
     private JPanel CaroBoard;
+    private JPanel panel_TimeBorder;
     private ButtonBoard[][] squares;
     boolean playerPlay = false;
     JLabel lblTimePlay;
@@ -29,7 +30,9 @@ public class CaroBoard extends JFrame {
     JLabel lblPointPlayer2;
     JLabel lblPointPlayer1;
     JLabel lblResult;
-    private int time;
+    boolean flag = false;
+    private int timePlay;
+    private int timeLess;
 	private Image img_setting = new ImageIcon(LobbyFrame.class.getResource("/img/setting_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
 	private Image img_logout = new ImageIcon(LobbyFrame.class.getResource("/img/logout_img.png")).getImage().getScaledInstance(59, 60,Image.SCALE_SMOOTH);
 	private Image img_man = new ImageIcon(LobbyFrame.class.getResource("/img/man_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
@@ -38,8 +41,7 @@ public class CaroBoard extends JFrame {
     public CaroBoard() {
     
         setTitle("Caro Game");
-        setSize(1000,800);
-        
+        setSize(1200,850);      
         JPanel panelContainer = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
@@ -47,7 +49,7 @@ public class CaroBoard extends JFrame {
                 initBG(g);
             }
         };
-        panelContainer.setBounds(0, 0, 1000, 1000);
+        panelContainer.setBounds(0, 0,1200,850);
         getContentPane().add(panelContainer);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -63,7 +65,7 @@ public class CaroBoard extends JFrame {
                 }    
             };
         CaroBoard.setBorder(new LineBorder(new Color(0, 0, 0,40), 2));
-        CaroBoard.setBounds(0, 0, 800,600);
+        CaroBoard.setBounds(0, 0, 800,800);
         
         squares = new ButtonBoard[19][19];
        // Map<JButton, Boolean> map = new HashMap<>();
@@ -72,20 +74,22 @@ public class CaroBoard extends JFrame {
             for (int j = 0; j <19; j++) {
             	squares[i][j] = new ButtonBoard();
             	squares[i][j].setContentAreaFilled(false);
+            	squares[i][j].setSize(30,30);
            // 	squares[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
-            	squares[i][j].setPreferredSize(new Dimension(30,35)); 
-            	squares[i][j].setMargin(new Insets(10, 10, 10, 10));
+            	//squares[i][j].setPreferredSize(new Dimension(15,15)); 
+            	squares[i][j].setMargin(new Insets(5,5,5,5));
             	squares[i][j].setContentAreaFilled(false);
             	squares[i][j].setFocusable(false);
-            	squares[i][j].setBorder(null);
-        		squares[i][j].setFont(new Font("Tahoma",Font.PLAIN,20));
+            	squares[i][j].setBorder(new LineBorder(new Color(0, 0, 0,40), 2));
+                squares[i][j].setText("");
+            	System.out.println(squares[i][j].getPreferredSize());
               //  map.put(squares[i][j], false);
                 CaroBoard.add(squares[i][j]);
                 	
                 // Set button colors based on chess board pattern
                
                // squares[i][j].setBackground(Color.WHITE);        
-                 squares[i][j].setText("");
+
                 // Add action listener to handle button clicks
                 final int row = i;
                 final int col = j;
@@ -120,7 +124,7 @@ public class CaroBoard extends JFrame {
                         		String text = playerPlay != false && playerPlay ? "X" : "O";
                         		Color colorText = text.equals("X") ? new Color(0xff0040) : Color.black;
                         		squares[row][col].setText(text);
-                        		squares[row][col].setFont(new Font("Tahoma",Font.PLAIN,25));
+                        		squares[row][col].setFont(new Font("Tahoma",Font.BOLD,25));
                        // 		squares[row][col].setBackground(color);
                       		squares[row][col].setForeground(colorText);
                         		System.out.println("Người chơi đánh: "+ squares[row][col].getText());
@@ -147,24 +151,36 @@ public class CaroBoard extends JFrame {
 	        		System.out.println(textField.getText());
 	        	}
 	        });
-	        btnGui.setBounds(715, 710, 80, 34);
+	        btnGui.setBounds(1085, 765, 80, 25);
 	        panelContainer.add(btnGui);
   
           textField = new CustomTextFiled();
           textField.setForeground(Color.WHITE);
-          textField.setBounds(30, 710, 685, 34);        
+          textField.setBounds(825, 760, 340, 34);        
           textField.setFont(new Font("Tahoma",Font.PLAIN,20));
           panelContainer.add(textField);
          
           lblPointPlayer2 = new JLabel("1,000 point");
-         lblPointPlayer2.setBounds(856, 447, 138, 51);
+         lblPointPlayer2.setBounds(960, 447, 100, 51);
          lblPointPlayer2.setHorizontalAlignment(JLabel.CENTER);
          lblPointPlayer2.setVerticalAlignment(JLabel.CENTER);
          panelContainer.add(lblPointPlayer2);
          
+       panel_TimeBorder = new JPanel() {
+             @Override
+             protected void paintComponent(Graphics g) {
+                 super.paintComponent(g);
+                 borderClock(g);
+             }
+         };
+         panel_TimeBorder.setOpaque(false); 
+
+       panel_TimeBorder.setBounds(915, 241, 165, 100);
+       panelContainer.add(panel_TimeBorder);
+         
          
          lblNamePlayer2 = new JLabel();        
-         lblNamePlayer2.setBounds(844,432, 162, 28);
+         lblNamePlayer2.setBounds(935,432, 150, 28);
          lblNamePlayer2.setText("MASTER JAVA");
          lblNamePlayer2.setForeground(Color.WHITE);
 
@@ -176,14 +192,14 @@ public class CaroBoard extends JFrame {
          
          
          lblPointPlayer1 = new JLabel("1,000 point");
-         lblPointPlayer1.setBounds(856,279, 138, 51);
+         lblPointPlayer1.setBounds(960,279, 100, 51);
          lblPointPlayer1.setHorizontalAlignment(JLabel.CENTER);
          lblPointPlayer1.setVerticalAlignment(JLabel.CENTER);
          panelContainer.add(lblPointPlayer1);
          
           
          lblNamePlayer1 = new JLabel("MASTER ");
-         lblNamePlayer1.setBounds(843,264, 162, 28);
+         lblNamePlayer1.setBounds(935,264, 150, 28);
          lblNamePlayer1.setForeground(Color.WHITE);
          lblNamePlayer1.setHorizontalAlignment(JLabel.CENTER);
          lblNamePlayer1.setVerticalAlignment(JLabel.CENTER);
@@ -192,39 +208,21 @@ public class CaroBoard extends JFrame {
          
          
          lblAvatarPlayer1 = new JLabel("New label");
-         lblAvatarPlayer1.setBounds(828,264,55,55);
+         lblAvatarPlayer1.setBounds(925,264,55,55);
          lblAvatarPlayer1.setIcon(new ImageIcon(img_girl));
          panelContainer.add(lblAvatarPlayer1);
          
          lblAvatarPlayer2 = new JLabel("New label");
-         lblAvatarPlayer2.setBounds(828,431, 55,55);
+         lblAvatarPlayer2.setBounds(925,431, 55,55);
          lblAvatarPlayer2.setIcon(new ImageIcon(img_man));
          panelContainer.add(lblAvatarPlayer2);
 
          lblResult = new JLabel("3-2");
-         lblResult.setBounds(825, 320, 155, 104);
+         lblResult.setBounds(925, 320, 155, 104);
          lblResult.setFont(new Font("Tahoma",Font.BOLD,25));
          lblResult.setHorizontalAlignment(JLabel.CENTER);
          lblResult.setVerticalAlignment(JLabel.CENTER);
          panelContainer.add(lblResult);
-        
-         lblTimePlay = new JLabel();
-        lblTimePlay.setBounds(857, 180,89,17);
-        lblTimePlay.setForeground(new Color(0xfffffff));
-        lblTimePlay.setFont(new Font("Tahoma",Font.BOLD,11));
-        lblTimePlay.setHorizontalAlignment(JLabel.CENTER);
-        lblTimePlay.setVerticalAlignment(JLabel.CENTER); 
-        panelContainer.add(lblTimePlay);
-
-        
-        
-        JLabel lblTilteTimePlay = new JLabel("THỜI GIAN TRẬN ĐẤU");
-        lblTilteTimePlay.setFont(new Font("Tahoma",Font.BOLD,11));
-        lblTilteTimePlay.setForeground(new Color(0xfffffff));
-        lblTilteTimePlay.setBounds(842,161, 138, 20);
-        lblTilteTimePlay.setHorizontalAlignment(JLabel.CENTER);
-        lblTilteTimePlay.setVerticalAlignment(JLabel.CENTER); 
-        panelContainer.add(lblTilteTimePlay);
         
         JLabel lblLogout = new JLabel();
         lblLogout.addMouseListener(new MouseAdapter() {
@@ -247,13 +245,13 @@ public class CaroBoard extends JFrame {
        		   }    
         	}
         });
-        lblLogout.setBounds(933, 33, 60,60);
+        lblLogout.setBounds(1133, 33, 60,60);
         lblLogout.setIcon(new ImageIcon(img_logout));
        
         panelContainer.add(lblLogout);
         
         JLabel lblSetting = new JLabel("");
-        lblSetting.setBounds(850, 33, 60, 60);
+        lblSetting.setBounds(1050, 33, 60, 60);
         lblSetting.setIcon(new ImageIcon(img_setting));
         panelContainer.add(lblSetting);
 
@@ -279,11 +277,11 @@ public class CaroBoard extends JFrame {
         		
         	}
         });
-        btnXoa.setBounds(828, 622, 148, 42);
+        btnXoa.setBounds(897, 543, 148, 42);
         panelContainer.add(btnXoa);
         
         CustomPanel panel_1 = new CustomPanel();
-        panel_1.setBounds(821, 19,179, 89);
+        panel_1.setBounds(1021, 19,179, 89);
         panelContainer.add(panel_1);
         panel_1.setLayout(null);
         
@@ -291,33 +289,63 @@ public class CaroBoard extends JFrame {
         
         CustomPanel panel = new CustomPanel();
         panel.setBackground(new Color(255, 255, 255));
-        panel.setBounds(10, 610, 792, 143);
+        panel.setBounds(820, 660, 350, 143);
         panelContainer.add(panel);
         panel.setLayout(null);
         
         CustomPanel panel_2 = new CustomPanel();
-        panel_2.setBounds(821, 146, 162, 68);
+        panel_2.setBounds(825, 40, 162, 68);
         panelContainer.add(panel_2);
         panel_2.setLayout(null);
         
-        CustomPanelGradients panel_3 = new CustomPanelGradients();
+                
+                
+                JLabel lblTilteTimePlay = new JLabel("THỜI GIAN TRẬN ĐẤU");
+                lblTilteTimePlay.setBounds(14, 10, 138, 20);
+                panel_2.add(lblTilteTimePlay);
+                lblTilteTimePlay.setFont(new Font("Tahoma",Font.BOLD,11));
+                lblTilteTimePlay.setForeground(new Color(0xfffffff));
+                lblTilteTimePlay.setHorizontalAlignment(JLabel.CENTER);
+                lblTilteTimePlay.setVerticalAlignment(JLabel.CENTER);
+                
+                 lblTimePlay = new JLabel();
+                 lblTimePlay.setBounds(35, 40, 89, 17);
+                 panel_2.add(lblTimePlay);
+                 lblTimePlay.setForeground(new Color(0xfffffff));
+                 lblTimePlay.setFont(new Font("Tahoma",Font.BOLD,11));
+                 lblTimePlay.setHorizontalAlignment(JLabel.CENTER);
+                 lblTimePlay.setVerticalAlignment(JLabel.CENTER);
         
-        panel_3.setBounds(815, 241, 165 ,99); 
+        CustomPanelGradients panel_3 = new CustomPanelGradients();       
+        panel_3.setBounds(915, 241, 165 ,99); 
         panelContainer.add(panel_3);
         panel_3.setLayout(null);
 
         CustomPanelGradients panel_4 = new CustomPanelGradients();
-        panel_4.setBounds(815, 408, 165 ,99);  
+        panel_4.setBounds(915, 408, 165 ,99);  
         panelContainer.add(panel_4);
         panel_4.setLayout(null);
-        
       
+        initTimeBorder();
+        
         setVisible(true);
         setupClock();
     }
 
     private void squareClicked(int row, int col) {
         JOptionPane.showMessageDialog(this, "Square clicked: " + (char)('A' + col) + (19 - row));
+    }
+    void initTimeBorder()
+    {
+    	  Timer timer = new Timer(1000, e -> {
+    		  timeLess++;
+              panel_TimeBorder.repaint();
+              System.out.println(timeLess);
+              panel_TimeBorder.setVisible(true);
+              });
+          timer.setInitialDelay(0);
+          timer.start();
+          
     }
     void initBG(Graphics g)
     {
@@ -331,17 +359,15 @@ public class CaroBoard extends JFrame {
            g2d.fillRoundRect(0,0, getWidth(), getHeight(),30,30);	
            int shadowOpacity = 90;
            Color shadowColor = new Color(0, 0, 0, shadowOpacity);
-           g2d.setColor(shadowColor);
-           
-		 
+           g2d.setColor(shadowColor);         	 
      }
     private void setupClock() {
     		
 			Timer timer = new Timer(1000, e -> {
-	            time++;
-	            int hours = time / 3600;
-	            int minutes = (time % 3600) / 60;
-	            int seconds = time % 60;
+	            timePlay++;
+	            int hours = timePlay / 3600;
+	            int minutes = (timePlay % 3600) / 60;
+	            int seconds = timePlay % 60;
 	            String timeString = String.format("%02d:%02d", minutes, seconds);
 	            lblTimePlay.setText(timeString);
 	        });
@@ -350,6 +376,46 @@ public class CaroBoard extends JFrame {
 	        timer.start();
 	
         
+    }
+    private void borderClock(Graphics g) {
+    
+    	g.setColor(Color.green);
+        if (timeLess < 7) {
+            g.fillRect(83, 0, timeLess * 13, 5);
+        } else if (timeLess < 14) {
+            g.fillRect(83, 0, 7 * 13, 5);
+            g.fillRect(160, 0, 5, (timeLess - 7) * 13);
+        } else if (timeLess < 27) {
+            g.fillRect(83, 0, 7 * 13, 5);
+            g.fillRect(160, 0, 5, (timeLess - 7) * 13);
+            int rectX1 = 165 - (timeLess - 14) * 13;
+            g.fillRect(rectX1, 94, (timeLess - 14) * 13, 5);
+        } else if (timeLess < 35) {
+            g.fillRect(83, 0, 7 * 13, 5);
+            g.fillRect(160, 0, 5, (timeLess - 7) * 13);
+            int rectX1 = 165 - (timeLess - 14) * 13;
+            g.fillRect(rectX1, 94, (timeLess - 14) * 13, 5);
+            int rectY2 = 99 - (timeLess - 27) * 13;
+            g.fillRect(0, rectY2, 5, (timeLess - 27) * 13);
+        } else {
+        	if(flag==false)
+    		{
+    			panel_TimeBorder.setVisible(true);
+    			flag=true;
+    		}
+    		else {
+    			panel_TimeBorder.setVisible(false);
+    			flag=false;
+    		}   
+            g.setColor(Color.red);
+            g.fillRect(83, 0, 7 * 13, 5);
+            g.fillRect(160, 0, 5, (timeLess - 7) * 13);
+            int rectX1 = 165 - (timeLess - 14) * 13;
+            g.fillRect(rectX1, 94, (timeLess - 14) * 13, 5);
+            int rectY2 = 99 - (timeLess - 27) * 13;
+            g.fillRect(0, rectY2, 5, (timeLess - 27) * 13);
+            g.fillRect(0, 0, (timeLess - 35) * 13, 5);
+        }
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

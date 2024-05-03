@@ -31,7 +31,6 @@ public class CustomPanelGradients extends JPanel {
         int cornerRadius = 20; 
         g2d.setColor(shadowColor);
         g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2, getHeight() - shadowOffset * 2, cornerRadius, cornerRadius);
-        
         g2d.dispose();
     }
 
