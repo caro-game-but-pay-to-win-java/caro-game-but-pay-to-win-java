@@ -421,11 +421,11 @@ public class CaroBoard extends JFrame {
                     	 
                      	if(btnXoa.getBackground()==Color.RED)
                      	{
-                     		if(	squares[row][col].getText()!= " ")
+                     		if(!squares[row][col].getText().isEmpty())
                      		{
                          		String text = playerPlay != false && playerPlay ? "O" : "X";
                          		System.out.println("Người chơi DIỆU DƠ vừa nạp 100k để xóa nước cờ: [" + row +","+ col +"] của bạn");
-                     	   		squares[row][col].setText(" ");
+                     	   		squares[row][col].setText("");
                          		squares[row][col].setBackground(Color.WHITE);
                      		}
                      		else {               	
