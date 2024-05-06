@@ -13,6 +13,7 @@ public class Game {
 	private Integer[][] matrix;
 	private Integer currentMove;
 	private Duration time;
+	private Integer Id;
 	
 	public Game() {
 		this.match = new Match();
