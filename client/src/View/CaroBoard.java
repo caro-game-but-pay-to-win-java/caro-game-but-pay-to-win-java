@@ -188,7 +188,7 @@ public class CaroBoard extends JFrame {
        		        );   
        		   
        		   if (result == JOptionPane.YES_OPTION) {
-       	  
+       			    timerLess.stop();
        				LobbyFrame lobby = new LobbyFrame();
            		   	lobby.setVisible(true);
            	        dispose();
