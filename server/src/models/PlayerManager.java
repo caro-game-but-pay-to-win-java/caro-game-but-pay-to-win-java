@@ -8,7 +8,6 @@ public class PlayerManager {
 	private List<Player> players;
 	
 	public PlayerManager() {
-		super();
 		this.players = new ArrayList<Player>();
 	}
 	
