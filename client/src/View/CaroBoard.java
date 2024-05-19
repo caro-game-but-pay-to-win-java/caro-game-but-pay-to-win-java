@@ -42,6 +42,7 @@ public class CaroBoard extends JFrame {
 	private Image img_girl = new ImageIcon(LobbyFrame.class.getResource("/img/girl_img.png")).getImage().getScaledInstance(60, 60,Image.SCALE_SMOOTH);
 
     public CaroBoard() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(CaroBoard.class.getResource("/img/logo.png")));
     
         setTitle("Caro Game");
         setSize(1200,850);      

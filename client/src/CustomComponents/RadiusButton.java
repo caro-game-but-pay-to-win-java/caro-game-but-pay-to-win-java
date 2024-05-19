@@ -55,6 +55,7 @@ public class RadiusButton extends JButton{
 		colorOver = new Color(179,250,160);
 		colorClick =  new Color(152,184,144);
 		borderColor = new Color(30,135,56);
+		setFocusPainted(false);
 		setContentAreaFilled(false);
 	}
 		

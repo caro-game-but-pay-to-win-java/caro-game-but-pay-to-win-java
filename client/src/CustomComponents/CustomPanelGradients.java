@@ -20,10 +20,8 @@ public class CustomPanelGradients extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-       
+        Graphics2D g2d = (Graphics2D) g.create();      
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);     
         int shadowSize = 4;
         int shadowOpacity = 90;
         Color shadowColor = new Color(0, 0, 0, shadowOpacity);

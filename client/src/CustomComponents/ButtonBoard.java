@@ -61,9 +61,6 @@ public class ButtonBoard extends JButton{
 		// TODO Auto-generated method stub
 		Graphics2D g2d = (Graphics2D)g.create();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    
-	//    g2d.fillRect(shadowSize, shadowSize, getWidth() - shadowSize * 2, getHeight() - shadowSize * 2);
-	//    g2d.setColor(new Color(0xabc4c4));
 	    int shadowOpacity = 50;
         Color shadowColor = new Color(0, 0, 0, shadowOpacity);
         g2d.setColor(shadowColor);
