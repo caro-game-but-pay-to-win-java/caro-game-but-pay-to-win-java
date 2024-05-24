@@ -384,11 +384,12 @@ public class CaroBoard extends JFrame {
     }
     private void switchPanel() {
         if (playerPlay) {
-        	panel_TimeBorderPlayer1.setVisible(false);
             initTimeBorder(panel_TimeBorderPlayer2);
+        	panel_TimeBorderPlayer1.setVisible(false);
         } else {
-        	panel_TimeBorderPlayer2.setVisible(false);
             initTimeBorder(panel_TimeBorderPlayer1);
+        	panel_TimeBorderPlayer2.setVisible(false);
+       
         }       
     }
     void initBoardCaro()
