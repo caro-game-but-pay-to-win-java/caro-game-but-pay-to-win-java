@@ -11,7 +11,15 @@ public class PlayerManager {
 		this.players = new ArrayList<Player>();
 	}
 	
-	public void addPlayer(Player player) {
-		this.players.add(player);
+	public boolean addPlayer(Player player) {
+		if (!this.players.contains(player)) {			
+			this.players.add(player);
+			return true;
+		}
+		return false;
+	}
+	
+	public void remove(Player player) {
+		this.players.remove(player);
 	}
 }
