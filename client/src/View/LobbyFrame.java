@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.text.html.CSS;
 
@@ -41,8 +43,10 @@ import CustomComponents.CustomTextFiled;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.awt.Toolkit;
+import javax.swing.JCheckBox;
 
 public class LobbyFrame extends JFrame {
 
@@ -83,7 +87,8 @@ public class LobbyFrame extends JFrame {
 	private CustomTextFiled txtIdRoom;
 	private RadiusButton rdEnterChooseRoom;
 	JLabel labelId;
-
+	int flagMusicAction=1;
+	int flagMusicTheme = 0;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -163,7 +168,7 @@ public class LobbyFrame extends JFrame {
 		close.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				panel_chooseContainer.setVisible(false);
 			}
 		});
@@ -181,7 +186,7 @@ public class LobbyFrame extends JFrame {
 		rdEasy = new RadiusButton();
 		rdEasy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(0);
 			}
 		});
@@ -197,7 +202,7 @@ public class LobbyFrame extends JFrame {
 		rdMedium = new RadiusButton();
 		rdMedium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(1);
 			}
 		});
@@ -213,7 +218,7 @@ public class LobbyFrame extends JFrame {
 		rdHard = new RadiusButton();
 		rdHard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(2);
 			}
 		});
@@ -243,7 +248,7 @@ public class LobbyFrame extends JFrame {
 		rdEnterChooseRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(4);
 			}
 		});
@@ -255,6 +260,43 @@ public class LobbyFrame extends JFrame {
 		rdEnterChooseRoom.setBackground(new Color(0xF19AFF));
 		rdEnterChooseRoom.setForeground(Color.WHITE);
 		panel_chooseContainer.add(rdEnterChooseRoom);
+		
+		CustomPanel panelSetting = new CustomPanel();
+		panelSetting.setBounds(753, 94, 179, 162);
+		panelSetting.setVisible(false);
+		panel_container.add(panelSetting);
+		panelSetting.setLayout(null);
+		
+		JCheckBox cbMusicTheme = new JCheckBox("Nhạc nền");
+		cbMusicTheme.setSelected(true);
+		cbMusicTheme.addItemListener(new ItemListener() {
+		    public void itemStateChanged(ItemEvent e) {
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		        		musicTheme.playCurrentSong();
+		        } else {
+		        	musicTheme.stopCurrentSong();
+		        }
+		    }
+		});
+		cbMusicTheme.setBounds(25, 17, 137, 21);
+		
+		panelSetting.add(cbMusicTheme);
+		
+		JCheckBox cbMusicEffect = new JCheckBox("Hiệu ứng âm thanh");
+		cbMusicEffect.setBounds(25, 52, 137, 21);
+		cbMusicEffect.setSelected(true);
+		cbMusicEffect.addItemListener(new ItemListener() {
+		    public void itemStateChanged(ItemEvent e) {
+		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
+		    		  flagMusicAction=1;
+		          } else {
+		        	  flagMusicAction=0;
+		          }
+		    	  musicAction(flagMusicAction);
+		    }
+		});
+		panelSetting.add(cbMusicEffect);
+		
 		
 		JLabel lblUser = new JLabel("ADMIN");
 		lblUser.setBounds(105, 15, 230, 67);
@@ -325,8 +367,16 @@ public class LobbyFrame extends JFrame {
 		lblSetting.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
-				musicTheme.stopCurrentSong();
+				
+				musicAction(flagMusicAction);
+				if(panelSetting.isVisible())
+				{
+					panelSetting.setVisible(false);
+
+				}
+				else {
+					panelSetting.setVisible(true);
+				}
 			}
 		});
 		lblSetting.setBounds(844, 25, 60, 59);
@@ -368,6 +418,15 @@ public class LobbyFrame extends JFrame {
 		panel_container.add(lblMessage);
 
 		JLabel lblRank = new JLabel();
+		lblRank.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				musicAction(flagMusicAction);
+				RankingFrame rk = new RankingFrame();
+				rk.setVisible(true);
+
+			}
+		});
 		lblRank.setBounds(914, 290, 62, 62);
 		lblRank.setIcon(new ImageIcon(img_Rank));
 		panel_container.add(lblRank);
@@ -381,7 +440,7 @@ public class LobbyFrame extends JFrame {
 		rdvsBot.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				panel_chooseContainer.setVisible(true);
 				setVisibleButtonChooseLevel(true);
 			}
@@ -410,7 +469,7 @@ public class LobbyFrame extends JFrame {
 		rdChooseRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				panel_chooseContainer.setVisible(true);
 				setVisibleButtonChooseLevel(false);
 				setVisibleChooseRoom(true);
@@ -445,6 +504,8 @@ public class LobbyFrame extends JFrame {
 		CustomPanelGradients panelcustomTopLeftBelow = new CustomPanelGradients();
 		panelcustomTopLeftBelow.setBounds(-7, 100, 157, 45);
 		panel_container.add(panelcustomTopLeftBelow);
+		
+
 
 		TitledBorder titledBorderBXH = new TitledBorder(null, "Bảng xếp hạng", TitledBorder.CENTER, TitledBorder.TOP,
 				null, null);
@@ -483,7 +544,16 @@ public class LobbyFrame extends JFrame {
 	void setVisibleChooseRoom(boolean condi) {
 		
 		lblTitleChoose.setText("Choose Room");
-
+	}
+	public void musicAction(int flag)
+	{
+		if(flag==1)
+		{
+			musicAction.playCurrentSong();
+		}
+		else {
+			musicAction.stopCurrentSong();
+		}
 	}
 	static void startMusic()
 	{
