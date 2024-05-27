@@ -37,6 +37,7 @@ import CustomComponents.RadiusButton;
 import Entry.Entry;
 import javazoom.jl.player.Player;
 import music.MusicUtils;
+import CustomComponents.CustomCheckBox;
 import CustomComponents.CustomPanel;
 import CustomComponents.CustomPanelGradients;
 import CustomComponents.CustomTextFiled;
@@ -260,15 +261,33 @@ public class LobbyFrame extends JFrame {
 		rdEnterChooseRoom.setBackground(new Color(0xF19AFF));
 		rdEnterChooseRoom.setForeground(Color.WHITE);
 		panel_chooseContainer.add(rdEnterChooseRoom);
-		
-		CustomPanel panelSetting = new CustomPanel();
-		panelSetting.setBounds(753, 94, 179, 162);
+		CustomPanel panelSetting = new CustomPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g;
+				GradientPaint gradient = new GradientPaint(0, 0, new Color(0x5170FF), // Màu bắt đầu (#ff8a00)#5170ff
+						getWidth(), getHeight(), new Color(0xff66c4) // Màu kết thúc (#e52e71)#ff66c4
+
+				);
+				// Sơn gradient trên JPanel
+				g2d.setPaint(gradient);
+				g2d.fillRoundRect(4, 4, getWidth() - 4 * 2, getHeight() - 4 * 2, 20, 20);
+
+			}
+		};
+		panelSetting.setBounds(753, 94, 225, 162);
 		panelSetting.setVisible(false);
 		panel_container.add(panelSetting);
 		panelSetting.setLayout(null);
 		
-		JCheckBox cbMusicTheme = new JCheckBox("Nhạc nền");
+		CustomCheckBox cbMusicTheme = new CustomCheckBox();
+		cbMusicTheme.setText("Nhạc nền");
 		cbMusicTheme.setSelected(true);
+		cbMusicTheme.setForeground(Color.WHITE);
+		cbMusicTheme.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbMusicTheme.setBackground(new Color(0xF19AFF));
 		cbMusicTheme.addItemListener(new ItemListener() {
 		    public void itemStateChanged(ItemEvent e) {
 		        if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -278,13 +297,17 @@ public class LobbyFrame extends JFrame {
 		        }
 		    }
 		});
-		cbMusicTheme.setBounds(25, 17, 137, 21);
+		cbMusicTheme.setBounds(25, 17, 180, 21);
 		
 		panelSetting.add(cbMusicTheme);
 		
-		JCheckBox cbMusicEffect = new JCheckBox("Hiệu ứng âm thanh");
-		cbMusicEffect.setBounds(25, 52, 137, 21);
+		CustomCheckBox cbMusicEffect = new CustomCheckBox();
+		cbMusicEffect.setText("Hiệu ứng âm thanh");
+		cbMusicEffect.setBounds(25, 52, 180, 21);
 		cbMusicEffect.setSelected(true);
+		cbMusicEffect.setForeground(Color.white);
+		cbMusicEffect.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbMusicEffect.setBackground(new Color(0xF19AFF));
 		cbMusicEffect.addItemListener(new ItemListener() {
 		    public void itemStateChanged(ItemEvent e) {
 		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -296,6 +319,31 @@ public class LobbyFrame extends JFrame {
 		    }
 		});
 		panelSetting.add(cbMusicEffect);
+		
+		CustomCheckBox cbAllMusic = new CustomCheckBox();
+		cbAllMusic.setText("Tất cả");
+		cbAllMusic.setSelected(true);
+		cbAllMusic.addItemListener(new ItemListener() {
+		    public void itemStateChanged(ItemEvent e) {
+		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
+		    		  flagMusicAction=1;
+		    		  cbMusicEffect.setSelected(true);
+		    		  cbMusicTheme.setSelected(true);
+		    		  musicTheme.playCurrentSong();
+		          } else {
+		        	  flagMusicAction=0;
+		    		  cbMusicEffect.setSelected(false);
+		    		  cbMusicTheme.setSelected(false);
+		        	  musicTheme.stopCurrentSong();
+		          }
+		    	  musicAction(flagMusicAction);
+		    }
+		});
+		cbAllMusic.setForeground(Color.white);
+		cbAllMusic.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbAllMusic.setBackground(new Color(0xF19AFF));
+		cbAllMusic.setBounds(25, 91, 178, 21);
+		panelSetting.add(cbAllMusic);
 		
 		
 		JLabel lblUser = new JLabel("ADMIN");

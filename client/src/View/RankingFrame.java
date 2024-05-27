@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.awt.Window.Type;
 import java.awt.Dialog.ModalExclusionType;
@@ -30,6 +32,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class RankingFrame extends JFrame{
+	private Image img_close = new ImageIcon(RankingFrame.class.getResource("/img/close_img.png")).getImage()
+			.getScaledInstance(30, 37, Image.SCALE_SMOOTH);
 
 	private CustomTable table;
 
@@ -62,7 +66,7 @@ public class RankingFrame extends JFrame{
 	private void initialize() {
 	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 700);     
+		setBounds(100, 100, 1000, 800);
 		setUndecorated(true);
 		getContentPane().setLayout(null);
 		
@@ -80,7 +84,7 @@ public class RankingFrame extends JFrame{
 				g2d.fillRect(0, 0, getWidth(), getHeight());
 			}
 		};
-		panel.setBounds(0, 0, 1000, 700);
+		panel.setBounds(0, 0, 1000, 800);
 		
 		
 		
@@ -98,12 +102,13 @@ public class RankingFrame extends JFrame{
 
 	    JScrollPane scrollPane = new JScrollPane(table);
 	    scrollPane.setViewportBorder(UIManager.getBorder("CheckBoxMenuItem.border"));
-	    scrollPane.setLocation(10, 143);
+	    scrollPane.setLocation(10, 242);
 	    scrollPane.setSize(980, 500);
 	    scrollPane.setBackground(Color.decode("#D9D9D9"));
 	    panel.add(scrollPane, BorderLayout.CENTER);
 	    
 	    JLabel close = new JLabel("New label");
+	    close.setIcon(new ImageIcon(img_close));
 	    close.addMouseListener(new MouseAdapter() {
 	    	@Override
 	    	public void mouseClicked(MouseEvent e) {
