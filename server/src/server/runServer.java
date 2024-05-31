@@ -19,18 +19,25 @@ public class runServer {
 	public runServer() {
 		try {
 			serverSocket = new ServerSocket(GVAR.SERVER_PORT);
+			playerManager = new PlayerManager();
 			System.out.println("Server is running at port " + GVAR.SERVER_PORT + ".");
 			
 			ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(8));
 			
 			while (!isShutdown) {
-				Socket clientSocket = serverSocket.accept();
-				Player player = new Player(clientSocket);
-				Boolean newPlayerLoggedIn = playerManager.addPlayer(player);
+				try {					
+					Socket clientSocket = serverSocket.accept();
+					Player player = new Player(clientSocket);
+					Boolean newPlayerLoggedIn = playerManager.addPlayer(player);
+					System.out.println("New Player Connected");
+					executor.execute(player);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 			
 		} catch (Exception ex) {
-			
+			ex.printStackTrace();
 		}
 	}
 	
