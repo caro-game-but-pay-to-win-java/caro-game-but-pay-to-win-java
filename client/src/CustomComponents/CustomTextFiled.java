@@ -10,7 +10,7 @@ import javax.swing.border.LineBorder;
 
 public class CustomTextFiled extends JTextField{
 
-	  private int borderRadius;
+	   private int borderRadius;
 	    private Color backgroundColor;
 	    private Color borderColor;
 

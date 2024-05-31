@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.text.html.CSS;
 
@@ -35,14 +37,17 @@ import CustomComponents.RadiusButton;
 import Entry.Entry;
 import javazoom.jl.player.Player;
 import music.MusicUtils;
+import CustomComponents.CustomCheckBox;
 import CustomComponents.CustomPanel;
 import CustomComponents.CustomPanelGradients;
 import CustomComponents.CustomTextFiled;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.awt.Toolkit;
+import javax.swing.JCheckBox;
 
 public class LobbyFrame extends JFrame {
 
@@ -83,7 +88,8 @@ public class LobbyFrame extends JFrame {
 	private CustomTextFiled txtIdRoom;
 	private RadiusButton rdEnterChooseRoom;
 	JLabel labelId;
-
+	int flagMusicAction=1;
+	int flagMusicTheme = 0;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -163,7 +169,7 @@ public class LobbyFrame extends JFrame {
 		close.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				panel_chooseContainer.setVisible(false);
 			}
 		});
@@ -181,7 +187,7 @@ public class LobbyFrame extends JFrame {
 		rdEasy = new RadiusButton();
 		rdEasy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(0);
 			}
 		});
@@ -197,7 +203,7 @@ public class LobbyFrame extends JFrame {
 		rdMedium = new RadiusButton();
 		rdMedium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(1);
 			}
 		});
@@ -213,7 +219,7 @@ public class LobbyFrame extends JFrame {
 		rdHard = new RadiusButton();
 		rdHard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(2);
 			}
 		});
@@ -243,7 +249,7 @@ public class LobbyFrame extends JFrame {
 		rdEnterChooseRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				startBoardVsBot(4);
 			}
 		});
@@ -255,6 +261,90 @@ public class LobbyFrame extends JFrame {
 		rdEnterChooseRoom.setBackground(new Color(0xF19AFF));
 		rdEnterChooseRoom.setForeground(Color.WHITE);
 		panel_chooseContainer.add(rdEnterChooseRoom);
+		CustomPanel panelSetting = new CustomPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g;
+				GradientPaint gradient = new GradientPaint(0, 0, new Color(0x5170FF), // Màu bắt đầu (#ff8a00)#5170ff
+						getWidth(), getHeight(), new Color(0xff66c4) // Màu kết thúc (#e52e71)#ff66c4
+
+				);
+				// Sơn gradient trên JPanel
+				g2d.setPaint(gradient);
+				g2d.fillRoundRect(4, 4, getWidth() - 4 * 2, getHeight() - 4 * 2, 20, 20);
+
+			}
+		};
+		panelSetting.setBounds(753, 94, 225, 162);
+		panelSetting.setVisible(false);
+		panel_container.add(panelSetting);
+		panelSetting.setLayout(null);
+		
+		CustomCheckBox cbMusicTheme = new CustomCheckBox();
+		cbMusicTheme.setText("Nhạc nền");
+		cbMusicTheme.setSelected(true);
+		cbMusicTheme.setForeground(Color.WHITE);
+		cbMusicTheme.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbMusicTheme.setBackground(new Color(0xF19AFF));
+		cbMusicTheme.addItemListener(new ItemListener() {
+		    public void itemStateChanged(ItemEvent e) {
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		        		musicTheme.playCurrentSong();
+		        } else {
+		        	musicTheme.stopCurrentSong();
+		        }
+		    }
+		});
+		cbMusicTheme.setBounds(25, 17, 180, 21);
+		
+		panelSetting.add(cbMusicTheme);
+		
+		CustomCheckBox cbMusicEffect = new CustomCheckBox();
+		cbMusicEffect.setText("Hiệu ứng âm thanh");
+		cbMusicEffect.setBounds(25, 52, 180, 21);
+		cbMusicEffect.setSelected(true);
+		cbMusicEffect.setForeground(Color.white);
+		cbMusicEffect.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbMusicEffect.setBackground(new Color(0xF19AFF));
+		cbMusicEffect.addItemListener(new ItemListener() {
+		    public void itemStateChanged(ItemEvent e) {
+		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
+		    		  flagMusicAction=1;
+		          } else {
+		        	  flagMusicAction=0;
+		          }
+		    	  musicAction(flagMusicAction);
+		    }
+		});
+		panelSetting.add(cbMusicEffect);
+		
+		CustomCheckBox cbAllMusic = new CustomCheckBox();
+		cbAllMusic.setText("Tất cả");
+		cbAllMusic.setSelected(true);
+		cbAllMusic.addItemListener(new ItemListener() {
+		    public void itemStateChanged(ItemEvent e) {
+		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
+		    		  flagMusicAction=1;
+		    		  cbMusicEffect.setSelected(true);
+		    		  cbMusicTheme.setSelected(true);
+		    		  musicTheme.playCurrentSong();
+		          } else {
+		        	  flagMusicAction=0;
+		    		  cbMusicEffect.setSelected(false);
+		    		  cbMusicTheme.setSelected(false);
+		        	  musicTheme.stopCurrentSong();
+		          }
+		    	  musicAction(flagMusicAction);
+		    }
+		});
+		cbAllMusic.setForeground(Color.white);
+		cbAllMusic.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbAllMusic.setBackground(new Color(0xF19AFF));
+		cbAllMusic.setBounds(25, 91, 178, 21);
+		panelSetting.add(cbAllMusic);
+		
 		
 		JLabel lblUser = new JLabel("ADMIN");
 		lblUser.setBounds(105, 15, 230, 67);
@@ -325,8 +415,16 @@ public class LobbyFrame extends JFrame {
 		lblSetting.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
-				musicTheme.stopCurrentSong();
+				
+				musicAction(flagMusicAction);
+				if(panelSetting.isVisible())
+				{
+					panelSetting.setVisible(false);
+
+				}
+				else {
+					panelSetting.setVisible(true);
+				}
 			}
 		});
 		lblSetting.setBounds(844, 25, 60, 59);
@@ -368,6 +466,15 @@ public class LobbyFrame extends JFrame {
 		panel_container.add(lblMessage);
 
 		JLabel lblRank = new JLabel();
+		lblRank.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				musicAction(flagMusicAction);
+				RankingFrame rk = new RankingFrame();
+				rk.setVisible(true);
+
+			}
+		});
 		lblRank.setBounds(914, 290, 62, 62);
 		lblRank.setIcon(new ImageIcon(img_Rank));
 		panel_container.add(lblRank);
@@ -381,7 +488,7 @@ public class LobbyFrame extends JFrame {
 		rdvsBot.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				panel_chooseContainer.setVisible(true);
 				setVisibleButtonChooseLevel(true);
 			}
@@ -410,7 +517,7 @@ public class LobbyFrame extends JFrame {
 		rdChooseRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				musicAction.playCurrentSong();
+				musicAction(flagMusicAction);
 				panel_chooseContainer.setVisible(true);
 				setVisibleButtonChooseLevel(false);
 				setVisibleChooseRoom(true);
@@ -445,6 +552,8 @@ public class LobbyFrame extends JFrame {
 		CustomPanelGradients panelcustomTopLeftBelow = new CustomPanelGradients();
 		panelcustomTopLeftBelow.setBounds(-7, 100, 157, 45);
 		panel_container.add(panelcustomTopLeftBelow);
+		
+
 
 		TitledBorder titledBorderBXH = new TitledBorder(null, "Bảng xếp hạng", TitledBorder.CENTER, TitledBorder.TOP,
 				null, null);
@@ -483,7 +592,16 @@ public class LobbyFrame extends JFrame {
 	void setVisibleChooseRoom(boolean condi) {
 		
 		lblTitleChoose.setText("Choose Room");
-
+	}
+	public void musicAction(int flag)
+	{
+		if(flag==1)
+		{
+			musicAction.playCurrentSong();
+		}
+		else {
+			musicAction.stopCurrentSong();
+		}
 	}
 	static void startMusic()
 	{
