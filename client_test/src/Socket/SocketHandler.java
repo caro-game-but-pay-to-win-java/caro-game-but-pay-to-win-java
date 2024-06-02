@@ -6,8 +6,13 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import Socket.StreamDataType;
+import client_test.CurrentAccount;
 import client_test.Test;
+import client_test.runClient;
 
 public class SocketHandler {
 	Socket socket;
@@ -40,7 +45,6 @@ public class SocketHandler {
 			
 			this.thread = new Thread(this::listen);
 			this.thread.start();
-			System.out.println("WTF");
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -58,6 +62,9 @@ public class SocketHandler {
 				if (streamDataType == StreamDataType.SEND_MESSAGE) {
 					onReceiveMessage(receivedData);
 				}
+				else if (streamDataType == StreamDataType.LOGIN) {
+					onReceiveLogin(receivedData);
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				isRunning = false;
@@ -66,13 +73,33 @@ public class SocketHandler {
 	}
 	
 	public void onReceiveMessage(String receivedData) {
-		String data = receivedData.split("/")[2];
+		String data = receivedData.split("/")[1];
 		Test.Paint(data);
+	}
+	
+	public void onReceiveLogin(String receivedData) {
+		String data = receivedData;
+		if (data.split("/")[1].equals("SUCCESSFULLY")) {
+			CurrentAccount.getInstance().setEmail(data.split("/")[2]);
+			runClient.onLoginSuccess();
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "Sai mật khẩu hoặc tên đăng nhập!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	public void sendMessage(String sentData) {
 		try {
-			String sendingString = StreamDataType.SEND_MESSAGE + "/" + sentData;
+			String sendingString = StreamDataType.SEND_MESSAGE + "/" + CurrentAccount.getInstance().getEmail() + "/" + sentData;
+			System.out.println("SENDING OUT DATA: " + sendingString);
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void sendLoginInformation(String email, String password) {
+		try {
+			String sendingString = StreamDataType.LOGIN + "/" + email + "/" + password;
 			System.out.println("SENDING OUT DATA: " + sendingString);
 			this.outputStream.writeUTF(sendingString);
 		} catch (Exception ex) {

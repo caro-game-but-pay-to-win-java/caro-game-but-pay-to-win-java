@@ -8,11 +8,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Socket.SocketHandler;
+import client_test.Dialog.MatchingDialog;
 
 import javax.swing.JTextPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class Test extends JFrame {
@@ -21,7 +26,8 @@ public class Test extends JFrame {
 	public static JPanel contentPane;
 	private JTextField textField;
 	public static JTextPane txtPane;
-	public static SocketHandler socketHandler;
+	private JButton btn_Profile;
+	private JButton btn_Matching;
 	/**
 	 * Launch the application.
 	 */
@@ -42,9 +48,6 @@ public class Test extends JFrame {
 	 * Create the frame.
 	 */
 	public Test() {
-		Test.socketHandler = new SocketHandler();
-		Test.socketHandler.connect();
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 501);
 		contentPane = new JPanel();
@@ -54,26 +57,60 @@ public class Test extends JFrame {
 		contentPane.setLayout(null);
 		
 		txtPane = new JTextPane();
-		txtPane.setBounds(8, 8, 751, 405);
+		txtPane.setBounds(8, 8, 751, 240);
 		contentPane.add(txtPane);
 		
 		textField = new JTextField();
-		textField.setBounds(8, 421, 556, 34);
+		textField.setBounds(10, 258, 556, 34);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JButton btnNewButton = new JButton("SEND");
+		
+		btnNewButton.setBounds(577, 258, 182, 34);
+		contentPane.add(btnNewButton);
+		
+		btn_Profile = new JButton("PROFILE");
+		
+		btn_Profile.setBounds(577, 420, 182, 34);
+		contentPane.add(btn_Profile);
+		
+		btn_Matching = new JButton("TÌM TRẬN");
+		
+		btn_Matching.setBounds(384, 420, 182, 34);
+		contentPane.add(btn_Matching);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String data = textField.getText();
-				Test.socketHandler.sendMessage(data);
+				if (!data.equals("")) {					
+					runClient.socketHandler.sendMessage(data);
+					textField.setText("");
+				}
 			}
 		});
-		btnNewButton.setBounds(577, 421, 182, 34);
-		contentPane.add(btnNewButton);
+		btn_Matching.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MatchingDialog matchingDialog = new MatchingDialog();
+				matchingDialog.setLocationRelativeTo(btn_Matching.getParent());
+				matchingDialog.setModal(true);
+				matchingDialog.setVisible(true);
+			}
+		});
+		btn_Profile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 	}
 	
 	public static void Paint(String data) {
 		Test.txtPane.setText(Test.txtPane.getText() + "\n" + data);
+	}
+	
+	public static void Close() {
+		Test.getWindows()[0].setVisible(false);
+	}
+	
+	public static void Show() {
+		Test.getWindows()[0].setVisible(true);
 	}
 }

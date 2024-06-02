@@ -3,7 +3,8 @@ package database.DTO;
 import java.time.LocalDate;
 
 public class PlayerDTO {
-	private Integer id;
+	private Long id;
+	private String user_uid;
 	private String full_name;
 	private String gender;
 	private String email;
@@ -19,11 +20,11 @@ public class PlayerDTO {
 	private LocalDate joined_date;
 	private Integer rank_id;
 
-	public PlayerDTO(Integer id, String full_name, String gender, String email, String password, LocalDate dob,
+	public PlayerDTO(Long id, String user_uid, String full_name, String gender, String email, String password, LocalDate dob,
 			Integer total_matches, Integer win_streak_counts, Integer win_matches, Integer lost_matches,
 			Integer elo_rating_points, String player_img_path, String biography, LocalDate joined_date, Integer rank_id) {
-		super();
 		this.id = id;
+		this.user_uid = user_uid;
 		this.full_name = full_name;
 		this.gender = gender;
 		this.email = email;
@@ -39,12 +40,21 @@ public class PlayerDTO {
 		this.joined_date = joined_date;
 		this.rank_id = rank_id;
 	}
+	
+	public PlayerDTO(Long id, String user_uid, String full_name, String gender, String email, String password) {
+		this.id = id;
+		this.user_uid = user_uid;
+		this.full_name = full_name;
+		this.gender = gender;
+		this.email = email;
+		this.password = password;
+	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

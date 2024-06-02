@@ -2,10 +2,13 @@ package server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import database.DAL.PlayerDAL;
+import database.DTO.PlayerDTO;
 import global.GVAR;
 import models.Player;
 import models.PlayerManager;
@@ -23,6 +26,9 @@ public class runServer {
 			System.out.println("Server is running at port " + GVAR.SERVER_PORT + ".");
 			
 			ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(8));
+			
+			List<PlayerDTO> players = PlayerDAL.getInstance().getAllPlayers();
+			System.out.println(players.isEmpty());
 			
 			while (!isShutdown) {
 				try {					

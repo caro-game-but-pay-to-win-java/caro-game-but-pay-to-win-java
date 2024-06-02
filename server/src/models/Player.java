@@ -4,7 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
+import database.DAL.PlayerDAL;
 import database.DTO.PlayerDTO;
 import global.GVAR;
 import server.runServer;
@@ -67,7 +70,19 @@ public class Player implements Runnable {
 	}
 
 	public void onLogin(String receivedData) {
-
+		try {			
+			String email = receivedData.split("/")[1];
+			String password = receivedData.split("/")[2];
+			PlayerDTO player = PlayerDAL.getInstance().getPlayerByLogin(email, password);
+			if (player != null) {
+				this.playerDTO = player;
+				this.outputStream.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getEmail());
+			} else {
+				this.outputStream.writeUTF(StreamDataType.LOGIN + "/" + "FAILED");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public void onSignUp(String receivedData) {
@@ -79,7 +94,9 @@ public class Player implements Runnable {
 	}
 	
 	public void onSendMessage(String receivedData) {
-		String data = receivedData.split("/")[1];
-		runServer.playerManager.broadcast(data);
+		String user = receivedData.split("/")[1];
+		String data = receivedData.split("/")[2];
+		LocalTime time = LocalTime.now();
+		runServer.playerManager.broadcast(StreamDataType.SEND_MESSAGE + "/" + user + " - " + time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + ": " + data);
 	}
 }

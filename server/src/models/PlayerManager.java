@@ -28,7 +28,7 @@ public class PlayerManager {
 	public void broadcast(String sentData) {
 		try {			
 			for (Player player : this.players) {
-				player.outputStream.writeUTF(StreamDataType.SEND_MESSAGE + "/" + "USER" + "/" + sentData);
+				player.outputStream.writeUTF(sentData);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
