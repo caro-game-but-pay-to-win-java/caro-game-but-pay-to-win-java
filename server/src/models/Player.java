@@ -52,6 +52,8 @@ public class Player implements Runnable {
 				} else if (streamDataType == StreamDataType.SEND_MESSAGE) {
 					onSendMessage(receivedData);
 					System.out.println("SERVER: RECEIVED DATA:" + receivedData);
+				} else if (streamDataType == StreamDataType.FIND_MATCH) {
+					onMatching(receivedData);
 				}
 
 			} catch (Exception ex) {
@@ -98,5 +100,26 @@ public class Player implements Runnable {
 		String data = receivedData.split("/")[2];
 		LocalTime time = LocalTime.now();
 		runServer.playerManager.broadcast(StreamDataType.SEND_MESSAGE + "/" + user + " - " + time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + ": " + data);
+	}
+	
+	public void onMatching(String receiveData) {
+		this.isMatching = true;
+		for (Player player : runServer.playerManager.getPlayers()) {
+			if (player != this && player.isMatching) {
+				try {
+					synchronized (this) {
+						this.isMatching = false;
+						this.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
+					}
+					synchronized (player) {						
+						player.isMatching = false;
+						player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				break;
+			}
+		}
 	}
 }

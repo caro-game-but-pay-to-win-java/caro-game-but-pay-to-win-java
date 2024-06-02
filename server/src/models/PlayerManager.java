@@ -34,4 +34,8 @@ public class PlayerManager {
 			ex.printStackTrace();
 		}
 	}
+	
+	public List<Player> getPlayers() {
+		return this.players;
+	}
 }

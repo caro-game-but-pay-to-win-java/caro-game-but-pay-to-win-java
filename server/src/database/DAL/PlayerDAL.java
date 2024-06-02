@@ -44,4 +44,16 @@ public class PlayerDAL {
 			return null;
 		}
 	}
+	
+	public void createPlayer() {
+		
+	}
+	
+	public void updatePlayerById(Long id) {
+		
+	}
+	
+	public void deletePlayerById(Long id) {
+		
+	}
 }

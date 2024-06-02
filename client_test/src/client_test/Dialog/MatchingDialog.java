@@ -8,6 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import client_test.runClient;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -24,6 +27,8 @@ public class MatchingDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private Timer timer;
+	public Boolean isCancel = false;
+	public Thread thread;
 
 	/**
 	 * Launch the application.
@@ -42,6 +47,19 @@ public class MatchingDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public MatchingDialog() {
+		thread = new Thread() {
+			public void run() {
+				while (!isCancel) {
+					try {
+						Thread.sleep(10000);
+						runClient.socketHandler.sendMatchingRequest();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+				System.out.println("THREAD DISPOSED!");
+			}
+		};
 		setUndecorated(true);
 		setResizable(false);
 		setBounds(100, 100, 338, 206);
@@ -53,6 +71,7 @@ public class MatchingDialog extends JDialog {
 			JButton cancelButton = new JButton("HỦY TÌM TRẬN");
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					isCancel = true;
 					dispose();
 				}
 			});
@@ -87,6 +106,6 @@ public class MatchingDialog extends JDialog {
 			}
 		});
 		timer.start();
-		
+		thread.start();
 	}
 }
