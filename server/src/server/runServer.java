@@ -35,8 +35,10 @@ public class runServer {
 					Socket clientSocket = serverSocket.accept();
 					Player player = new Player(clientSocket);
 					Boolean newPlayerLoggedIn = playerManager.addPlayer(player);
-					System.out.println("New Player Connected");
-					executor.execute(player);
+					if (newPlayerLoggedIn) {
+						System.out.println("New Player Connected");						
+						executor.execute(player);
+					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
