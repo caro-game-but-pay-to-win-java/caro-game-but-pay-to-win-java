@@ -34,7 +34,7 @@ public class SocketHandler {
 
 			// this.socket = new Socket();
 
-			this.socket = new Socket("127.0.0.1", 6543);
+			this.socket = new Socket("127.0.0.1", 9000);
 
 			this.outputStream = new DataOutputStream(this.socket.getOutputStream());
 			this.inputStream = new DataInputStream(this.socket.getInputStream());

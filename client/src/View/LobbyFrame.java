@@ -329,14 +329,14 @@ public class LobbyFrame extends JFrame {
 		    		  flagMusicAction=1;
 		    		  cbMusicEffect.setSelected(true);
 		    		  cbMusicTheme.setSelected(true);
-		    		  musicTheme.playCurrentSong();
+		    		  musicAction(flagMusicAction);
 		          } else {
 		        	  flagMusicAction=0;
 		    		  cbMusicEffect.setSelected(false);
 		    		  cbMusicTheme.setSelected(false);
 		        	  musicTheme.stopCurrentSong();
+		        	  musicAction(flagMusicAction);
 		          }
-		    	  musicAction(flagMusicAction);
 		    }
 		});
 		cbAllMusic.setForeground(Color.white);
