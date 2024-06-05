@@ -27,6 +27,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import CustomComponent.DateTextField;
+
 public class Signup extends JFrame {
 
 	private static final long serialVersionUID = 1L;

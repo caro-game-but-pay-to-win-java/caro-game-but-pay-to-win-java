@@ -9,8 +9,8 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import Models.CurrentAccount;
 import Socket.StreamDataType;
-import client_test.CurrentAccount;
 import client_test.Test;
 import client_test.runClient;
 
