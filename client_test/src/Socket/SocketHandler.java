@@ -86,6 +86,7 @@ public class SocketHandler {
 		if(data.split("/")[1].equals("SUCCESSFULLY"))
 		{
 			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky thanh cong");
+		
 		}
 		else {
 			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky khong thanh cong");

@@ -1,19 +1,18 @@
 package Models;
 
-
 public class CurrentAccount {
 	private Long id;
 	private String user_uid;
 	private String full_name;
 	private String gender;
 	private String email;
-	
+
 	private static CurrentAccount instance;
-	
+
 	private CurrentAccount() {
-		
+
 	}
-	
+
 	public static CurrentAccount getInstance() {
 		if (instance == null) {
 			instance = new CurrentAccount();

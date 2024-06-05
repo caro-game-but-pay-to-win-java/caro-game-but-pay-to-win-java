@@ -9,9 +9,9 @@ import javax.swing.JOptionPane;
 
 import Entry.Entry;
 import Models.CurrentAccount;
-//import client_test.Test;
-//import client_test.runClient;
+
 import View.LobbyFrame;
+
 public class SocketHandler {
 	Socket socket;
 	DataOutputStream outputStream;
@@ -63,6 +63,10 @@ public class SocketHandler {
 					onReceiveLogin(receivedData);
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
 					onReceivedMatchFound(receivedData);
+				}else if(streamDataType == StreamDataType.SIGNUP)
+				{
+					System.out.println("vong lap dang ky: "+receivedData);
+					onReceiveSignUp(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -73,9 +77,22 @@ public class SocketHandler {
 
 	public void onReceiveMessage(String receivedData) {
 		String data = receivedData.split("/")[1];
+		System.out.println(receivedData);
 //		Test.Paint(data);
 	}
-
+	public void onReceiveSignUp(String receivedData)
+	{
+		String data = receivedData;
+		System.out.println("socket " + data);
+		if(data.split("/")[1].equals("SUCCESSFULLY"))
+		{
+			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky thanh cong");
+			Entry.onLogin();
+		}
+		else {
+			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky khong thanh cong");
+		}
+	}
 	public void onReceiveLogin(String receivedData) {
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
@@ -116,7 +133,18 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-
+	public void sendSigupInformation(String name, String email,String password,String date,String gender)
+	{
+		try {
+			String sendingString = StreamDataType.SIGNUP+ "/" +name +"/" + email +"/" +password+"/"+date+"/"+gender;
+			System.out.println("SENDING OUT DATA: " + sendingString);
+			this.outputStream.writeUTF(sendingString);
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 	public void sendMatchingRequest() {
 		try {
 			String sendingString = StreamDataType.FIND_MATCH + "/";

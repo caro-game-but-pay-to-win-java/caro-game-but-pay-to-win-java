@@ -75,13 +75,13 @@ public class MatchingDialog extends JDialog {
 			contentPanel.add(cancelButton);
 			cancelButton.setActionCommand("Cancel");
 		}
-		
+
 		JLabel timeLabel = new JLabel("00:00");
 		timeLabel.setFont(new Font("Teko SemiBold", Font.BOLD, 44));
 		timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		timeLabel.setBounds(68, 72, 208, 45);
 		contentPanel.add(timeLabel);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Đang tìm trận");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 20));

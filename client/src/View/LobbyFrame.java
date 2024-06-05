@@ -6,36 +6,26 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 
 import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
-import javax.swing.text.html.CSS;
 
 import CustomComponents.RadiusButton;
 import Entry.Entry;
-import javazoom.jl.player.Player;
 import music.MusicUtils;
 import CustomComponents.CustomCheckBox;
 import CustomComponents.CustomPanel;
@@ -75,9 +65,9 @@ public class LobbyFrame extends JFrame {
 			.getScaledInstance(30, 37, Image.SCALE_SMOOTH);
 
 	static String filePathTheme = LobbyFrame.class.getResource("/music/Sakura-Girl-Daisy-chosic.mp3").getFile();
-    static MusicUtils musicTheme = new MusicUtils(filePathTheme);
+	static MusicUtils musicTheme = new MusicUtils(filePathTheme);
 	static String filePathAction = LobbyFrame.class.getResource("/music/player_click.mp3").getFile();
-    static MusicUtils musicAction = new MusicUtils(filePathAction);
+	static MusicUtils musicAction = new MusicUtils(filePathAction);
 	private RadiusButton rdvsBot;
 	private RadiusButton rdvsPlayer;
 	private RadiusButton rdChooseRoom;
@@ -88,13 +78,14 @@ public class LobbyFrame extends JFrame {
 	private CustomTextFiled txtIdRoom;
 	private RadiusButton rdEnterChooseRoom;
 	JLabel labelId;
-	int flagMusicAction=1;
+	int flagMusicAction = 1;
 	int flagMusicTheme = 0;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+
 					LobbyFrame frame = new LobbyFrame();
 					frame.setVisible(true);
 					startMusic();
@@ -115,7 +106,7 @@ public class LobbyFrame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
-		
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		LineBorder lineBorder = new LineBorder(new Color(0, 0, 0), 1);
@@ -235,16 +226,16 @@ public class LobbyFrame extends JFrame {
 		txtIdRoom = new CustomTextFiled();
 		txtIdRoom.setBounds(45, 180, 340, 66);
 		txtIdRoom.setHorizontalAlignment(SwingConstants.CENTER);
-		txtIdRoom.setFont(new Font("Tahoma",Font.BOLD,40));
+		txtIdRoom.setFont(new Font("Tahoma", Font.BOLD, 40));
 		panel_chooseContainer.add(txtIdRoom);
-		
+
 		labelId = new JLabel();
 		labelId.setText("Enter IDRoom");
-		labelId.setBounds(43,157,143,23);
-		labelId.setFont(new Font("Tahoma",Font.BOLD,16));
+		labelId.setBounds(43, 157, 143, 23);
+		labelId.setFont(new Font("Tahoma", Font.BOLD, 16));
 		labelId.setForeground(Color.WHITE);
 		panel_chooseContainer.add(labelId);
-		
+
 		rdEnterChooseRoom = new RadiusButton();
 		rdEnterChooseRoom.addMouseListener(new MouseAdapter() {
 			@Override
@@ -253,9 +244,9 @@ public class LobbyFrame extends JFrame {
 				startBoardVsBot(4);
 			}
 		});
-		rdEnterChooseRoom.setBounds(80,304,280,50);
+		rdEnterChooseRoom.setBounds(80, 304, 280, 50);
 		rdEnterChooseRoom.setText("Enter Room");
-		rdEnterChooseRoom.setFont(new Font("Tahoma",Font.PLAIN,35));
+		rdEnterChooseRoom.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		rdEnterChooseRoom.setRadius(30);
 		rdEnterChooseRoom.setBorderColor(new Color(0xFFFFFF));
 		rdEnterChooseRoom.setBackground(new Color(0xF19AFF));
@@ -281,71 +272,70 @@ public class LobbyFrame extends JFrame {
 		panelSetting.setVisible(false);
 		panel_container.add(panelSetting);
 		panelSetting.setLayout(null);
-		
+
 		CustomCheckBox cbMusicTheme = new CustomCheckBox();
 		cbMusicTheme.setText("Nhạc nền");
 		cbMusicTheme.setSelected(true);
 		cbMusicTheme.setForeground(Color.WHITE);
-		cbMusicTheme.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbMusicTheme.setFont(new Font("Tahoma", Font.BOLD, 15));
 		cbMusicTheme.setBackground(new Color(0xF19AFF));
 		cbMusicTheme.addItemListener(new ItemListener() {
-		    public void itemStateChanged(ItemEvent e) {
-		        if (e.getStateChange() == ItemEvent.SELECTED) {
-		        		musicTheme.playCurrentSong();
-		        } else {
-		        	musicTheme.stopCurrentSong();
-		        }
-		    }
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					musicTheme.playCurrentSong();
+				} else {
+					musicTheme.stopCurrentSong();
+				}
+			}
 		});
 		cbMusicTheme.setBounds(25, 17, 180, 21);
-		
+
 		panelSetting.add(cbMusicTheme);
-		
+
 		CustomCheckBox cbMusicEffect = new CustomCheckBox();
 		cbMusicEffect.setText("Hiệu ứng âm thanh");
 		cbMusicEffect.setBounds(25, 52, 180, 21);
 		cbMusicEffect.setSelected(true);
 		cbMusicEffect.setForeground(Color.white);
-		cbMusicEffect.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbMusicEffect.setFont(new Font("Tahoma", Font.BOLD, 15));
 		cbMusicEffect.setBackground(new Color(0xF19AFF));
 		cbMusicEffect.addItemListener(new ItemListener() {
-		    public void itemStateChanged(ItemEvent e) {
-		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
-		    		  flagMusicAction=1;
-		          } else {
-		        	  flagMusicAction=0;
-		          }
-		    	  musicAction(flagMusicAction);
-		    }
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					flagMusicAction = 1;
+				} else {
+					flagMusicAction = 0;
+				}
+				musicAction(flagMusicAction);
+			}
 		});
 		panelSetting.add(cbMusicEffect);
-		
+
 		CustomCheckBox cbAllMusic = new CustomCheckBox();
 		cbAllMusic.setText("Tất cả");
 		cbAllMusic.setSelected(true);
 		cbAllMusic.addItemListener(new ItemListener() {
-		    public void itemStateChanged(ItemEvent e) {
-		    	  if (e.getStateChange() == ItemEvent.SELECTED) {
-		    		  flagMusicAction=1;
-		    		  cbMusicEffect.setSelected(true);
-		    		  cbMusicTheme.setSelected(true);
-		    		  musicAction(flagMusicAction);
-		          } else {
-		        	  flagMusicAction=0;
-		    		  cbMusicEffect.setSelected(false);
-		    		  cbMusicTheme.setSelected(false);
-		        	  musicTheme.stopCurrentSong();
-		        	  musicAction(flagMusicAction);
-		          }
-		    }
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					flagMusicAction = 1;
+					cbMusicEffect.setSelected(true);
+					cbMusicTheme.setSelected(true);
+					musicAction(flagMusicAction);
+				} else {
+					flagMusicAction = 0;
+					cbMusicEffect.setSelected(false);
+					cbMusicTheme.setSelected(false);
+					musicTheme.stopCurrentSong();
+					musicAction(flagMusicAction);
+				}
+			}
 		});
 		cbAllMusic.setForeground(Color.white);
-		cbAllMusic.setFont(new Font("Tahoma",Font.BOLD,15));
+		cbAllMusic.setFont(new Font("Tahoma", Font.BOLD, 15));
 		cbAllMusic.setBackground(new Color(0xF19AFF));
 		cbAllMusic.setBounds(25, 91, 178, 21);
 		panelSetting.add(cbAllMusic);
-		
-		
+
 		JLabel lblUser = new JLabel("ADMIN");
 		lblUser.setBounds(105, 15, 230, 67);
 		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -415,14 +405,12 @@ public class LobbyFrame extends JFrame {
 		lblSetting.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				musicAction(flagMusicAction);
-				if(panelSetting.isVisible())
-				{
+				if (panelSetting.isVisible()) {
 					panelSetting.setVisible(false);
 
-				}
-				else {
+				} else {
 					panelSetting.setVisible(true);
 				}
 			}
@@ -552,8 +540,6 @@ public class LobbyFrame extends JFrame {
 		CustomPanelGradients panelcustomTopLeftBelow = new CustomPanelGradients();
 		panelcustomTopLeftBelow.setBounds(-7, 100, 157, 45);
 		panel_container.add(panelcustomTopLeftBelow);
-		
-
 
 		TitledBorder titledBorderBXH = new TitledBorder(null, "Bảng xếp hạng", TitledBorder.CENTER, TitledBorder.TOP,
 				null, null);
@@ -576,7 +562,7 @@ public class LobbyFrame extends JFrame {
 		CaroBoard cb = new CaroBoard();
 		cb.setVisible(true);
 		dispose();
-		
+
 	}
 
 	void setVisibleButtonChooseLevel(boolean condi) {
@@ -590,21 +576,19 @@ public class LobbyFrame extends JFrame {
 	}
 
 	void setVisibleChooseRoom(boolean condi) {
-		
+
 		lblTitleChoose.setText("Choose Room");
 	}
-	public void musicAction(int flag)
-	{
-		if(flag==1)
-		{
+
+	public void musicAction(int flag) {
+		if (flag == 1) {
 			musicAction.playCurrentSong();
-		}
-		else {
+		} else {
 			musicAction.stopCurrentSong();
 		}
 	}
-	static void startMusic()
-	{
+
+	static void startMusic() {
 		musicTheme.playCurrentSong();
 	}
 }

@@ -7,12 +7,12 @@ import java.awt.RenderingHints;
 
 import javax.swing.JCheckBox;
 
-public class CustomCheckBox extends JCheckBox{
+public class CustomCheckBox extends JCheckBox {
 
 	public CustomCheckBox() {
 		super();
 		setFocusPainted(false);
 		setContentAreaFilled(false);
 	}
-	
+
 }
