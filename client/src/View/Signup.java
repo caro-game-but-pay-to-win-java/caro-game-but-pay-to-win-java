@@ -17,8 +17,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Register extends JFrame {
+public class Signup extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -36,7 +38,7 @@ public class Register extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Register frame = new Register();
+					Signup frame = new Signup();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,8 +50,8 @@ public class Register extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Register() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Register.class.getResource("/img/logo.png")));
+	public Signup() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Signup.class.getResource("/img/logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 		contentPane = new JPanel();
@@ -112,26 +114,37 @@ public class Register extends JFrame {
 		txtPassword.setColumns(10);
 		login_layout.add(txtPassword);
 		
-		JButton btnLogin = new JButton("REGISTER");
-		sl_login_layout.putConstraint(SpringLayout.EAST, txtPassword, 0, SpringLayout.EAST, btnLogin);
-		sl_login_layout.putConstraint(SpringLayout.WEST, btnLogin, 20, SpringLayout.WEST, login_layout);
-		sl_login_layout.putConstraint(SpringLayout.EAST, btnLogin, -24, SpringLayout.EAST, login_layout);
-		btnLogin.setBorderPainted(false);
-		btnLogin.setBackground(Color.PINK);
-		btnLogin.setForeground(Color.WHITE);
-		btnLogin.setFont(new Font("Monospaced", Font.PLAIN, 20));
-		login_layout.add(btnLogin);
-		
-		JButton btnRegister = new JButton("Back to Login");
-		sl_login_layout.putConstraint(SpringLayout.SOUTH, btnLogin, -17, SpringLayout.NORTH, btnRegister);
-		sl_login_layout.putConstraint(SpringLayout.NORTH, btnRegister, 287, SpringLayout.NORTH, login_layout);
+		JButton btnRegister = new JButton("REGISTER");
+		sl_login_layout.putConstraint(SpringLayout.EAST, txtPassword, 0, SpringLayout.EAST, btnRegister);
 		sl_login_layout.putConstraint(SpringLayout.WEST, btnRegister, 20, SpringLayout.WEST, login_layout);
 		sl_login_layout.putConstraint(SpringLayout.EAST, btnRegister, -24, SpringLayout.EAST, login_layout);
-		btnRegister.setBackground(Color.PINK);
 		btnRegister.setBorderPainted(false);
+		btnRegister.setBackground(Color.PINK);
 		btnRegister.setForeground(Color.WHITE);
 		btnRegister.setFont(new Font("Monospaced", Font.PLAIN, 20));
 		login_layout.add(btnRegister);
+		
+		JButton btnBackLogin = new JButton("Back to Login");
+		sl_login_layout.putConstraint(SpringLayout.SOUTH, btnRegister, -17, SpringLayout.NORTH, btnBackLogin);
+		sl_login_layout.putConstraint(SpringLayout.NORTH, btnBackLogin, 287, SpringLayout.NORTH, login_layout);
+		sl_login_layout.putConstraint(SpringLayout.WEST, btnBackLogin, 20, SpringLayout.WEST, login_layout);
+		sl_login_layout.putConstraint(SpringLayout.EAST, btnBackLogin, -24, SpringLayout.EAST, login_layout);
+		btnBackLogin.setBackground(Color.PINK);
+		btnBackLogin.setBorderPainted(false);
+		btnBackLogin.setForeground(Color.WHITE);
+		btnBackLogin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+				Login login = new Login();
+				login.setVisible(true);
+			}
+		});
+		btnBackLogin.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		
+		login_layout.add(btnBackLogin);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Retype Password:");
 		sl_login_layout.putConstraint(SpringLayout.NORTH, lblNewLabel_1_1_1, 196, SpringLayout.NORTH, login_layout);
@@ -159,7 +172,7 @@ public class Register extends JFrame {
 		textField_1 = new JTextField();
 		sl_login_layout.putConstraint(SpringLayout.SOUTH, txtPassword, -8, SpringLayout.NORTH, textField_1);
 		sl_login_layout.putConstraint(SpringLayout.EAST, lblNewLabel_1_1, -48, SpringLayout.WEST, textField_1);
-		sl_login_layout.putConstraint(SpringLayout.EAST, textField_1, 0, SpringLayout.EAST, btnLogin);
+		sl_login_layout.putConstraint(SpringLayout.EAST, textField_1, 0, SpringLayout.EAST, btnRegister);
 		sl_login_layout.putConstraint(SpringLayout.NORTH, textField_1, 2, SpringLayout.NORTH, lblNewLabel_1_1);
 		textField_1.setColumns(10);
 		textField_1.setBackground(Color.BLACK);
@@ -182,7 +195,7 @@ public class Register extends JFrame {
 		
 		textField_3 = new JTextField();
 		sl_login_layout.putConstraint(SpringLayout.WEST, textField_1, 0, SpringLayout.WEST, textField_3);
-		sl_login_layout.putConstraint(SpringLayout.NORTH, btnLogin, 10, SpringLayout.SOUTH, textField_3);
+		sl_login_layout.putConstraint(SpringLayout.NORTH, btnRegister, 10, SpringLayout.SOUTH, textField_3);
 		sl_login_layout.putConstraint(SpringLayout.EAST, textField_3, -26, SpringLayout.EAST, login_layout);
 		sl_login_layout.putConstraint(SpringLayout.NORTH, textField_3, 2, SpringLayout.NORTH, lblNewLabel_1_1_1);
 		sl_login_layout.putConstraint(SpringLayout.WEST, textField_3, 6, SpringLayout.EAST, lblNewLabel_1_1_1);

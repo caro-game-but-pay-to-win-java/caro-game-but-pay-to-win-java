@@ -1,9 +1,11 @@
-package database.DTO;
+	package database.DTO;
 
 import java.time.LocalDate;
 
 public class PlayerDTO {
 	private Long id;
+
+
 	private String user_uid;
 	private String full_name;
 	private String gender;
@@ -49,7 +51,15 @@ public class PlayerDTO {
 		this.email = email;
 		this.password = password;
 	}
+	public PlayerDTO( String user_uid, String full_name, String gender, String email, String password,LocalDate dob ) {
 
+		this.user_uid = user_uid;
+		this.full_name = full_name;
+		this.gender = gender;
+		this.email = email;
+		this.password = password;
+		this.dob = dob;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -168,5 +178,12 @@ public class PlayerDTO {
 
 	public void setRank_id(Integer rank_id) {
 		this.rank_id = rank_id;
+	}
+	public String getUser_uid() {
+		return user_uid;
+	}
+
+	public void setUser_uid(String user_uid) {
+		this.user_uid = user_uid;
 	}
 }

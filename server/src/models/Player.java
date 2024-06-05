@@ -4,7 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 import database.DAL.PlayerDAL;
@@ -42,7 +45,7 @@ public class Player implements Runnable {
 			try {
 				receivedData = inputStream.readUTF();
 				Integer streamDataType = StreamDataType.getTypeFromData(receivedData);
-
+				System.out.println(receivedData);
 				if (streamDataType == StreamDataType.LOGIN) {
 					onLogin(receivedData);
 				} else if (streamDataType == StreamDataType.SIGNUP) {
@@ -54,8 +57,7 @@ public class Player implements Runnable {
 					System.out.println("SERVER: RECEIVED DATA:" + receivedData);
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
 					onMatching(receivedData);
-				}
-
+				}		
 			} catch (Exception ex) {
 				break;
 			}
@@ -73,6 +75,7 @@ public class Player implements Runnable {
 
 	public void onLogin(String receivedData) {
 		try {			
+			System.out.println("login: "+receivedData);
 			String email = receivedData.split("/")[1];
 			String password = receivedData.split("/")[2];
 			PlayerDTO player = PlayerDAL.getInstance().getPlayerByLogin(email, password);
@@ -88,7 +91,39 @@ public class Player implements Runnable {
 	}
 
 	public void onSignUp(String receivedData) {
-
+			try {
+			System.out.println("on sigup from player: "+ receivedData);
+			String id = "P0000000002";
+			String fullName = receivedData.split("/")[1];
+			String email = receivedData.split("/")[2];
+			String password =receivedData.split("/")[3];
+			String date = receivedData.split("/")[4];
+			String gender = receivedData.split("/")[5];
+			System.out.println(id + " " + fullName + " " + gender);
+			  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+		        LocalDate dob;
+		        try {
+		            dob = LocalDate.parse(date, formatter);
+		        
+//			String user_uid, String full_name, String gender, String email, String password
+			PlayerDTO player = new PlayerDTO("P002", fullName,gender, email,password,dob);
+			PlayerDAL playerDAL = PlayerDAL.getInstance();
+			boolean flag =playerDAL.createPlayer(player);
+			if(flag)
+			{
+				this.playerDTO = player;
+				this.outputStream.writeUTF(StreamDataType.SIGNUP + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getEmail());
+			}
+			else {
+				this.outputStream.writeUTF(StreamDataType.SIGNUP+"/"+"FAILED");
+			}
+			} catch (Exception e) {
+			}
+			} catch (DateTimeParseException e) {
+	            e.printStackTrace();
+	            // Xử lý lỗi phân tích cú pháp ngày tháng
+	            return;
+	        }
 	}
 
 	public void onGameEvent(String receivedData) {

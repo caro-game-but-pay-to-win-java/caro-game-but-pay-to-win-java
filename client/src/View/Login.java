@@ -6,7 +6,11 @@ import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Entry.Entry;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import javax.swing.border.BevelBorder;
@@ -132,6 +136,19 @@ public class Login extends JFrame {
 		btnLogin.setBackground(Color.PINK);
 		btnLogin.setForeground(Color.WHITE);
 		btnLogin.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		btnLogin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String email = txtUsername.getText();
+				String password = txtPassword.getText();
+				if (!email.equals("") && !password.equals("")) {
+					Entry.socketHandler.sendLoginInformation(email, password);					
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(), "Không để trống tên đăng nhập hoặc mật khẩu!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		login_layout.add(btnLogin);
 		
 		JButton btnRegister = new JButton("REGISTER");
@@ -143,6 +160,16 @@ public class Login extends JFrame {
 		sl_login_layout.putConstraint(SpringLayout.NORTH, btnRegister, 207, SpringLayout.NORTH, login_layout);
 		sl_login_layout.putConstraint(SpringLayout.SOUTH, btnLogin, -15, SpringLayout.NORTH, btnRegister);
 		btnRegister.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		btnRegister.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Signup rs = new Signup();
+				dispose();
+				rs.setVisible(true);
+			}
+		});
 		login_layout.add(btnRegister);
 		
 		JLabel lblNewLabel_2 = new JLabel("CARO GAME");

@@ -72,7 +72,18 @@ public class Login extends JFrame {
 				}
 			}
 		});
-		btn_Login.setBounds(214, 222, 148, 45);
+		btn_Login.setBounds(81, 221, 148, 45);
 		contentPane.add(btn_Login);
+		
+		JButton btnSignup = new JButton("Đăng ký");
+		btnSignup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Signup signup = new Signup();
+				dispose();
+				signup.setVisible(true);
+			}
+		});
+		btnSignup.setBounds(277, 219, 117, 47);
+		contentPane.add(btnSignup);
 	}
 }

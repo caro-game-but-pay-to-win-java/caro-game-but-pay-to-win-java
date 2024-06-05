@@ -2,18 +2,16 @@ package Socket;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import Socket.StreamDataType;
-import client_test.CurrentAccount;
-import client_test.Test;
-import client_test.runClient;
-
+import Entry.Entry;
+import Models.CurrentAccount;
+//import client_test.Test;
+//import client_test.runClient;
+import View.LobbyFrame;
 public class SocketHandler {
 	Socket socket;
 	DataOutputStream outputStream;
@@ -63,14 +61,8 @@ public class SocketHandler {
 					onReceiveMessage(receivedData);
 				} else if (streamDataType == StreamDataType.LOGIN) {
 					onReceiveLogin(receivedData);
-				
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
 					onReceivedMatchFound(receivedData);
-					
-				}else if(streamDataType == StreamDataType.SIGNUP)
-				{
-					System.out.println("vong lap dang ky: "+receivedData);
-					onRecivedSigup(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -79,29 +71,16 @@ public class SocketHandler {
 		}
 	}
 
-	public void onRecivedSigup(String receivedData)
-	{
-		String data = receivedData;
-		System.out.println("socket " + data);
-		if(data.split("/")[1].equals("SUCCESSFULLY"))
-		{
-			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky thanh cong");
-		}
-		else {
-			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky khong thanh cong");
-		}
-	}
 	public void onReceiveMessage(String receivedData) {
 		String data = receivedData.split("/")[1];
-		System.out.println(receivedData);
-		Test.Paint(data);
+//		Test.Paint(data);
 	}
 
 	public void onReceiveLogin(String receivedData) {
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
 			CurrentAccount.getInstance().setEmail(data.split("/")[2]);
-			runClient.onLoginSuccess();
+			Entry.onLoginSuccess();
 		} else {
 			JOptionPane.showMessageDialog(new JFrame(), "Sai mật khẩu hoặc tên đăng nhập!", "Thông báo",
 					JOptionPane.ERROR_MESSAGE);
@@ -109,10 +88,10 @@ public class SocketHandler {
 	}
 
 	public void onReceivedMatchFound(String receivedData) {
-		if (!runClient.matchingDialog.isCancel) {			
+		if (!Entry.matchingDialog.isCancel) {			
 			String data = receivedData;
-			runClient.matchingDialog.isCancel = true;
-			runClient.matchingDialog.dispose();
+			Entry.matchingDialog.isCancel = true;
+			Entry.matchingDialog.dispose();
 			JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
 		}
 	}
@@ -137,18 +116,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	public void sendSigupInformation(String name, String email,String password,String date,String gender)
-	{
-		try {
-			String sendingString = StreamDataType.SIGNUP+ "/" +name +"/" + email +"/" +password+"/"+date+"/"+gender;
-			System.out.println("SENDING OUT DATA: " + sendingString);
-			this.outputStream.writeUTF(sendingString);
-			
-		}catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
+
 	public void sendMatchingRequest() {
 		try {
 			String sendingString = StreamDataType.FIND_MATCH + "/";
