@@ -32,8 +32,9 @@ public class runClient {
 		matchingDialog.setVisible(true);
 	}
 
-	public static void onMatchAccepted() {
+	public static void onMatchAccepted(Integer playerMoveMark) {
 		caroboard = new CaroBoard();
+		caroboard.setMoveMark(playerMoveMark);
 		caroboard.setVisible(true);
 		test.setVisible(false);
 	}

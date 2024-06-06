@@ -7,12 +7,14 @@ import global.MOVE;
 import global.StreamDataType;
 
 public class Match {
-	
+
 	Integer[][] boardValues;
-	
+
 	Player fPlayer = null;
 	Player sPlayer = null;
 	
+	int nextMove = 1;
+
 	public Match(Player fPlayer, Player sPlayer) {
 		this.boardValues = new Integer[GVAR.MATRIX_SIZE][GVAR.MATRIX_SIZE];
 		for (int i = 0; i < GVAR.MATRIX_SIZE; ++i) {
@@ -21,14 +23,14 @@ public class Match {
 		this.fPlayer = fPlayer;
 		this.sPlayer = sPlayer;
 	}
-	
+
 	public void move(int x, int y, Integer move) {
-		if (boardValues[x][y] == MOVE.NONE_MOVE) {			
+		if (boardValues[x][y] == MOVE.NONE_MOVE) {
 			boardValues[x][y] = move;
 			this.broadcast(StreamDataType.GAME_EVENT_MOVE + "/" + x + "/" + y + "/" + move);
 		}
 	}
-	
+
 	public void broadcast(String data) {
 		try {
 			fPlayer.outputStream.writeUTF(data);
@@ -37,7 +39,7 @@ public class Match {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private Boolean winChecking() {
 		return false;
 	}

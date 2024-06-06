@@ -149,30 +149,30 @@ public class Player implements Runnable {
 		}
 	}
 
-	public void onMatching(String receiveData) {
-		for (Player player : runServer.playerManager.getPlayers()) {
-			if (player != this && player.isMatching) {
-				try {
-					synchronized (this) {
-						this.isMatching = false;
-						this.move = MOVE.X_MOVE;
-						this.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
-						System.out.println("Match created for player one");
-						synchronized (player) {
+	public synchronized void onMatching(String receiveData) {
+		synchronized (this) {
+			for (Player player : runServer.playerManager.getPlayers()) {
+				synchronized (player) {
+					if (player != this && player.isMatching) {
+						try {
+							this.isMatching = false;
+							this.move = MOVE.X_MOVE;
+							this.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + this.move + "/" + "/");
+							System.out.println("Match created for player one");
 							player.isMatching = false;
 							player.move = MOVE.O_MOVE;
-							player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
+							player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + player.move + "/" + "/");
 							System.out.println("Match created for player two");
 							Match match = new Match(this, player);
 							this.match = match;
 							player.match = match;
 							match.broadcast(StreamDataType.ACCEPT_MATCH + "/");
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
+						break;
 					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
 				}
-				break;
 			}
 		}
 	}

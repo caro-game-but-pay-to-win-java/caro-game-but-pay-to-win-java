@@ -1,6 +1,9 @@
 package client_test;
 
 import javax.swing.*;
+
+import Socket.MOVE;
+
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.event.*;
@@ -11,7 +14,10 @@ public class CaroBoard extends JFrame {
 	private JPanel CaroBoard;
 	private JButton[][] squares;
 	boolean playerPlay = false;
-
+	
+	Integer playerMoveMark = null;
+	Integer opponentMoveMark = null;
+	
 	public CaroBoard() {
 		setTitle("Caro Game");
 		setSize(1000, 800);
@@ -40,7 +46,7 @@ public class CaroBoard extends JFrame {
 				final int col = j;
 				squares[i][j].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						runClient.socketHandler.sendGameEventMove(row, col, 1);
+						runClient.socketHandler.sendGameEventMove(row, col, playerMoveMark);
 //						Color color;
 //						boolean temp = playerPlay;
 //						if (!playerPlay) {
@@ -62,7 +68,6 @@ public class CaroBoard extends JFrame {
 //							playerPlay = temp;
 //							return;
 //						}
-						
 					}
 				});
 			}
@@ -73,8 +78,23 @@ public class CaroBoard extends JFrame {
 		setVisible(true);
 	}
 	
+	public void setMoveMark(Integer playerMoveMark) {
+		this.playerMoveMark = playerMoveMark;
+		if (playerMoveMark == MOVE.X_MOVE) {
+			this.opponentMoveMark = MOVE.O_MOVE;
+		} else {
+			this.opponentMoveMark = MOVE.X_MOVE;
+		}
+	}
+	
 	public void paint(int x, int y, Integer move) {
-		squares[x][y].setText(move + "");
+		if (move == MOVE.X_MOVE) {
+			squares[x][y].setText("X");
+			squares[x][y].setForeground(Color.blue);
+		} else if (move == MOVE.O_MOVE) {
+			squares[x][y].setText("O");
+			squares[x][y].setForeground(Color.red);
+		}
 	}
 
 	public static void main(String[] args) {

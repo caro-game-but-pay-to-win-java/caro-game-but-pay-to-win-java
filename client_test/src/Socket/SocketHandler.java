@@ -128,9 +128,10 @@ public class SocketHandler {
 
 	public void onReceivedMatchAccepted(String receivedData) {
 		try {
+			Integer playerMoveMark = Integer.valueOf(receivedData.split("/")[1]);
 			runClient.matchingDialog.isCancel = true;
 			runClient.matchingDialog.dispose();
-			runClient.onMatchAccepted();
+			runClient.onMatchAccepted(playerMoveMark);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
