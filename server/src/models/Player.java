@@ -42,8 +42,7 @@ public class Player implements Runnable {
 	@Override
 	public void run() {
 		String receivedData;
-		Boolean isClientRunning = true;
-
+		
 		while (!runServer.isShutdown) {
 			try {
 				receivedData = inputStream.readUTF();
@@ -110,7 +109,6 @@ public class Player implements Runnable {
 			LocalDate dob;
 			try {
 				dob = LocalDate.parse(date, formatter);
-
 //			String user_uid, String full_name, String gender, String email, String password
 				PlayerDTO player = new PlayerDTO("P002", fullName, gender, email, password, dob);
 				PlayerDAL playerDAL = PlayerDAL.getInstance();
@@ -126,8 +124,6 @@ public class Player implements Runnable {
 			}
 		} catch (DateTimeParseException e) {
 			e.printStackTrace();
-			// Xử lý lỗi phân tích cú pháp ngày tháng
-			return;
 		}
 	}
 
