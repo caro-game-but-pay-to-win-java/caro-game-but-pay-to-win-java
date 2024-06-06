@@ -13,6 +13,7 @@ import Models.CurrentAccount;
 import Socket.StreamDataType;
 import client_test.Test;
 import client_test.runClient;
+import client_test.Dialog.MatchingDialog;
 
 public class SocketHandler {
 	Socket socket;
@@ -60,17 +61,18 @@ public class SocketHandler {
 				receivedData = inputStream.readUTF();
 				Integer streamDataType = StreamDataType.getTypeFromData(receivedData);
 				if (streamDataType == StreamDataType.SEND_MESSAGE) {
-					onReceiveMessage(receivedData);
+					onReceivedMessage(receivedData);
 				} else if (streamDataType == StreamDataType.LOGIN) {
-					onReceiveLogin(receivedData);
-				
+					onReceivedLogin(receivedData);
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
 					onReceivedMatchFound(receivedData);
-					
-				}else if(streamDataType == StreamDataType.SIGNUP)
-				{
-					System.out.println("vong lap dang ky: "+receivedData);
-					onRecivedSigup(receivedData);
+					System.out.println("WON'T RUN?");
+				} else if (streamDataType == StreamDataType.SIGNUP) {
+					// vòng lặp đăng ký cái là cái lồn gì hả Vinh????
+					System.out.println("vong lap dang ky: " + receivedData);
+					onReceivedSigup(receivedData);
+				} else if (streamDataType == StreamDataType.START_MATCHING) {
+					onReceivedMatchSignal(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -79,26 +81,24 @@ public class SocketHandler {
 		}
 	}
 
-	public void onRecivedSigup(String receivedData)
-	{
+	public void onReceivedSigup(String receivedData) {
 		String data = receivedData;
 		System.out.println("socket " + data);
-		if(data.split("/")[1].equals("SUCCESSFULLY"))
-		{
-			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky thanh cong");
-		
-		}
-		else {
-			JOptionPane.showConfirmDialog(new JFrame(),"Dang ky khong thanh cong");
+		if (data.split("/")[1].equals("SUCCESSFULLY")) {
+			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky thanh cong");
+
+		} else {
+			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky khong thanh cong");
 		}
 	}
-	public void onReceiveMessage(String receivedData) {
+
+	public void onReceivedMessage(String receivedData) {
 		String data = receivedData.split("/")[1];
 		System.out.println(receivedData);
 		Test.Paint(data);
 	}
 
-	public void onReceiveLogin(String receivedData) {
+	public void onReceivedLogin(String receivedData) {
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
 			CurrentAccount.getInstance().setEmail(data.split("/")[2]);
@@ -110,11 +110,18 @@ public class SocketHandler {
 	}
 
 	public void onReceivedMatchFound(String receivedData) {
-		if (!runClient.matchingDialog.isCancel) {			
-			String data = receivedData;
-			runClient.matchingDialog.isCancel = true;
-			runClient.matchingDialog.dispose();
-			JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
+		System.out.println("WON'T RUN?");
+		String data = receivedData;
+		runClient.matchingDialog.isCancel = true;
+		runClient.matchingDialog.dispose();
+		JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
+	}
+
+	public void onReceivedMatchSignal(String reiceivedData) {
+		try {
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -138,18 +145,30 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	public void sendSigupInformation(String name, String email,String password,String date,String gender)
-	{
+
+	public void sendSigupInformation(String name, String email, String password, String date, String gender) {
 		try {
-			String sendingString = StreamDataType.SIGNUP+ "/" +name +"/" + email +"/" +password+"/"+date+"/"+gender;
+			String sendingString = StreamDataType.SIGNUP + "/" + name + "/" + email + "/" + password + "/" + date + "/"
+					+ gender;
 			System.out.println("SENDING OUT DATA: " + sendingString);
 			this.outputStream.writeUTF(sendingString);
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
+
+	public void sendMatchingSignal() {
+		try {
+			String sendingString = StreamDataType.START_MATCHING + "/";
+			System.out.println("SENDING OUT DATA: " + sendingString);
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public void sendMatchingRequest() {
 		try {
 			String sendingString = StreamDataType.FIND_MATCH + "/";

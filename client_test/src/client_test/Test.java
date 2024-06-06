@@ -90,11 +90,8 @@ public class Test extends JFrame {
 		});
 		btn_Matching.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				runClient.matchingDialog = new MatchingDialog();
-				runClient.matchingDialog.setLocationRelativeTo(btn_Matching.getParent());
-				runClient.matchingDialog.setModal(true);
-				runClient.matchingDialog.setVisible(true);
-				runClient.socketHandler.sendMatchingRequest();
+				runClient.socketHandler.sendMatchingSignal();
+				runClient.onMatchingClicked();
 			}
 		});
 		btn_Profile.addActionListener(new ActionListener() {

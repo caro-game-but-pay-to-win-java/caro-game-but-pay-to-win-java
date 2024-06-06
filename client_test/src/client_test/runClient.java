@@ -22,9 +22,15 @@ public class runClient {
 		login.dispose();
 		test.setVisible(true);
 	}
+	
+	public static void onMatchingClicked() {
+		matchingDialog = new MatchingDialog();
+		matchingDialog.setLocationRelativeTo(test);
+		matchingDialog.setModal(true);
+		matchingDialog.setVisible(true);
+	}
 
 	public static void onMatchAccepted() {
-		
 		
 	}
 	

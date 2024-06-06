@@ -23,12 +23,12 @@ public class Player implements Runnable {
 	DataOutputStream outputStream;
 
 	PlayerDTO playerDTO;
-	Player opponentPlayer;
 
 	boolean isMatching = false;
 	String matchingStatus = "CANCEL";
 
 	Match match = null;
+	Player opponentPlayer = null;
 
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
@@ -57,7 +57,9 @@ public class Player implements Runnable {
 					System.out.println("SERVER: RECEIVED DATA:" + receivedData);
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
 					onMatching(receivedData);
-				}		
+				} else if (streamDataType == StreamDataType.START_MATCHING) {
+					onStartMatching();
+				}
 			} catch (Exception ex) {
 				break;
 			}
@@ -137,18 +139,29 @@ public class Player implements Runnable {
 		runServer.playerManager.broadcast(StreamDataType.SEND_MESSAGE + "/" + user + " - " + time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + ": " + data);
 	}
 	
+	public void onStartMatching() {
+		try {
+			this.isMatching = true;
+			System.out.println("SETTING UP!");
+			this.outputStream.writeUTF(StreamDataType.START_MATCHING + "/");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public void onMatching(String receiveData) {
-		this.isMatching = true;
 		for (Player player : runServer.playerManager.getPlayers()) {
 			if (player != this && player.isMatching) {
 				try {
 					synchronized (this) {
 						this.isMatching = false;
 						this.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
-					}
-					synchronized (player) {						
-						player.isMatching = false;
-						player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
+						System.out.println("Match created for player one");
+						synchronized (player) {						
+							player.isMatching = false;
+							player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
+							System.out.println("Match created for player two");
+						}
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();

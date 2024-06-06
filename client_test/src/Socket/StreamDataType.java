@@ -17,6 +17,8 @@ public class StreamDataType {
 	public static final Integer EXIT = 11;
 	public static final Integer UNKNOWN = 12;
 	
+	public static final Integer START_MATCHING = 13;
+	
 	public static Integer getTypeFromData(String receivedData) {
 		String type = receivedData.split("/")[0];
 		return getType(type);
