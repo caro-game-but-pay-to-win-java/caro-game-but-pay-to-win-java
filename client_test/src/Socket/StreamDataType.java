@@ -12,7 +12,7 @@ public class StreamDataType {
 	public static final Integer EDIT_PROFILE = 8;
 	public static final Integer SEND_MESSAGE = 9;
 
-	public static final Integer GAME_EVENT = 10;
+	public static final Integer GAME_EVENT_MOVE = 10;
 
 	public static final Integer EXIT = 11;
 	public static final Integer UNKNOWN = 12;

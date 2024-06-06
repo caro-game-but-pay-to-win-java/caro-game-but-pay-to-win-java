@@ -75,6 +75,8 @@ public class SocketHandler {
 					onReceivedMatchSignal(receivedData);
 				} else if (streamDataType == StreamDataType.ACCEPT_MATCH) {
 					
+				} else if (streamDataType == StreamDataType.GAME_EVENT_MOVE) {
+					onReceivedGameEventMove(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -133,6 +135,18 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
+	
+	public void onReceivedGameEventMove(String receivedData) {
+		try {
+			System.out.println("PAINTING...");
+			int x = Integer.valueOf(receivedData.split("/")[1]);
+			int y = Integer.valueOf(receivedData.split("/")[2]);
+			Integer move = Integer.valueOf(receivedData.split("/")[3]);
+			runClient.caroboard.paint(x, y, move);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	public void sendMessage(String sentData) {
 		try {
@@ -181,6 +195,16 @@ public class SocketHandler {
 	public void sendMatchingRequest() {
 		try {
 			String sendingString = StreamDataType.FIND_MATCH + "/";
+			System.out.println("SENDING OUT DATA: " + sendingString);
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void sendGameEventMove(int x, int y, Integer move) {
+		try {
+			String sendingString = StreamDataType.GAME_EVENT_MOVE + "/" + x + "/" + y + "/" + move;
 			System.out.println("SENDING OUT DATA: " + sendingString);
 			this.outputStream.writeUTF(sendingString);
 		} catch (Exception ex) {

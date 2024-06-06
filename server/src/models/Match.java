@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import global.GVAR;
 import global.MOVE;
+import global.StreamDataType;
 
 public class Match {
 	
@@ -22,8 +23,10 @@ public class Match {
 	}
 	
 	public void move(int x, int y, Integer move) {
-		boardValues[x][y] = move;
-		this.broadcast("???/???");
+		if (boardValues[x][y] == MOVE.NONE_MOVE) {			
+			boardValues[x][y] = move;
+			this.broadcast(StreamDataType.GAME_EVENT_MOVE + "/" + x + "/" + y + "/" + move);
+		}
 	}
 	
 	public void broadcast(String data) {

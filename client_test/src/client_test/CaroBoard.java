@@ -33,37 +33,36 @@ public class CaroBoard extends JFrame {
 				squares[i][j].setFont(new Font("Arial", Font.PLAIN, 20));
 				// map.put(squares[i][j], false);
 				CaroBoard.add(squares[i][j]);
-
 				// Set button colors based on chess board pattern
-
 				squares[i][j].setBackground(Color.WHITE);
-
 				// Add action listener to handle button clicks
 				final int row = i;
 				final int col = j;
 				squares[i][j].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Color color;
-						boolean temp = playerPlay;
-						if (!playerPlay) {
-							color = Color.red;
-							playerPlay = true;
-						} else {
-							color = Color.black;
-							playerPlay = false;
-						}
-						if (squares[row][col].getBackground() == Color.WHITE) {
-							String text = playerPlay != false && playerPlay ? "X" : "O";
-							Color colorText = text.equals("X") ? Color.red : Color.black;
-							squares[row][col].setText(text);
-							squares[row][col].setBackground(color);
-							squares[row][col].setForeground(colorText);
-							System.out.println("Người chơi đánh: " + squares[row][col].getText());
-							// map.put(squares[row][col], true);
-						} else {
-							playerPlay = temp;
-							return;
-						}
+						runClient.socketHandler.sendGameEventMove(row, col, 1);
+//						Color color;
+//						boolean temp = playerPlay;
+//						if (!playerPlay) {
+//							color = Color.red;
+//							playerPlay = true;
+//						} else {
+//							color = Color.black;
+//							playerPlay = false;
+//						}
+//						if (squares[row][col].getBackground() == Color.WHITE) {
+//							String text = playerPlay != false && playerPlay ? "X" : "O";
+//							Color colorText = text.equals("X") ? Color.red : Color.black;
+//							squares[row][col].setText(text);
+//							squares[row][col].setBackground(color);
+//							squares[row][col].setForeground(colorText);
+//							System.out.println("Người chơi đánh: " + squares[row][col].getText());
+//							// map.put(squares[row][col], true);
+//						} else {
+//							playerPlay = temp;
+//							return;
+//						}
+						
 					}
 				});
 			}
@@ -72,6 +71,10 @@ public class CaroBoard extends JFrame {
 
 		getContentPane().add(CaroBoard);
 		setVisible(true);
+	}
+	
+	public void paint(int x, int y, Integer move) {
+		squares[x][y].setText(move + "");
 	}
 
 	public static void main(String[] args) {
