@@ -13,7 +13,6 @@ public class CaroBoard extends JFrame {
 	boolean playerPlay = false;
 
 	public CaroBoard() {
-
 		setTitle("Caro Game");
 		setSize(1000, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

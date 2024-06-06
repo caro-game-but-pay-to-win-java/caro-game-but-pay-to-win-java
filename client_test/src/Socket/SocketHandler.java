@@ -65,7 +65,7 @@ public class SocketHandler {
 				} else if (streamDataType == StreamDataType.LOGIN) {
 					onReceivedLogin(receivedData);
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
-					onReceivedMatchFound(receivedData);
+					onReceivedMatchAccepted(receivedData);
 					System.out.println("WON'T RUN?");
 				} else if (streamDataType == StreamDataType.SIGNUP) {
 					// vòng lặp đăng ký cái là cái lồn gì hả Vinh????
@@ -74,7 +74,7 @@ public class SocketHandler {
 				} else if (streamDataType == StreamDataType.START_MATCHING) {
 					onReceivedMatchSignal(receivedData);
 				} else if (streamDataType == StreamDataType.ACCEPT_MATCH) {
-
+					
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -112,10 +112,7 @@ public class SocketHandler {
 	}
 
 	public void onReceivedMatchFound(String receivedData) {
-		System.out.println("WON'T RUN?");
-		String data = receivedData;
-		runClient.matchingDialog.isCancel = true;
-		runClient.matchingDialog.dispose();
+		
 		// JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
 	}
 
@@ -127,11 +124,13 @@ public class SocketHandler {
 		}
 	}
 
-	public void onReceivedAcceptedMatch(String receivedData) {
+	public void onReceivedMatchAccepted(String receivedData) {
 		try {
-			
+			runClient.matchingDialog.isCancel = true;
+			runClient.matchingDialog.dispose();
+			runClient.onMatchAccepted();
 		} catch (Exception ex) {
-			
+			ex.printStackTrace();
 		}
 	}
 
