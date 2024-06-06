@@ -73,6 +73,8 @@ public class SocketHandler {
 					onReceivedSigup(receivedData);
 				} else if (streamDataType == StreamDataType.START_MATCHING) {
 					onReceivedMatchSignal(receivedData);
+				} else if (streamDataType == StreamDataType.ACCEPT_MATCH) {
+
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -114,14 +116,22 @@ public class SocketHandler {
 		String data = receivedData;
 		runClient.matchingDialog.isCancel = true;
 		runClient.matchingDialog.dispose();
-		JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
+		// JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
 	}
 
 	public void onReceivedMatchSignal(String reiceivedData) {
 		try {
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	public void onReceivedAcceptedMatch(String receivedData) {
+		try {
+			
+		} catch (Exception ex) {
+			
 		}
 	}
 

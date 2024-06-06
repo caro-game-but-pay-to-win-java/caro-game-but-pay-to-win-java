@@ -16,7 +16,6 @@ public class Game {
 	private Integer Id;
 	
 	public Game() {
-		this.match = new Match();
 		this.matrix = new Integer[GVAR.MATRIX_SIZE][GVAR.MATRIX_SIZE];
 		
 		Random rand = new Random();

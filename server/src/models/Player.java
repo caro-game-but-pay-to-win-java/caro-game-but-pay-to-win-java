@@ -161,6 +161,8 @@ public class Player implements Runnable {
 							player.isMatching = false;
 							player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + "Đã tìm thấy trận!");
 							System.out.println("Match created for player two");
+							Match match = new Match(this, player);
+							match.broadcast(StreamDataType.ACCEPT_MATCH + "/");
 						}
 					}
 				} catch (Exception ex) {
