@@ -38,6 +38,4 @@ public class runClient {
 		caroboard.setVisible(true);
 		test.setVisible(false);
 	}
-	
-
 }

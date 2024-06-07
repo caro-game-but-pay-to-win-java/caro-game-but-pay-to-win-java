@@ -1,10 +1,9 @@
-	package database.DTO;
+package database.DTO;
 
 import java.time.LocalDate;
 
 public class PlayerDTO {
 	private Long id;
-
 
 	private String user_uid;
 	private String full_name;
@@ -22,9 +21,10 @@ public class PlayerDTO {
 	private LocalDate joined_date;
 	private Integer rank_id;
 
-	public PlayerDTO(Long id, String user_uid, String full_name, String gender, String email, String password, LocalDate dob,
-			Integer total_matches, Integer win_streak_counts, Integer win_matches, Integer lost_matches,
-			Integer elo_rating_points, String player_img_path, String biography, LocalDate joined_date, Integer rank_id) {
+	public PlayerDTO(Long id, String user_uid, String full_name, String gender, String email, String password,
+			LocalDate dob, Integer total_matches, Integer win_streak_counts, Integer win_matches, Integer lost_matches,
+			Integer elo_rating_points, String player_img_path, String biography, LocalDate joined_date,
+			Integer rank_id) {
 		this.id = id;
 		this.user_uid = user_uid;
 		this.full_name = full_name;
@@ -42,7 +42,7 @@ public class PlayerDTO {
 		this.joined_date = joined_date;
 		this.rank_id = rank_id;
 	}
-	
+
 	public PlayerDTO(Long id, String user_uid, String full_name, String gender, String email, String password) {
 		this.id = id;
 		this.user_uid = user_uid;
@@ -51,8 +51,8 @@ public class PlayerDTO {
 		this.email = email;
 		this.password = password;
 	}
-	public PlayerDTO( String user_uid, String full_name, String gender, String email, String password,LocalDate dob ) {
 
+	public PlayerDTO(String user_uid, String full_name, String gender, String email, String password, LocalDate dob) {
 		this.user_uid = user_uid;
 		this.full_name = full_name;
 		this.gender = gender;
@@ -60,6 +60,21 @@ public class PlayerDTO {
 		this.password = password;
 		this.dob = dob;
 	}
+	
+	public PlayerDTO(Long id, String user_uid, String full_name, String gender, String email, String password, String dob, Integer totalMatches, Integer winStreakCounts, Integer winMatches, Integer lostMatches, Integer eloRatingPoints) {
+		this.user_uid = user_uid;
+		this.full_name = full_name;
+		this.gender = gender;
+		this.email = email;
+		this.password = password;
+//		this.dob = dob;
+		this.total_matches = totalMatches;
+		this.win_streak_counts = winStreakCounts;
+		this.win_matches = winMatches;
+		this.lost_matches = lostMatches;
+		this.elo_rating_points = eloRatingPoints;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -179,6 +194,7 @@ public class PlayerDTO {
 	public void setRank_id(Integer rank_id) {
 		this.rank_id = rank_id;
 	}
+
 	public String getUser_uid() {
 		return user_uid;
 	}

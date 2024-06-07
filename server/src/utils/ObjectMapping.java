@@ -23,7 +23,8 @@ public class ObjectMapping {
 		try {
 			while (resultSet.next()) {
 				PlayerDTO player = new PlayerDTO(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getInt(8), resultSet.getInt(9),
+						resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12));
 				players.add(player);
 			}
 			return players;
@@ -37,7 +38,8 @@ public class ObjectMapping {
 		try {
 			if (resultSet.next()) {				
 				return new PlayerDTO(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getInt(8), resultSet.getInt(9),
+						resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

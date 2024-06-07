@@ -24,11 +24,13 @@ public class Match {
 		this.sPlayer = sPlayer;
 	}
 
-	public void move(int x, int y, Integer move) {
+	public Boolean move(int x, int y, Integer move) {
 		if (boardValues[x][y] == MOVE.NONE_MOVE) {
 			boardValues[x][y] = move;
 			this.broadcast(StreamDataType.GAME_EVENT_MOVE + "/" + x + "/" + y + "/" + move);
+			return true;
 		}
+		return false;
 	}
 
 	public void broadcast(String data) {

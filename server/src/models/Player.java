@@ -33,6 +33,8 @@ public class Player implements Runnable {
 
 	Integer move = null;
 
+	Boolean isAbleToMove = false;
+
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
 		this.inputStream = new DataInputStream(socket.getInputStream());
@@ -42,7 +44,7 @@ public class Player implements Runnable {
 	@Override
 	public void run() {
 		String receivedData;
-		
+
 		while (!runServer.isShutdown) {
 			try {
 				receivedData = inputStream.readUTF();
@@ -159,10 +161,28 @@ public class Player implements Runnable {
 							player.move = MOVE.O_MOVE;
 							player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + player.move + "/" + "/");
 							System.out.println("Match created for player two");
+							this.opponentPlayer = player;
+							player.opponentPlayer = this;
 							Match match = new Match(this, player);
 							this.match = match;
 							player.match = match;
 							match.broadcast(StreamDataType.ACCEPT_MATCH + "/");
+							this.opponentPlayer.isAbleToMove = true;
+							this.isAbleToMove = false;
+							// SEND PRE-MATCH META DATA
+							this.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
+									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
+									+ this.playerDTO.getElo_rating_points() + "/"
+									+ this.opponentPlayer.playerDTO.getFull_name() + "/" + this.opponentPlayer.move
+									+ "/" + this.opponentPlayer.playerDTO.getElo_rating_points() + "/");
+							this.opponentPlayer.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
+									+ this.opponentPlayer.playerDTO.getFull_name() + "/" + this.opponentPlayer.move
+									+ "/" + this.opponentPlayer.playerDTO.getElo_rating_points() + "/"
+									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
+									+ this.playerDTO.getElo_rating_points() + "/");
+
+							this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
+							this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -175,10 +195,18 @@ public class Player implements Runnable {
 
 	public void onGameEventMove(String receivedData) {
 		try {
-			int x = Integer.valueOf(receivedData.split("/")[1]);
-			int y = Integer.valueOf(receivedData.split("/")[2]);
-			Integer move = Integer.valueOf(receivedData.split("/")[3]);
-			this.match.move(x, y, move);
+			if (this.isAbleToMove) {
+				int x = Integer.valueOf(receivedData.split("/")[1]);
+				int y = Integer.valueOf(receivedData.split("/")[2]);
+				Integer move = Integer.valueOf(receivedData.split("/")[3]);
+				if (this.match.move(x, y, move)) {
+					this.opponentPlayer.isAbleToMove = true;
+					this.isAbleToMove = false;
+					this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
+					this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+				}
+				;
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

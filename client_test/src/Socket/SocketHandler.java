@@ -68,8 +68,6 @@ public class SocketHandler {
 					onReceivedMatchAccepted(receivedData);
 					System.out.println("WON'T RUN?");
 				} else if (streamDataType == StreamDataType.SIGNUP) {
-					// vòng lặp đăng ký cái là cái lồn gì hả Vinh????
-					System.out.println("vong lap dang ky: " + receivedData);
 					onReceivedSigup(receivedData);
 				} else if (streamDataType == StreamDataType.START_MATCHING) {
 					onReceivedMatchSignal(receivedData);
@@ -77,6 +75,12 @@ public class SocketHandler {
 					
 				} else if (streamDataType == StreamDataType.GAME_EVENT_MOVE) {
 					onReceivedGameEventMove(receivedData);
+				} else if (streamDataType == StreamDataType.GAME_EVENT_ABLE_TO_MOVE) {
+					onReceivedGameEventAbleToMove(receivedData);
+				} else if (streamDataType == StreamDataType.GAME_EVENT_UNABLE_TO_MOVE) {
+					onReceivedGameEventUnableToMove(receivedData);
+				} else if (streamDataType == StreamDataType.PREMATCH_META_DATA) {
+					onReceivedPrematchMetaData(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -144,6 +148,36 @@ public class SocketHandler {
 			int y = Integer.valueOf(receivedData.split("/")[2]);
 			Integer move = Integer.valueOf(receivedData.split("/")[3]);
 			runClient.caroboard.paint(x, y, move);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void onReceivedGameEventAbleToMove(String receivedData) {
+		try {
+			runClient.caroboard.setAbleToMove(true);
+			runClient.caroboard.resetPTimer();
+			runClient.caroboard.blockOTimer();
+			System.out.println("ABLE TO MOVE: true");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void onReceivedGameEventUnableToMove(String receivedData) {
+		try {
+			runClient.caroboard.setAbleToMove(false);
+			runClient.caroboard.resetOTimer();
+			runClient.caroboard.blockPTimer();
+			System.out.println("ABLE TO MOVE: false");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void onReceivedPrematchMetaData(String receivedData) {
+		try {
+			runClient.caroboard.setMetaData(receivedData);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
