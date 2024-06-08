@@ -72,7 +72,7 @@ public class SocketHandler {
 				} else if (streamDataType == StreamDataType.START_MATCHING) {
 					onReceivedMatchSignal(receivedData);
 				} else if (streamDataType == StreamDataType.ACCEPT_MATCH) {
-					
+
 				} else if (streamDataType == StreamDataType.GAME_EVENT_MOVE) {
 					onReceivedGameEventMove(receivedData);
 				} else if (streamDataType == StreamDataType.GAME_EVENT_ABLE_TO_MOVE) {
@@ -81,6 +81,10 @@ public class SocketHandler {
 					onReceivedGameEventUnableToMove(receivedData);
 				} else if (streamDataType == StreamDataType.PREMATCH_META_DATA) {
 					onReceivedPrematchMetaData(receivedData);
+				} else if (streamDataType == StreamDataType.GAME_EVENT_WIN) {
+					onReceivedMatchWin(receivedData);
+				} else if (streamDataType == StreamDataType.GAME_EVENT_LOST) {
+					onReceivedMatchLost(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -118,7 +122,7 @@ public class SocketHandler {
 	}
 
 	public void onReceivedMatchFound(String receivedData) {
-		
+
 		// JOptionPane.showMessageDialog(new JFrame(), data.split("/")[1]);
 	}
 
@@ -140,7 +144,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void onReceivedGameEventMove(String receivedData) {
 		try {
 			System.out.println("PAINTING...");
@@ -152,7 +156,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void onReceivedGameEventAbleToMove(String receivedData) {
 		try {
 			runClient.caroboard.setAbleToMove(true);
@@ -163,7 +167,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void onReceivedGameEventUnableToMove(String receivedData) {
 		try {
 			runClient.caroboard.setAbleToMove(false);
@@ -174,12 +178,40 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void onReceivedPrematchMetaData(String receivedData) {
 		try {
 			runClient.caroboard.setMetaData(receivedData);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	public void onReceivedMatchWin(String receivedData) {
+		try {
+			String currentElo = receivedData.split("/")[1];
+			String gainElo = receivedData.split("/")[2];
+			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thắng!\nElo của bạn: " + currentElo + " + " + gainElo);
+			runClient.caroboard.blockPTimer();
+			runClient.caroboard.blockOTimer();
+			runClient.caroboard.blockMatchTimer();
+			runClient.onMatchEnd();
+		} catch (Exception ex) {
+			
+		}
+	}
+
+	public void onReceivedMatchLost(String receivedData) {
+		try {
+			String currentElo = receivedData.split("/")[1];
+			String gainElo = receivedData.split("/")[2];
+			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thua!\nElo của bạn: " + currentElo + " - " + gainElo);
+			runClient.caroboard.blockPTimer();
+			runClient.caroboard.blockOTimer();
+			runClient.caroboard.blockMatchTimer();
+			runClient.onMatchEnd();
+		} catch (Exception ex) {
+			
 		}
 	}
 
@@ -236,7 +268,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void sendGameEventMove(int x, int y, Integer move) {
 		try {
 			String sendingString = StreamDataType.GAME_EVENT_MOVE + "/" + x + "/" + y + "/" + move;

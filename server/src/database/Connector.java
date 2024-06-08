@@ -34,4 +34,13 @@ public class Connector {
 		}
 	}
 	
+	public void executeNonQuery(String query) {
+		try {
+			Statement statement = this.connection.createStatement();
+			statement.executeUpdate(query);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 }

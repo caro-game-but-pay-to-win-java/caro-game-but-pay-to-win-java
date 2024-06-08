@@ -204,6 +204,38 @@ public class Player implements Runnable {
 					this.isAbleToMove = false;
 					this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
 					this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+					if (this.match.isMatchEnded(x, y, move)) {
+						double pEloRatio = (double) this.opponentPlayer.playerDTO.getElo_rating_points()
+								/ this.playerDTO.getElo_rating_points();
+						double oEloRatio = (double) this.playerDTO.getElo_rating_points()
+								/ this.opponentPlayer.playerDTO.getElo_rating_points();
+						int OPp = (int) (1 * 22.5 * pEloRatio);
+						int OPo = (int) (1 * 22.5 * oEloRatio);
+
+						System.out.println(this.playerDTO.getId());
+						System.out.println(this.playerDTO.getUser_uid());
+
+						PlayerDAL.getInstance().updateElo(this.playerDTO, OPp);
+						PlayerDAL.getInstance().updateElo(this.opponentPlayer.playerDTO, -OPo);
+
+						this.outputStream.writeUTF(StreamDataType.GAME_EVENT_WIN + "/"
+								+ this.playerDTO.getElo_rating_points() + "/" + OPp);
+						this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_LOST + "/"
+								+ this.opponentPlayer.playerDTO.getElo_rating_points() + "/" + OPo);
+
+						this.playerDTO = PlayerDAL.getInstance()
+								.updateCurrentPlayerDTOByUserUID(this.playerDTO.getUser_uid());
+						this.opponentPlayer.playerDTO = PlayerDAL.getInstance()
+								.updateCurrentPlayerDTOByUserUID(this.opponentPlayer.playerDTO.getUser_uid());
+
+						this.match = null;
+						this.move = null;
+
+						this.opponentPlayer.match = null;
+						this.opponentPlayer.move = null;
+						this.opponentPlayer.opponentPlayer = null;
+						this.opponentPlayer = null;
+					}
 				}
 				;
 			}

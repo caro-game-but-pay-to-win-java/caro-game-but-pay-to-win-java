@@ -38,6 +38,17 @@ public class PlayerDAL {
 		}
 	}
 	
+	public PlayerDTO updateCurrentPlayerDTOByUserUID(String user_uid) {
+		try {
+			Connector connector = new Connector();
+			ResultSet resultSet = connector.query("SELECT * FROM PLAYERS WHERE USER_UID = '" + user_uid + "'");
+			return ObjectMapping.mapFirstPlayer(resultSet);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<PlayerDTO> getAllPlayers() {
 		try {
 			Connector connector = new Connector();
@@ -79,8 +90,14 @@ public class PlayerDAL {
 	    return false;
 	}
 
-	public void updatePlayerById(Long id) {
-		
+	public void updateElo(PlayerDTO player, int newElo) {
+		try {
+			Connector connector = new Connector();
+			String sql = "UPDATE players SET elo_rating_points = elo_rating_points + " + newElo + " WHERE USER_UID = '" + player.getUser_uid() + "'";
+			connector.executeNonQuery(sql);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	public void deletePlayerById(Long id) {

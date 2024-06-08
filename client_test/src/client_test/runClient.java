@@ -38,4 +38,9 @@ public class runClient {
 		caroboard.setVisible(true);
 		test.setVisible(false);
 	}
+	
+	public static void onMatchEnd() {
+		caroboard.dispose();
+		test.setVisible(true);
+	}
 }

@@ -190,6 +190,7 @@ public class CaroBoard extends JFrame {
 		resetCalendar();
 		lbl_pRTime.setText("__:__");
 		lbl_oRTime.setText("__:__");
+		lbl_matchTimer.setText("__:__");
 	}
 	
 	private void resetCalendar() {
@@ -241,7 +242,6 @@ public class CaroBoard extends JFrame {
 		try {
 			pTimer.stop();
 			lbl_pRTime.setText("__:__");
-			
 		} catch (Exception ex) {
 			
 		}
@@ -251,6 +251,14 @@ public class CaroBoard extends JFrame {
 		try {
 			oTimer.stop();
 			lbl_oRTime.setText("__:__");
+		} catch (Exception ex) {
+			
+		}
+	}
+	
+	public void blockMatchTimer() {
+		try {
+			mTimer.stop();
 		} catch (Exception ex) {
 			
 		}
