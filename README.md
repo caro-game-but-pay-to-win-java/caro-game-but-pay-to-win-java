@@ -64,7 +64,16 @@
 
 ## Tiến độ dự án
 
-updating...
+- Project SRS Document: Đã hoàn thành.
+- Database and Database CRUD: Đã hoàn thành.
+- Realtime In-game chatting: Đã hoàn thành.
+- Reatime Matching & Matching Algorithm: Đã hoàn thành.
+- Realtime In-game gameplay: Đã hoàn thành.
+- Realtime Server-Client broadcasting: 99%.
+- Elo Calculation: 70%.
+- Achievements System: 0%.
+- Ranking System: 0%.
+- Player Profile Editing: 0%.
 
 ## Giấy phép
 
