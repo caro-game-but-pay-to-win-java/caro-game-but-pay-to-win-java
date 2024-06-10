@@ -9,10 +9,9 @@
 ## Công nghệ sử dụng
 
 1. Development Environment: Eclipse IDE for Java Developers
-2. Java Development Kit (JDK): 17
+2. Java Development Kit (JDK) Version: 17
 3. Các thành phần khác:
     - Connector/J 8.3.0 (JDBC Type 4) (MySQL)
-    - Netty 5.0.0
 
 ## Thông tin thành viên
 <table>
