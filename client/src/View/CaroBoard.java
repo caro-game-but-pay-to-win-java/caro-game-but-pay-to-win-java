@@ -3,6 +3,9 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.swing.border.LineBorder;
 
 import CustomComponents.ButtonBoard;
@@ -10,22 +13,19 @@ import CustomComponents.CustomPanel;
 import CustomComponents.CustomPanelGradients;
 import CustomComponents.CustomTextFiled;
 import CustomComponents.RadiusButton;
+import Socket.MOVE;
+import Entry.Entry;
 
 public class CaroBoard extends JFrame {
 	private JPanel CaroBoard;
 	private JPanel panel_TimeBorderPlayer1;
 	private JPanel panel_TimeBorderPlayer2;
 	private ButtonBoard[][] squares;
-	JButton btnXoa;
 	private boolean playerPlay = false; // sử dụng để đánh dấu mốc đến lượt người chơi , false là x , true là o
 	JLabel lblTimePlay; // Hiển thị thời gian trận đấu
 	private CustomTextFiled textField;
 	JLabel lblAvatarPlayer1;
 	JLabel lblAvatarPlayer2;
-	JLabel lblNamePlayer1;
-	JLabel lblNamePlayer2;
-	JLabel lblPointPlayer2;
-	JLabel lblPointPlayer1;
 	JLabel lblResult;
 	boolean flagTimeWarning = false; // sử dụng để cảnh báo thời gian
 	private int timePlay; // sử dụng cho bàn cờ
@@ -39,7 +39,30 @@ public class CaroBoard extends JFrame {
 			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 	private Image img_girl = new ImageIcon(LobbyFrame.class.getResource("/img/girl_img.png")).getImage()
 			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+	Integer playerMoveMark = null;
+	Integer opponentMoveMark = null;
+	private JTextField chatTextField;
+	
+	Calendar calendar = Calendar.getInstance();
+	Calendar matchCalendar = Calendar.getInstance();
 
+	JTextPane chatTextPane = new JTextPane();
+	JButton sendBtn = new JButton("SEND");
+	JLabel lbl_pName = new JLabel("P_NAME");
+	JLabel lbl_pElo = new JLabel("P_ELO_VALUES (RANK_NAME)");
+	
+	JLabel lbl_oMark = new JLabel("O_MARK_VALUE");
+	JLabel lbl_oElo = new JLabel("O_ELO_VALUES");
+	
+	JLabel lbl_oName = new JLabel("O_NAME");
+	JLabel lbl_pRTime = new JLabel("P_REMAINING_TIME");
+	JLabel lbl_oRTime = new JLabel("O_REMAINING_TIME");
+	JLabel lbl_matchTimer = new JLabel("MATCH_TIMER");
+	
+	Timer oTimer;
+	Timer pTimer;
+	Timer mTimer;
+	JLabel lbl_pMark_ = new JLabel("Y");
 	public CaroBoard() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CaroBoard.class.getResource("/img/logo.png")));
 
@@ -56,8 +79,6 @@ public class CaroBoard extends JFrame {
 		getContentPane().add(panelContainer);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		btnXoa = new JButton("Xóa nước đi đối phương");
-		btnXoa.setBackground(Color.WHITE);
 
 		CaroBoard = new JPanel(new GridLayout(19, 19)) {
 			@Override
@@ -84,20 +105,16 @@ public class CaroBoard extends JFrame {
 				System.out.println(textField.getText());
 			}
 		});
-
-		panel_TimeBorderPlayer2 = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if (playerPlay) {
-					borderClock(g, panel_TimeBorderPlayer2);
-				}
-
-			}
-		};
-		panel_TimeBorderPlayer2.setBounds(915, 408, 165, 100);
-		panel_TimeBorderPlayer2.setOpaque(false);
-		panelContainer.add(panel_TimeBorderPlayer2);
+		
+		 lbl_oMark = new JLabel("X");
+		 lbl_oMark.setHorizontalAlignment(SwingConstants.LEFT);
+		 lbl_oMark.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		 lbl_oMark.setBounds(985, 475, 50, 20);
+		 panelContainer.add(lbl_oMark);
+		lbl_pMark_.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
+			lbl_pMark_.setBounds(985, 310, 50, 20);
+			panelContainer.add(lbl_pMark_);
 		btnGui.setBounds(1085, 765, 80, 25);
 		panelContainer.add(btnGui);
 
@@ -107,11 +124,11 @@ public class CaroBoard extends JFrame {
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelContainer.add(textField);
 
-		lblPointPlayer2 = new JLabel("1,000 point");
-		lblPointPlayer2.setBounds(960, 447, 100, 51);
-		lblPointPlayer2.setHorizontalAlignment(JLabel.CENTER);
-		lblPointPlayer2.setVerticalAlignment(JLabel.CENTER);
-		panelContainer.add(lblPointPlayer2);
+		lbl_pElo = new JLabel("1,000 point");
+		lbl_pElo.setBounds(960, 457, 100, 20);
+		lbl_pElo.setHorizontalAlignment(JLabel.CENTER);
+		lbl_pElo.setVerticalAlignment(JLabel.CENTER);
+		panelContainer.add(lbl_pElo);
 
 		panel_TimeBorderPlayer1 = new JPanel() {
 			@Override
@@ -127,29 +144,29 @@ public class CaroBoard extends JFrame {
 		panel_TimeBorderPlayer1.setBounds(915, 241, 165, 100);
 		panelContainer.add(panel_TimeBorderPlayer1);
 
-		lblNamePlayer2 = new JLabel();
-		lblNamePlayer2.setBounds(935, 432, 150, 28);
-		lblNamePlayer2.setText("MASTER JAVA");
-		lblNamePlayer2.setForeground(Color.WHITE);
+		lbl_oName = new JLabel();
+		lbl_oName.setBounds(935, 432, 150, 28);
+		lbl_oName.setText("MASTER JAVA");
+		lbl_oName.setForeground(Color.WHITE);
 
-		lblNamePlayer2.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNamePlayer2.setHorizontalAlignment(JLabel.CENTER);
-		lblNamePlayer2.setVerticalAlignment(JLabel.CENTER);
-		panelContainer.add(lblNamePlayer2);
+		lbl_oName.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lbl_oName.setHorizontalAlignment(JLabel.CENTER);
+		lbl_oName.setVerticalAlignment(JLabel.CENTER);
+		panelContainer.add(lbl_oName);
 
-		lblPointPlayer1 = new JLabel("1,000 point");
-		lblPointPlayer1.setBounds(960, 279, 100, 51);
-		lblPointPlayer1.setHorizontalAlignment(JLabel.CENTER);
-		lblPointPlayer1.setVerticalAlignment(JLabel.CENTER);
-		panelContainer.add(lblPointPlayer1);
+		lbl_oElo = new JLabel("1,000 point");
+		lbl_oElo.setBounds(960, 279, 100, 51);
+		lbl_oElo.setHorizontalAlignment(JLabel.CENTER);
+		lbl_oElo.setVerticalAlignment(JLabel.CENTER);
+		panelContainer.add(lbl_oElo);
 
-		lblNamePlayer1 = new JLabel("MASTER ");
-		lblNamePlayer1.setBounds(935, 264, 150, 28);
-		lblNamePlayer1.setForeground(Color.WHITE);
-		lblNamePlayer1.setHorizontalAlignment(JLabel.CENTER);
-		lblNamePlayer1.setVerticalAlignment(JLabel.CENTER);
-		lblNamePlayer1.setFont(new Font("Tahoma", Font.BOLD, 10));
-		panelContainer.add(lblNamePlayer1);
+		lbl_pName = new JLabel("MASTER ");
+		lbl_pName.setBounds(935, 264, 150, 28);
+		lbl_pName.setForeground(Color.WHITE);
+		lbl_pName.setHorizontalAlignment(JLabel.CENTER);
+		lbl_pName.setVerticalAlignment(JLabel.CENTER);
+		lbl_pName.setFont(new Font("Tahoma", Font.BOLD, 10));
+		panelContainer.add(lbl_pName);
 
 		lblAvatarPlayer1 = new JLabel("New label");
 		lblAvatarPlayer1.setBounds(925, 264, 55, 55);
@@ -195,25 +212,6 @@ public class CaroBoard extends JFrame {
 
 		panelContainer.add(CaroBoard);
 
-		btnXoa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (btnXoa.getBackground() == Color.WHITE) {
-					if (!playerPlay) {
-						System.err.println("Người chơi X vừa dùng tính năng đặc biệt =))");
-					} else {
-						System.err.println("Người chơi O vừa dùng tính năng đặc biệt =))");
-					}
-					btnXoa.setBackground(Color.RED);
-
-				} else {
-					btnXoa.setBackground(Color.WHITE);
-				}
-
-			}
-		});
-		btnXoa.setBounds(897, 543, 148, 42);
-		panelContainer.add(btnXoa);
-
 		CustomPanel panel_1 = new CustomPanel();
 		panel_1.setBounds(1021, 19, 179, 89);
 		panelContainer.add(panel_1);
@@ -255,7 +253,20 @@ public class CaroBoard extends JFrame {
 		panel_4.setBounds(915, 408, 165, 99);
 		panelContainer.add(panel_4);
 		panel_4.setLayout(null);
-
+		
+				panel_TimeBorderPlayer2 = new JPanel() {
+					@Override
+					protected void paintComponent(Graphics g) {
+						super.paintComponent(g);
+						if (playerPlay) {
+							borderClock(g, panel_TimeBorderPlayer2);
+						}
+		
+					}
+				};
+				panel_TimeBorderPlayer2.setBounds(0, 0, 165, 100);
+				panel_4.add(panel_TimeBorderPlayer2);
+				panel_TimeBorderPlayer2.setOpaque(false);
 		if (!playerPlay) {
 			initTimeBorder(panel_TimeBorderPlayer1);
 		}
@@ -394,50 +405,188 @@ public class CaroBoard extends JFrame {
 				// click
 				squares[i][j].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-
-						if (btnXoa.getBackground() == Color.RED) {
-							if (!squares[row][col].getText().isEmpty()) {
-								String text = playerPlay != false && playerPlay ? "O" : "X";
-								System.out.println("Người chơi DIỆU DƠ vừa nạp 100k để xóa nước cờ: [" + row + "," + col
-										+ "] của bạn");
-								squares[row][col].setText("");
-								squares[row][col].setBackground(Color.WHITE);
-							} else {
-							}
-						} else {
-
-							Color color;
-							boolean temp = playerPlay;
-							if (!playerPlay) {
-								color = Color.red;
-								playerPlay = true;
-							} else {
-								color = Color.black;
-								playerPlay = false;
-
-							}
-							if (squares[row][col].getText().isEmpty()) {
-								String text = playerPlay != false && playerPlay ? "X" : "O";
-								Color colorText = text.equals("X") ? new Color(0xff0040) : Color.black;
-								squares[row][col].setText(text);
-								squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
-								// squares[row][col].setBackground(color);
-								squares[row][col].setForeground(colorText);
-								System.out.println("Người chơi đánh: " + squares[row][col].getText());
-								// map.put(squares[row][col], true);
-							} else {
-								playerPlay = temp;
-								return;
-							}
-							switchPanel();
-
-						}
+//							Color color;
+//							boolean temp = playerPlay;
+//							if (!playerPlay) {
+//								color = Color.red;
+//								playerPlay = true;
+//							} else {
+//								color = Color.black;
+//								playerPlay = false;
+//
+//							}
+//							if (squares[row][col].getText().isEmpty()) {
+//								String text = playerPlay != false && playerPlay ? "X" : "O";
+//								Color colorText = text.equals("X") ? new Color(0xff0040) : Color.black;
+//								squares[row][col].setText(text);
+//								squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
+//								// squares[row][col].setBackground(color);
+//								squares[row][col].setForeground(colorText);
+//								System.out.println("Người chơi đánh: " + squares[row][col].getText());
+//								// map.put(squares[row][col], true);
+//							} else {
+//								playerPlay = temp;
+//								return;
+//							}
+						//	switchPanel();
+						Entry.socketHandler.sendGameEventMove(row, col, playerMoveMark);
 					}
 				});
 			}
 		}
 	}
+	private void init() {
+		matchCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		matchCalendar.set(Calendar.MINUTE, 0);
+		matchCalendar.set(Calendar.SECOND, 0);
+		mTimer = new Timer(1000, (ActionListener) new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+				lbl_matchTimer.setText(sdf.format(matchCalendar.getTime()));
+				matchCalendar.add(Calendar.SECOND, 1);
+			}
+		});
+		mTimer.start();
+		resetCalendar();
+		lbl_pRTime.setText("__:__");
+		lbl_oRTime.setText("__:__");
+		lbl_matchTimer.setText("__:__");
+	}
+	
+	private void resetCalendar() {
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 40);
+	}
+	
+	public void setMoveMark(Integer playerMoveMark) {
+		this.playerMoveMark = playerMoveMark;
+		if (playerMoveMark == MOVE.X_MOVE) {
+			this.opponentMoveMark = MOVE.O_MOVE;
+		} else {
+			this.opponentMoveMark = MOVE.X_MOVE;
+		}
+	}
 
+	public void setAbleToMove(boolean isAble) {
+		this.CaroBoard.setEnabled(isAble);
+	}
+	
+	public void resetPTimer() {
+		resetCalendar();
+		pTimer = new Timer(1000, (ActionListener) new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+				if (calendar.get(Calendar.SECOND) <= 10) {
+					lbl_pRTime.setForeground(Color.red);
+				} else {
+					lbl_pRTime.setForeground(Color.black);
+				}
+				lbl_pRTime.setText(sdf.format(calendar.getTime()));
+				calendar.add(Calendar.SECOND, -1);
+				System.out.println("PLAYER HAVE LEFT " + calendar.get(Calendar.SECOND));
+				if (calendar.get(Calendar.SECOND) <= 0) {
+					try {
+						Thread.sleep(1000);
+						Entry.socketHandler.sendTimeOutSignal();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
+		pTimer.start();
+	}
+	
+	public void resetOTimer() {
+		resetCalendar();
+		oTimer = new Timer(1000, (ActionListener) new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+				if (calendar.get(Calendar.SECOND) <= 10) {
+					lbl_oRTime.setForeground(Color.red);
+				} else {
+					lbl_oRTime.setForeground(Color.black);
+				}
+				lbl_oRTime.setText(sdf.format(calendar.getTime()));
+				calendar.add(Calendar.SECOND, -1);
+				System.out.println("OPPONENT HAVE LEFT " + calendar.get(Calendar.SECOND));
+			}
+		});
+		oTimer.start();
+	}
+	
+	public void blockPTimer() {
+		try {
+			pTimer.stop();
+			lbl_pRTime.setText("__:__");
+		} catch (Exception ex) {
+			
+		}
+	}
+	
+	public void printMessage(String message) {
+		this.chatTextPane.setText(this.chatTextPane.getText() + "\n" + message);
+	}
+	
+	public void blockOTimer() {
+		try {
+			oTimer.stop();
+			lbl_oRTime.setText("__:__");
+		} catch (Exception ex) {
+			
+		}
+	}
+	
+	public void blockMatchTimer() {
+		try {
+			mTimer.stop();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void setMetaData(String data) {
+		String pName = data.split("/")[1];
+		String pMark = data.split("/")[2];
+		String pElo = data.split("/")[3];
+		String oName = data.split("/")[4];
+		String oMark = data.split("/")[5];
+		String oElo = data.split("/")[6];
+		
+		lbl_pName.setText(pName);
+		if (Integer.valueOf(pMark) == MOVE.X_MOVE) {			
+			lbl_pMark_.setText("X");
+			lbl_pMark_.setForeground(Color.blue);
+			lbl_oMark.setText("O");
+			lbl_oMark.setForeground(Color.red);
+		} else {
+			lbl_pMark_.setText("O");
+			lbl_pMark_.setForeground(Color.red);
+			lbl_oMark.setText("X");
+			lbl_oMark.setForeground(Color.blue);
+		}
+		lbl_pElo.setText(pElo);
+		lbl_oName.setText(oName);
+		lbl_oElo.setText(oElo);
+	}
+
+	public void paint(int x, int y, Integer move) {
+		if (move == MOVE.X_MOVE) {
+			squares[x][y].setText("X");
+			squares[x][y].setForeground(Color.blue);
+			squares[x][y].setFont(new Font("Tahoma", Font.BOLD, 25));
+
+		} else if (move == MOVE.O_MOVE) {
+			squares[x][y].setText("O");
+			squares[x][y].setForeground(Color.red);
+			squares[x][y].setFont(new Font("Tahoma", Font.BOLD, 25));
+
+		}
+	}
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

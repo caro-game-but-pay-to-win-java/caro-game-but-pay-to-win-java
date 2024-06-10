@@ -152,7 +152,7 @@ public class LobbyFrame extends JFrame {
 			}
 		};
 		panel_chooseContainer.setVisible(false);
-		panel_chooseContainer.setBounds(292, 230, 420, 450);
+		panel_chooseContainer.setBounds(284, 254, 420, 450);
 		panel_container.add(panel_chooseContainer);
 		panel_chooseContainer.setLayout(null);
 
@@ -494,7 +494,15 @@ public class LobbyFrame extends JFrame {
 		rdvsPlayer.setRadius(30);
 		rdvsPlayer.setForeground(Color.WHITE);
 		rdvsPlayer.setBorderColor(new Color(0xFFFFFF));
-
+		rdvsPlayer.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Entry.socketHandler.sendMatchingSignal();
+				Entry.onMatchingClicked();
+			}
+		});
 		rdvsPlayer.setBackground(new Color(0xF19AFF));
 		rdvsPlayer.setFont(new Font("Tahoma", Font.PLAIN, 32));
 		rdvsPlayer.setText("VS PLAYER");
