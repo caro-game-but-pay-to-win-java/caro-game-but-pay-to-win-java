@@ -30,35 +30,35 @@
         <a href="https://steamcommunity.com/profiles/76561199560297622/"><img src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Steam.png?raw=true" width="25" height="25"></a>
         <a href="https://github.com/deethesaint"><img src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Github.png?raw=true" width="25" height="25"></a>
         </td>
-        <td>Co-Team Leader</td>
+        <td>Co-Team Leader (Server-side)</td>
     </tr>
     <tr>
         <td>2001216316</td>
         <td>Phan Ngọc Bảo Vinh</td>
         <td>pv198357@gmail.com</td>
         <td><a href="https://www.facebook.com/barovinh"><img src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Facebook.png?raw=true" width="25" height="25"></a></td>
-        <td>Co-Team Leader</td>
+        <td>Co-Team Leader (Client-side)</td>
     </tr>
     <tr>
         <td>2001215657</td>
         <td>Bồ Quang Diệu</td>
         <td>boquangdieu2003@gmail.com</td>
         <td><a href="https://www.facebook.com/dieu.bo.94"><img src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Facebook.png?raw=true" width="25" height="25"></a></td>
-        <td>Member</td>
+        <td>Member (Client-side)</td>
     </tr>
     <tr>
           <td>2001215661</td>
           <td>Hồ Hoàng Khắc Dũng</td>
           <td>dungry853@gmail.com</td>
           <td><a href="https://www.facebook.com/dungry853"><img src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Facebook.png?raw=true" width="25" height="25"></a></td>
-          <td>Member</td>
+          <td>Member (Client-side)</td>
       </tr>
     <tr>
           <td>2001221279</td>
           <td>Nguyễn Thị Ngọc Hân</td>
           <td>nguyenthingochan454@gmail.com</td>
           <td></td>
-          <td>Member</td>
+          <td>Member (Client-side)</td>
       </tr>
 </table>
 
