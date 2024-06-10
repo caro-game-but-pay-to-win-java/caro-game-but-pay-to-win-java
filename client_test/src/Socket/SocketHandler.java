@@ -85,6 +85,8 @@ public class SocketHandler {
 					onReceivedMatchWin(receivedData);
 				} else if (streamDataType == StreamDataType.GAME_EVENT_LOST) {
 					onReceivedMatchLost(receivedData);
+				} else if (streamDataType == StreamDataType.SEND_MESSAGE_IN_MATCH) {
+					onReceivedMessageInMatch(receivedData);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -190,11 +192,11 @@ public class SocketHandler {
 	public void onReceivedMatchWin(String receivedData) {
 		try {
 			String currentElo = receivedData.split("/")[1];
-			String gainElo = receivedData.split("/")[2];
-			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thắng!\nElo của bạn: " + currentElo + " + " + gainElo);
 			runClient.caroboard.blockPTimer();
 			runClient.caroboard.blockOTimer();
 			runClient.caroboard.blockMatchTimer();
+			String gainElo = receivedData.split("/")[2];
+			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thắng!\nElo của bạn: " + currentElo + " + " + gainElo);
 			runClient.onMatchEnd();
 		} catch (Exception ex) {
 			
@@ -205,13 +207,24 @@ public class SocketHandler {
 		try {
 			String currentElo = receivedData.split("/")[1];
 			String gainElo = receivedData.split("/")[2];
-			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thua!\nElo của bạn: " + currentElo + " - " + gainElo);
 			runClient.caroboard.blockPTimer();
 			runClient.caroboard.blockOTimer();
 			runClient.caroboard.blockMatchTimer();
+			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thua!\nElo của bạn: " + currentElo + " - " + gainElo);
 			runClient.onMatchEnd();
 		} catch (Exception ex) {
 			
+		}
+	}
+	
+	public void onReceivedMessageInMatch(String receivedData) {
+		try {
+			String name = receivedData.split("/")[1];
+			String time = receivedData.split("/")[2];
+			String message = name + " - " + time + ": " + receivedData.split("/")[3];
+			runClient.caroboard.printMessage(message);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -272,6 +285,26 @@ public class SocketHandler {
 	public void sendGameEventMove(int x, int y, Integer move) {
 		try {
 			String sendingString = StreamDataType.GAME_EVENT_MOVE + "/" + x + "/" + y + "/" + move;
+			System.out.println("SENDING OUT DATA: " + sendingString);
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void sendMessageInMatch(String message) {
+		try {
+			String sendingString = StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + message;
+			System.out.println("SENDING OUT DATA: " + sendingString);
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void sendTimeOutSignal() {
+		try {
+			String sendingString = StreamDataType.GAME_EVENT_TIMEOUT + "/";
 			System.out.println("SENDING OUT DATA: " + sendingString);
 			this.outputStream.writeUTF(sendingString);
 		} catch (Exception ex) {

@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Random;
 
 import database.DAL.PlayerDAL;
 import database.DTO.PlayerDTO;
@@ -63,6 +64,10 @@ public class Player implements Runnable {
 					onMatching(receivedData);
 				} else if (streamDataType == StreamDataType.START_MATCHING) {
 					onStartMatching();
+				} else if (streamDataType == StreamDataType.SEND_MESSAGE_IN_MATCH) {
+					onSendMessageInMatch(receivedData);
+				} else if (streamDataType == StreamDataType.GAME_EVENT_TIMEOUT) {
+					onGameEventTimeOut(receivedData);
 				}
 			} catch (Exception ex) {
 				break;
@@ -88,7 +93,7 @@ public class Player implements Runnable {
 			if (player != null) {
 				this.playerDTO = player;
 				this.outputStream
-						.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getEmail());
+						.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name());
 			} else {
 				this.outputStream.writeUTF(StreamDataType.LOGIN + "/" + "FAILED");
 			}
@@ -167,8 +172,6 @@ public class Player implements Runnable {
 							this.match = match;
 							player.match = match;
 							match.broadcast(StreamDataType.ACCEPT_MATCH + "/");
-							this.opponentPlayer.isAbleToMove = true;
-							this.isAbleToMove = false;
 							// SEND PRE-MATCH META DATA
 							this.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
 									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
@@ -181,8 +184,31 @@ public class Player implements Runnable {
 									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
 									+ this.playerDTO.getElo_rating_points() + "/");
 
-							this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
-							this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+							LocalTime time = LocalTime.now();
+							Random random = new Random();
+
+							if (random.nextInt() % 2 == 0) {
+								this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
+								this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+								this.opponentPlayer.isAbleToMove = true;
+								this.isAbleToMove = false;
+								this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+										+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+										+ "Trận đấu bắt đầu! Lượt đi đầu tiên thuộc về "
+										+ this.opponentPlayer.playerDTO.getFull_name() + "!");
+
+							} else {
+								this.opponentPlayer.outputStream
+										.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+								this.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
+								this.opponentPlayer.isAbleToMove = false;
+								this.isAbleToMove = true;
+								this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+										+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+										+ "Trận đấu bắt đầu! Lượt đi đầu tiên thuộc về " + this.playerDTO.getFull_name()
+										+ "!");
+							}
+
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -199,21 +225,25 @@ public class Player implements Runnable {
 				int x = Integer.valueOf(receivedData.split("/")[1]);
 				int y = Integer.valueOf(receivedData.split("/")[2]);
 				Integer move = Integer.valueOf(receivedData.split("/")[3]);
+				LocalTime time = LocalTime.now();
 				if (this.match.move(x, y, move)) {
 					this.opponentPlayer.isAbleToMove = true;
 					this.isAbleToMove = false;
 					this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
 					this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+
 					if (this.match.isMatchEnded(x, y, move)) {
+						this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+								+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+								+ "Nước mắt anh rơi, trò chơi kết thúc. Xin chúc mừng " + this.playerDTO.getFull_name()
+								+ " đã chiến thắng!");
+
 						double pEloRatio = (double) this.opponentPlayer.playerDTO.getElo_rating_points()
 								/ this.playerDTO.getElo_rating_points();
 						double oEloRatio = (double) this.playerDTO.getElo_rating_points()
 								/ this.opponentPlayer.playerDTO.getElo_rating_points();
 						int OPp = (int) (1 * 22.5 * pEloRatio);
 						int OPo = (int) (1 * 22.5 * oEloRatio);
-
-						System.out.println(this.playerDTO.getId());
-						System.out.println(this.playerDTO.getUser_uid());
 
 						PlayerDAL.getInstance().updateElo(this.playerDTO, OPp);
 						PlayerDAL.getInstance().updateElo(this.opponentPlayer.playerDTO, -OPo);
@@ -235,10 +265,67 @@ public class Player implements Runnable {
 						this.opponentPlayer.move = null;
 						this.opponentPlayer.opponentPlayer = null;
 						this.opponentPlayer = null;
+
+						return;
 					}
+					this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+							+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+							+ "Lượt đi tiếp theo của " + this.opponentPlayer.playerDTO.getFull_name() + ".");
 				}
-				;
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void onGameEventTimeOut(String receivedData) {
+		try {
+			LocalTime time = LocalTime.now();
+			this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+					+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+					+ "Nước mắt anh rơi, trò chơi kết thúc. Người chơi " + this.playerDTO.getFull_name()
+					+ " đã hết thời gian đánh và thua cuộc!" + " Xin chúc mừng "
+					+ this.opponentPlayer.playerDTO.getFull_name() + " đã chiến thắng!");
+
+			double pEloRatio = (double) this.opponentPlayer.playerDTO.getElo_rating_points()
+					/ this.playerDTO.getElo_rating_points();
+			double oEloRatio = (double) this.playerDTO.getElo_rating_points()
+					/ this.opponentPlayer.playerDTO.getElo_rating_points();
+			int OPp = (int) (1 * 22.5 * pEloRatio);
+			int OPo = (int) (1 * 22.5 * oEloRatio);
+
+			PlayerDAL.getInstance().updateElo(this.playerDTO, -OPp);
+			PlayerDAL.getInstance().updateElo(this.opponentPlayer.playerDTO, OPo);
+
+			this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_WIN + "/"
+					+ this.opponentPlayer.playerDTO.getElo_rating_points() + "/" + OPp);
+			this.outputStream
+					.writeUTF(StreamDataType.GAME_EVENT_LOST + "/" + this.playerDTO.getElo_rating_points() + "/" + OPo);
+
+			this.playerDTO = PlayerDAL.getInstance().updateCurrentPlayerDTOByUserUID(this.playerDTO.getUser_uid());
+			this.opponentPlayer.playerDTO = PlayerDAL.getInstance()
+					.updateCurrentPlayerDTOByUserUID(this.opponentPlayer.playerDTO.getUser_uid());
+
+			this.match = null;
+			this.move = null;
+
+			this.opponentPlayer.match = null;
+			this.opponentPlayer.move = null;
+			this.opponentPlayer.opponentPlayer = null;
+			this.opponentPlayer = null;
+
+			return;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void onSendMessageInMatch(String receivedData) {
+		try {
+			String message = receivedData.split("/")[1];
+			LocalTime time = LocalTime.now();
+			this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + this.playerDTO.getFull_name() + "/"
+					+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/" + message);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -82,6 +82,14 @@ public class CaroBoard extends JFrame {
 		chatTextField.setBounds(660, 609, 344, 31);
 		getContentPane().add(chatTextField);
 		chatTextField.setColumns(10);
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!chatTextField.getText().equals("")) {
+					runClient.socketHandler.sendMessageInMatch(chatTextField.getText());
+					chatTextField.setText("");
+				}
+			}
+		});
 
 		sendBtn.setBounds(1006, 609, 68, 31);
 		getContentPane().add(sendBtn);
@@ -171,6 +179,8 @@ public class CaroBoard extends JFrame {
 		getContentPane().add(lbl_matchTimer);
 		setVisible(true);
 		
+		
+		
 		init();
 	}
 
@@ -196,7 +206,7 @@ public class CaroBoard extends JFrame {
 	private void resetCalendar() {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.SECOND, 40);
 	}
 	
 	public void setMoveMark(Integer playerMoveMark) {
@@ -218,8 +228,22 @@ public class CaroBoard extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+				if (calendar.get(Calendar.SECOND) <= 10) {
+					lbl_pRTime.setForeground(Color.red);
+				} else {
+					lbl_pRTime.setForeground(Color.black);
+				}
 				lbl_pRTime.setText(sdf.format(calendar.getTime()));
-				calendar.add(Calendar.SECOND, 1);
+				calendar.add(Calendar.SECOND, -1);
+				System.out.println("PLAYER HAVE LEFT " + calendar.get(Calendar.SECOND));
+				if (calendar.get(Calendar.SECOND) <= 0) {
+					try {
+						Thread.sleep(1000);
+						runClient.socketHandler.sendTimeOutSignal();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 		pTimer.start();
@@ -231,8 +255,14 @@ public class CaroBoard extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+				if (calendar.get(Calendar.SECOND) <= 10) {
+					lbl_oRTime.setForeground(Color.red);
+				} else {
+					lbl_oRTime.setForeground(Color.black);
+				}
 				lbl_oRTime.setText(sdf.format(calendar.getTime()));
-				calendar.add(Calendar.SECOND, 1);
+				calendar.add(Calendar.SECOND, -1);
+				System.out.println("OPPONENT HAVE LEFT " + calendar.get(Calendar.SECOND));
 			}
 		});
 		oTimer.start();
@@ -245,6 +275,10 @@ public class CaroBoard extends JFrame {
 		} catch (Exception ex) {
 			
 		}
+	}
+	
+	public void printMessage(String message) {
+		this.chatTextPane.setText(this.chatTextPane.getText() + "\n" + message);
 	}
 	
 	public void blockOTimer() {
@@ -260,7 +294,7 @@ public class CaroBoard extends JFrame {
 		try {
 			mTimer.stop();
 		} catch (Exception ex) {
-			
+			ex.printStackTrace();
 		}
 	}
 
