@@ -145,6 +145,14 @@ public class Player implements Runnable {
 			String password = receivedData.split("/")[2];
 			PlayerDTO player = PlayerDAL.getInstance().getPlayerByLogin(email, password);
 			if (player != null) {
+				Player cplayer = runServer.playerManager.getPlayerByUID(player.getUser_uid());
+				if (cplayer != null && cplayer.match != null) {
+					this.outputStream.writeUTF(StreamDataType.LOGIN_FAILED + "/");
+					return;
+				} else if (cplayer != null && cplayer.match == null) {
+					cplayer.outputStream.writeUTF(StreamDataType.OUT_OF_CLIENT_UI + "/");
+					cplayer.remove();
+				}
 				this.playerDTO = player;
 				this.outputStream
 						.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name());

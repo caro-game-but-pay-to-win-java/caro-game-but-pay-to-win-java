@@ -23,6 +23,9 @@ public class StreamDataType {
 	public static final Integer PREMATCH_META_DATA = 18;
 	public static final Integer SEND_MESSAGE_IN_MATCH = 19;
 	public static final Integer GAME_EVENT_TIMEOUT = 20;
+	public static final Integer LOGIN_FAILED = 21;
+	public static final Integer OUT_OF_CLIENT_UI = 22;
+	public static final Integer DISCONNECTED = 23;
 	
 	public static Integer getTypeFromData(String receivedData) {
 		String type = receivedData.split("/")[0];

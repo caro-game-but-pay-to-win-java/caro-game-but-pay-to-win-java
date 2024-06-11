@@ -1,5 +1,8 @@
 package client_test;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import Socket.SocketHandler;
 import client_test.Dialog.MatchingDialog;
 
@@ -23,6 +26,18 @@ public class runClient {
 		test = new Test();
 		login.dispose();
 		test.setVisible(true);
+	}
+	
+	public static void onOutOfClientUI() {
+		socketHandler = new SocketHandler();
+		socketHandler.connect();
+		test.dispose();;
+		login = new Login();
+		login.setVisible(true);
+	}
+	
+	public static void onDisconnectedToServer() {
+		// code
 	}
 
 	public static void onMatchingClicked() {
