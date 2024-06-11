@@ -10,7 +10,7 @@ public class runClient {
 	public static MatchingDialog matchingDialog;
 	public static Signup sigup;
 	public static CaroBoard caroboard;
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		socketHandler = new SocketHandler();
@@ -18,13 +18,13 @@ public class runClient {
 		login = new Login();
 		login.setVisible(true);
 	}
-	
+
 	public static void onLoginSuccess() {
 		test = new Test();
 		login.dispose();
 		test.setVisible(true);
 	}
-	
+
 	public static void onMatchingClicked() {
 		matchingDialog = new MatchingDialog();
 		matchingDialog.setLocationRelativeTo(test);
@@ -38,7 +38,7 @@ public class runClient {
 		caroboard.setVisible(true);
 		test.setVisible(false);
 	}
-	
+
 	public static void onMatchEnd() {
 		caroboard.dispose();
 		test.setVisible(true);

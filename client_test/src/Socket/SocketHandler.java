@@ -142,7 +142,7 @@ public class SocketHandler {
 			runClient.matchingDialog.isCancel = true;
 			runClient.matchingDialog.dispose();
 			runClient.onMatchAccepted(playerMoveMark);
-			Thread.sleep(500);
+			Thread.sleep(100);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -200,7 +200,7 @@ public class SocketHandler {
 			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thắng!\nElo của bạn: " + currentElo + " + " + gainElo);
 			runClient.onMatchEnd();
 		} catch (Exception ex) {
-			
+
 		}
 	}
 
@@ -214,10 +214,10 @@ public class SocketHandler {
 			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thua!\nElo của bạn: " + currentElo + " - " + gainElo);
 			runClient.onMatchEnd();
 		} catch (Exception ex) {
-			
+
 		}
 	}
-	
+
 	public void onReceivedMessageInMatch(String receivedData) {
 		try {
 			String name = receivedData.split("/")[1];
@@ -292,7 +292,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void sendMessageInMatch(String message) {
 		try {
 			String sendingString = StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + message;
@@ -302,7 +302,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void sendTimeOutSignal() {
 		try {
 			String sendingString = StreamDataType.GAME_EVENT_TIMEOUT + "/";

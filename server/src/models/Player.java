@@ -103,8 +103,8 @@ public class Player implements Runnable {
 			this.opponentPlayer.outputStream.writeUTF(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
 					+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
 					+ "Nước mắt anh rơi, trò chơi kết thúc. Người chơi " + this.playerDTO.getFull_name()
-					+ " đã bị mất kết nối!" + " Xin chúc mừng "
-					+ this.opponentPlayer.playerDTO.getFull_name() + " đã chiến thắng!");
+					+ " đã bị mất kết nối!" + " Xin chúc mừng " + this.opponentPlayer.playerDTO.getFull_name()
+					+ " đã chiến thắng!");
 
 			double pEloRatio = (double) this.opponentPlayer.playerDTO.getElo_rating_points()
 					/ this.playerDTO.getElo_rating_points();
@@ -226,8 +226,10 @@ public class Player implements Runnable {
 							Match match = new Match(this, player);
 							this.match = match;
 							player.match = match;
+							Thread.sleep(200);
 							match.broadcast(StreamDataType.ACCEPT_MATCH + "/");
 							// SEND PRE-MATCH META DATA
+							Thread.sleep(200);
 							this.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
 									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
 									+ this.playerDTO.getElo_rating_points() + "/"
@@ -241,7 +243,7 @@ public class Player implements Runnable {
 
 							LocalTime time = LocalTime.now();
 							Random random = new Random();
-
+							Thread.sleep(200);
 							if (random.nextInt() % 2 == 0) {
 								this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
 								this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
