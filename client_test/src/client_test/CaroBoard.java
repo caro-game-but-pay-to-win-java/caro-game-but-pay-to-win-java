@@ -17,7 +17,7 @@ public class CaroBoard extends JFrame {
 	Integer playerMoveMark = null;
 	Integer opponentMoveMark = null;
 	private JTextField chatTextField;
-	
+
 	Calendar calendar = Calendar.getInstance();
 	Calendar matchCalendar = Calendar.getInstance();
 
@@ -32,7 +32,7 @@ public class CaroBoard extends JFrame {
 	JLabel lbl_pRTime = new JLabel("P_REMAINING_TIME");
 	JLabel lbl_oRTime = new JLabel("O_REMAINING_TIME");
 	JLabel lbl_matchTimer = new JLabel("MATCH_TIMER");
-	
+
 	Timer oTimer;
 	Timer pTimer;
 	Timer mTimer;
@@ -144,7 +144,6 @@ public class CaroBoard extends JFrame {
 		lbl_oElo.setBounds(808, 296, 266, 23);
 		getContentPane().add(lbl_oElo);
 
-		
 		lbl_oName.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lbl_oName.setBounds(808, 271, 266, 23);
 		getContentPane().add(lbl_oName);
@@ -178,9 +177,6 @@ public class CaroBoard extends JFrame {
 		lbl_matchTimer.setBounds(896, 183, 138, 23);
 		getContentPane().add(lbl_matchTimer);
 		setVisible(true);
-		
-		
-		
 		init();
 	}
 
@@ -202,13 +198,13 @@ public class CaroBoard extends JFrame {
 		lbl_oRTime.setText("__:__");
 		lbl_matchTimer.setText("__:__");
 	}
-	
+
 	private void resetCalendar() {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 40);
 	}
-	
+
 	public void setMoveMark(Integer playerMoveMark) {
 		this.playerMoveMark = playerMoveMark;
 		if (playerMoveMark == MOVE.X_MOVE) {
@@ -221,7 +217,7 @@ public class CaroBoard extends JFrame {
 	public void setAbleToMove(boolean isAble) {
 		this.CaroBoard.setEnabled(isAble);
 	}
-	
+
 	public void resetPTimer() {
 		resetCalendar();
 		pTimer = new Timer(1000, (ActionListener) new ActionListener() {
@@ -248,7 +244,7 @@ public class CaroBoard extends JFrame {
 		});
 		pTimer.start();
 	}
-	
+
 	public void resetOTimer() {
 		resetCalendar();
 		oTimer = new Timer(1000, (ActionListener) new ActionListener() {
@@ -267,29 +263,29 @@ public class CaroBoard extends JFrame {
 		});
 		oTimer.start();
 	}
-	
+
 	public void blockPTimer() {
 		try {
 			pTimer.stop();
 			lbl_pRTime.setText("__:__");
 		} catch (Exception ex) {
-			
+
 		}
 	}
-	
+
 	public void printMessage(String message) {
 		this.chatTextPane.setText(this.chatTextPane.getText() + "\n" + message);
 	}
-	
+
 	public void blockOTimer() {
 		try {
 			oTimer.stop();
 			lbl_oRTime.setText("__:__");
 		} catch (Exception ex) {
-			
+
 		}
 	}
-	
+
 	public void blockMatchTimer() {
 		try {
 			mTimer.stop();
@@ -305,9 +301,9 @@ public class CaroBoard extends JFrame {
 		String oName = data.split("/")[4];
 		String oMark = data.split("/")[5];
 		String oElo = data.split("/")[6];
-		
+
 		lbl_pName.setText(pName);
-		if (Integer.valueOf(pMark) == MOVE.X_MOVE) {			
+		if (Integer.valueOf(pMark) == MOVE.X_MOVE) {
 			lbl_pMark.setText("X");
 			lbl_pMark.setForeground(Color.blue);
 			lbl_oMark.setText("O");

@@ -27,15 +27,16 @@ public class runClient {
 		login.dispose();
 		test.setVisible(true);
 	}
-	
+
 	public static void onOutOfClientUI() {
 		socketHandler = new SocketHandler();
 		socketHandler.connect();
-		test.dispose();;
+		test.dispose();
+		;
 		login = new Login();
 		login.setVisible(true);
 	}
-	
+
 	public static void onDisconnectedToServer() {
 		// code
 	}

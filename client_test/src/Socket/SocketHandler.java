@@ -98,18 +98,23 @@ public class SocketHandler {
 			}
 		}
 	}
-	
+
 	public void onLoginFailed() {
-		JOptionPane.showMessageDialog(new JFrame(), "Đã có người đăng nhập tài khoản này và đang chơi một trận đấu!\nVui lòng đăng nhập lại sau.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Đã có người đăng nhập tài khoản này và đang chơi một trận đấu!\nVui lòng đăng nhập lại sau.",
+				"Thông báo", JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	public void onOutOfClientUI() {
 		runClient.onOutOfClientUI();
-		JOptionPane.showMessageDialog(new JFrame(), "Một người khác đã đăng nhập vào tài khoản này!\nBạn sẽ bị mất kết nối.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Một người khác đã đăng nhập vào tài khoản này!\nBạn sẽ bị mất kết nối.", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	public void onDisconnectedToServer() {
-		JOptionPane.showMessageDialog(new JFrame(), "Không thể kết nối tới máy chủ!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(new JFrame(), "Không thể kết nối tới máy chủ!", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void onReceivedSigup(String receivedData) {

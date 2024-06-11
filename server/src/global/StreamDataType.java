@@ -1,7 +1,7 @@
 package global;
 
 public class StreamDataType {
-	
+
 	public static final Integer UNKNOWN = 0;
 	public static final Integer LOGIN = 1;
 	public static final Integer SIGNUP = 2;
@@ -26,7 +26,7 @@ public class StreamDataType {
 	public static final Integer LOGIN_FAILED = 21;
 	public static final Integer OUT_OF_CLIENT_UI = 22;
 	public static final Integer DISCONNECTED = 23;
-	
+
 	public static Integer getTypeFromData(String receivedData) {
 		String type = receivedData.split("/")[0];
 		return getType(type);
@@ -42,4 +42,3 @@ public class StreamDataType {
 		return dataType;
 	}
 }
-
