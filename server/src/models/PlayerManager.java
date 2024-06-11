@@ -38,4 +38,17 @@ public class PlayerManager {
 	public List<Player> getPlayers() {
 		return this.players;
 	}
+	
+	public Player getPlayerByUID(String UID) {
+		for (int i = 0; i < this.players.size(); ++i) {
+			try {
+				if (this.players.get(i).playerDTO.getUser_uid().equals(UID)) {
+					return this.players.get(i);
+				}
+			} catch (Exception ex) {
+				
+			}
+		}
+		return null;
+	}
 }

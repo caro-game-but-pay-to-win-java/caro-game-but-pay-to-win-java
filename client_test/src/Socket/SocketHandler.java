@@ -142,6 +142,7 @@ public class SocketHandler {
 			runClient.matchingDialog.isCancel = true;
 			runClient.matchingDialog.dispose();
 			runClient.onMatchAccepted(playerMoveMark);
+			Thread.sleep(500);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

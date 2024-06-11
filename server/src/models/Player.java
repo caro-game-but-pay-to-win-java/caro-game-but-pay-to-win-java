@@ -50,7 +50,7 @@ public class Player implements Runnable {
 			try {
 				receivedData = inputStream.readUTF();
 				Integer streamDataType = StreamDataType.getTypeFromData(receivedData);
-				System.out.println(receivedData);
+				System.out.println("RECEIVED: " + receivedData);
 				if (streamDataType == StreamDataType.LOGIN) {
 					onLogin(receivedData);
 				} else if (streamDataType == StreamDataType.SIGNUP) {
@@ -59,7 +59,6 @@ public class Player implements Runnable {
 					onGameEventMove(receivedData);
 				} else if (streamDataType == StreamDataType.SEND_MESSAGE) {
 					onSendMessage(receivedData);
-					System.out.println("SERVER: RECEIVED DATA:" + receivedData);
 				} else if (streamDataType == StreamDataType.FIND_MATCH) {
 					onMatching(receivedData);
 				} else if (streamDataType == StreamDataType.START_MATCHING) {
@@ -70,7 +69,15 @@ public class Player implements Runnable {
 					onGameEventTimeOut(receivedData);
 				}
 			} catch (Exception ex) {
-				break;
+				try {
+					System.out.println(this.playerDTO.getUser_uid() + " IS DISCONNECTED!");
+					onDisconnected();
+					remove();
+					System.out.println(runServer.playerManager.getPlayers().size());
+					break;
+				} catch (Exception iex) {
+					break;
+				}
 			}
 		}
 
@@ -81,6 +88,53 @@ public class Player implements Runnable {
 			runServer.playerManager.remove(this);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	public void remove() {
+		synchronized (this) {
+			runServer.playerManager.remove(this);
+		}
+	}
+
+	public void onDisconnected() {
+		try {
+			LocalTime time = LocalTime.now();
+			this.opponentPlayer.outputStream.writeUTF(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+					+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+					+ "Nước mắt anh rơi, trò chơi kết thúc. Người chơi " + this.playerDTO.getFull_name()
+					+ " đã bị mất kết nối!" + " Xin chúc mừng "
+					+ this.opponentPlayer.playerDTO.getFull_name() + " đã chiến thắng!");
+
+			double pEloRatio = (double) this.opponentPlayer.playerDTO.getElo_rating_points()
+					/ this.playerDTO.getElo_rating_points();
+			double oEloRatio = (double) this.playerDTO.getElo_rating_points()
+					/ this.opponentPlayer.playerDTO.getElo_rating_points();
+			int OPp = (int) (1 * 22.5 * pEloRatio);
+			int OPo = (int) (1 * 22.5 * oEloRatio);
+
+			PlayerDAL.getInstance().updateElo(this.playerDTO, -OPp);
+			PlayerDAL.getInstance().updateElo(this.opponentPlayer.playerDTO, OPo);
+
+			this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_WIN + "/"
+					+ this.opponentPlayer.playerDTO.getElo_rating_points() + "/" + OPp);
+
+			this.playerDTO = PlayerDAL.getInstance().updateCurrentPlayerDTOByUserUID(this.playerDTO.getUser_uid());
+			this.opponentPlayer.playerDTO = PlayerDAL.getInstance()
+					.updateCurrentPlayerDTOByUserUID(this.opponentPlayer.playerDTO.getUser_uid());
+
+			this.match = null;
+			this.move = null;
+
+			this.opponentPlayer.match = null;
+			this.opponentPlayer.move = null;
+			this.opponentPlayer.opponentPlayer = null;
+			this.opponentPlayer = null;
+
+			return;
+		} catch (Exception ex) {
+			// everything fine here!
+			System.out.println(ex.getMessage());
 		}
 	}
 
@@ -156,13 +210,14 @@ public class Player implements Runnable {
 		synchronized (this) {
 			for (Player player : runServer.playerManager.getPlayers()) {
 				synchronized (player) {
-					if (player != this && player.isMatching) {
+					if (player != this && player.isMatching && this.match == null && player.match == null
+							&& this.opponentPlayer == null && player.opponentPlayer == null) {
 						try {
 							this.isMatching = false;
+							player.isMatching = false;
 							this.move = MOVE.X_MOVE;
 							this.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + this.move + "/" + "/");
 							System.out.println("Match created for player one");
-							player.isMatching = false;
 							player.move = MOVE.O_MOVE;
 							player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + player.move + "/" + "/");
 							System.out.println("Match created for player two");
