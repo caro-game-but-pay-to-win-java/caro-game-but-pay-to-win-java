@@ -96,10 +96,10 @@ public class SocketHandler {
 		String data = receivedData;
 		System.out.println("socket " + data);
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
-			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky thanh cong");
+			JOptionPane.showConfirmDialog(new JFrame(), "Đăng ký thành công");
 
 		} else {
-			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky khong thanh cong");
+			JOptionPane.showConfirmDialog(new JFrame(), "Đăng ký không thành công");
 		}
 	}
 
