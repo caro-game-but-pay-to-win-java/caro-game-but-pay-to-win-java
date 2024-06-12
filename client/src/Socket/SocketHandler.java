@@ -11,6 +11,7 @@ import Entry.Entry;
 import Models.CurrentAccount;
 
 import View.LobbyFrame;
+import View.Login;
 
 public class SocketHandler {
 	Socket socket;
@@ -117,10 +118,12 @@ public class SocketHandler {
 		String data = receivedData;
 		System.out.println("socket " + data);
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
-			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky thanh cong");
-
+			JOptionPane.showMessageDialog(new JFrame(), "Dang ky thanh cong");
+			Entry.login = new Login();
+			Entry.login.setVisible(true);
+			Entry.signUp.dispose();
 		} else {
-			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky khong thanh cong");
+			JOptionPane.showMessageDialog(new JFrame(), "Dang ky khong thanh cong");
 		}
 	}
 
@@ -274,7 +277,7 @@ public class SocketHandler {
 					+ gender;
 			System.out.println("SENDING OUT DATA: " + sendingString);
 			this.outputStream.writeUTF(sendingString);
-
+				
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

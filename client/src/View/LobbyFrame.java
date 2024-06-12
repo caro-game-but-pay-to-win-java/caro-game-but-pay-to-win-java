@@ -570,13 +570,12 @@ public class LobbyFrame extends JFrame {
 		CaroBoardClient cb = new CaroBoardClient(level);
 		cb.setVisible(true);
 		dispose();
-
 	}
 
 	void setVisibleButtonChooseLevel(boolean condi) {
 		lblTitleChoose.setText("Choose Level");
 		rdEasy.setVisible(condi);
-		rdMedium.setVisible(condi);
+		rdMedium.setVisible(condi);	
 		rdHard.setVisible(condi);
 		txtIdRoom.setVisible(!condi);
 		labelId.setVisible(!condi);

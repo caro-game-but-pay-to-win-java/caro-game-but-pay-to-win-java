@@ -3,12 +3,18 @@ package models;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Random;
 
 import database.DAL.PlayerDAL;
@@ -67,6 +73,8 @@ public class Player implements Runnable {
 					onSendMessageInMatch(receivedData);
 				} else if (streamDataType == StreamDataType.GAME_EVENT_TIMEOUT) {
 					onGameEventTimeOut(receivedData);
+				} else if (streamDataType == StreamDataType.WATCH_PROFILE) {
+					onWatchProfile();
 				}
 			} catch (Exception ex) {
 				try {
@@ -166,20 +174,24 @@ public class Player implements Runnable {
 
 	public void onSignUp(String receivedData) {
 		try {
-			System.out.println("on sigup from player: " + receivedData);
-			String id = "P0000000002";
+			Instant now = Instant.now();
+			String currentTime = now.toString();
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hashBytes = digest.digest(currentTime.getBytes(StandardCharsets.UTF_8));
+			String hashString = String.format("%064x", new BigInteger(1, hashBytes));
+			String result = hashString.substring(0, 9);
+			String id = "P".concat(result);
 			String fullName = receivedData.split("/")[1];
 			String email = receivedData.split("/")[2];
 			String password = receivedData.split("/")[3];
 			String date = receivedData.split("/")[4];
 			String gender = receivedData.split("/")[5];
-			System.out.println(id + " " + fullName + " " + gender);
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 			LocalDate dob;
 			try {
 				dob = LocalDate.parse(date, formatter);
 //			String user_uid, String full_name, String gender, String email, String password
-				PlayerDTO player = new PlayerDTO("P002", fullName, gender, email, password, dob);
+				PlayerDTO player = new PlayerDTO(id, fullName, gender, email, password, dob);
 				PlayerDAL playerDAL = PlayerDAL.getInstance();
 				boolean flag = playerDAL.createPlayer(player);
 				if (flag) {
@@ -191,7 +203,22 @@ public class Player implements Runnable {
 				}
 			} catch (Exception e) {
 			}
-		} catch (DateTimeParseException e) {
+		} catch (DateTimeParseException | NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void onWatchProfile() {
+		try {
+			this.outputStream.writeUTF(StreamDataType.WATCH_PROFILE + "/" + this.playerDTO.getUser_uid() + "/"
+					+ this.playerDTO.getFull_name() + "/" + this.playerDTO.getGender() + "/" + this.playerDTO.getEmail()
+					+ "/" + this.playerDTO.getPassword() + "/" + this.playerDTO.getDob() + "/"
+					+ this.playerDTO.getTotal_matches() + "/" + this.playerDTO.getWin_streak_counts() + "/"
+					+ this.playerDTO.getWin_matches() + "/" + this.playerDTO.getLost_matches() + "/"
+					+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path() + "/"
+					+ this.playerDTO.getBiography() + "/" + this.playerDTO.getJoined_date()+"/"+this.playerDTO.getRank_id());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

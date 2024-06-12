@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
@@ -71,7 +73,14 @@ public class Test extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		btn_Profile = new JButton("PROFILE");
-		
+		btn_Profile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				runClient.socketHandler.sendWatchProfile();
+			}
+		});
 		btn_Profile.setBounds(577, 420, 182, 34);
 		contentPane.add(btn_Profile);
 		

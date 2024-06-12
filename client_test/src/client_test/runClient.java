@@ -13,7 +13,7 @@ public class runClient {
 	public static MatchingDialog matchingDialog;
 	public static Signup sigup;
 	public static CaroBoard caroboard;
-
+	public static ProfileFrame profile;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		socketHandler = new SocketHandler();
@@ -57,5 +57,12 @@ public class runClient {
 	public static void onMatchEnd() {
 		caroboard.dispose();
 		test.setVisible(true);
+	}
+	public static void onShowProfile(String data)
+	{
+		profile = new ProfileFrame();
+		profile.setVisible(true);
+		profile.setProfile(data);
+		test.setVisible(false);
 	}
 }

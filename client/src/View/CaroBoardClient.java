@@ -296,18 +296,23 @@ public class CaroBoardClient extends JFrame {
 	}
 
 	private void computerMove() {
-		int[] bestMove = bestMove(squares, level, System.currentTimeMillis());
-		if (bestMove != null) {
-			int row = bestMove[0];
-			int col = bestMove[1];
-			squares[row][col].setText(COMPUTER);
-			squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
-			squares[row][col].setForeground(Color.blue);
-			String winner = checkWinner(squares);
-			if (!winner.equals(EMPTY)) {
-				JOptionPane.showMessageDialog(this, "Computer " + winner + " wins!");
-			}
-		}
+		Thread aiThread = new Thread(() -> {
+	        long startTime = System.currentTimeMillis();
+	        int[] move = bestMove(squares, "HARD", startTime);
+	        if (move != null) {
+	            SwingUtilities.invokeLater(() -> {
+	                int row = move[0];
+	                int col = move[1];
+	                squares[row][col].setText(COMPUTER);
+	                String winner = checkWinner(squares);
+	                if (!winner.equals(EMPTY)) {
+	                    JOptionPane.showMessageDialog(null, "Computer " + winner + " wins!");
+	                }
+	            });
+	        }
+	    });
+	    aiThread.start();
+
 	}
 
 	private static boolean checkDirection(JButton[][] board, int x, int y, int dx, int dy) {

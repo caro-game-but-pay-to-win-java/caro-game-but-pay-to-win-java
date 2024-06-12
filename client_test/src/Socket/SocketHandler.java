@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import Models.CurrentAccount;
 import Socket.StreamDataType;
+import client_test.ProfileFrame;
 import client_test.Test;
 import client_test.runClient;
 import client_test.Dialog.MatchingDialog;
@@ -92,13 +93,23 @@ public class SocketHandler {
 				} else if (streamDataType == StreamDataType.OUT_OF_CLIENT_UI) {
 					onOutOfClientUI();
 				}
+				else if(streamDataType==StreamDataType.WATCH_PROFILE)
+				{
+					onReceivedWatchProfile(receivedData);
+				}
+				else if(streamDataType==StreamDataType.EDIT_PROFILE)
+				{
+					onReceivedEditProfile(receivedData);
+				}
+				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				isRunning = false;
 			}
 		}
 	}
-
+	
+	
 	public void onLoginFailed() {
 		JOptionPane.showMessageDialog(new JFrame(),
 				"Đã có người đăng nhập tài khoản này và đang chơi một trận đấu!\nVui lòng đăng nhập lại sau.",
@@ -211,7 +222,25 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-
+	public void onReceivedWatchProfile(String receivedData)
+	{
+		try {
+			runClient.onShowProfile(receivedData);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	public void onReceivedEditProfile(String receivedData)
+	{
+		String data = receivedData;
+		if (data.split("/")[1].equals("SUCCESSFULLY")) {	
+			JOptionPane.showMessageDialog(new JFrame(), "Cap nhat thanh cong");
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "Sai mật khẩu hoặc tên đăng nhập!", "Thông báo",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 	public void onReceivedMatchWin(String receivedData) {
 		try {
 			String currentElo = receivedData.split("/")[1];
@@ -332,6 +361,26 @@ public class SocketHandler {
 			this.outputStream.writeUTF(sendingString);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+	public void sendWatchProfile()
+	{
+		try {
+			String sendingString = StreamDataType.WATCH_PROFILE+"/";
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void sendEditProfile(String fullname,String gender,String dob,String img_file_path,String bio , String password)
+	
+	{
+		try {
+			String message = fullname + "/" + gender + "/" + dob +"/" + img_file_path +"/"+bio+"/"+password;
+			String sendString = StreamDataType.EDIT_PROFILE+"/"+message;
+			this.outputStream.writeUTF(sendString);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
