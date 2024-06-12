@@ -75,6 +75,8 @@ public class Player implements Runnable {
 					onGameEventTimeOut(receivedData);
 				} else if (streamDataType == StreamDataType.WATCH_PROFILE) {
 					onWatchProfile();
+				} else if (streamDataType == StreamDataType.EDIT_PROFILE) {
+					onEditProfile(receivedData);
 				}
 			} catch (Exception ex) {
 				try {
@@ -210,13 +212,15 @@ public class Player implements Runnable {
 
 	public void onWatchProfile() {
 		try {
+					
 			this.outputStream.writeUTF(StreamDataType.WATCH_PROFILE + "/" + this.playerDTO.getUser_uid() + "/"
 					+ this.playerDTO.getFull_name() + "/" + this.playerDTO.getGender() + "/" + this.playerDTO.getEmail()
 					+ "/" + this.playerDTO.getPassword() + "/" + this.playerDTO.getDob() + "/"
 					+ this.playerDTO.getTotal_matches() + "/" + this.playerDTO.getWin_streak_counts() + "/"
 					+ this.playerDTO.getWin_matches() + "/" + this.playerDTO.getLost_matches() + "/"
 					+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path() + "/"
-					+ this.playerDTO.getBiography() + "/" + this.playerDTO.getJoined_date()+"/"+this.playerDTO.getRank_id());
+					+ this.playerDTO.getBiography() + "/" + this.playerDTO.getJoined_date() + "/"
+					+ this.playerDTO.getRank_id());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -238,6 +242,40 @@ public class Player implements Runnable {
 			this.outputStream.writeUTF(StreamDataType.START_MATCHING + "/");
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	public void onEditProfile(String receiveData) {
+		try {
+//			String message = fullname + "/" + gender + "/" + dob +"/" + img_file_path +"/"+bio+"/"+password;
+//			String sendString = StreamDataType.EDIT_PROFILE+"/"+message;
+			String fullname = receiveData.split("/")[1];
+			String gender = receiveData.split("/")[2];
+			String dob = receiveData.split("/")[3];
+			String img = receiveData.split("/")[4];
+			String bio = receiveData.split("/")[5];
+			String password = receiveData.split("/")[6];
+
+			LocalDate dobD;
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+			dobD = LocalDate.parse(dob, formatter);
+			this.playerDTO.setFull_name(fullname);
+			this.playerDTO.setDob(dobD);
+			this.playerDTO.setGender(gender);
+			this.playerDTO.setPlayer_img_path(img);
+			this.playerDTO.setBiography(bio);
+			this.playerDTO.setPassword(password);
+			PlayerDAL playerDAL = PlayerDAL.getInstance();
+			boolean flag = playerDAL.updateProfilePlayer(playerDTO);
+			if (flag) {
+				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getEmail());
+			}
+			else {
+				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "FAILED");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 

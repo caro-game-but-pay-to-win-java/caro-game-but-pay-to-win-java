@@ -236,6 +236,7 @@ public class SocketHandler {
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {	
 			JOptionPane.showMessageDialog(new JFrame(), "Cap nhat thanh cong");
+			runClient.onLoginSuccess();
 		} else {
 			JOptionPane.showMessageDialog(new JFrame(), "Sai mật khẩu hoặc tên đăng nhập!", "Thông báo",
 					JOptionPane.ERROR_MESSAGE);
@@ -373,7 +374,6 @@ public class SocketHandler {
 		}
 	}
 	public void sendEditProfile(String fullname,String gender,String dob,String img_file_path,String bio , String password)
-	
 	{
 		try {
 			String message = fullname + "/" + gender + "/" + dob +"/" + img_file_path +"/"+bio+"/"+password;

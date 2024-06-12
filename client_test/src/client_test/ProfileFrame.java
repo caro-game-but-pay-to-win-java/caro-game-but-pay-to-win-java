@@ -22,6 +22,7 @@ public class ProfileFrame extends JFrame {
 	    private JTextField txDob;
 	    private JTextField txBio;
 	    private JTextField txImg;
+	    private JTextField txPassword;
 	    private JLabel lblWinMatch;
 	    private JLabel lblLostMatch;
 	    private JLabel lblElo;
@@ -29,6 +30,7 @@ public class ProfileFrame extends JFrame {
 	    private JLabel lblRankid;
 	    private JLabel lblTotalMatch;
 	    private JLabel lblWinStreak;
+	    private JTextField textField;
 	/**
 	 * Launch the application.
 	 */
@@ -133,7 +135,9 @@ public class ProfileFrame extends JFrame {
 		JButton btnCapNhat = new JButton("cap nhap");
 		btnCapNhat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				runClient.socketHandler.sendEditProfile(tx);
+			//	public void sendEditProfile(String fullname,String gender,String dob,String img_file_path,String bio , String password)
+
+				runClient.socketHandler.sendEditProfile(txtName.getText(),txGender.getText(),txDob.getText(),txBio.getText(),txImg.getText(),txPassword.getText());
 			}
 		});
 		btnCapNhat.setBounds(38, 284, 150, 34);
@@ -166,9 +170,31 @@ public class ProfileFrame extends JFrame {
 		 lblWinStreak = new JLabel("New label");
 		lblWinStreak.setBounds(131, 193, 46, 14);
 		contentPane.add(lblWinStreak);
+		
+		txPassword = new JTextField();
+		txPassword.setBounds(477, 33, 86, 20);
+		contentPane.add(txPassword);
+		txPassword.setColumns(10);
 	}
 
 	   public void setProfile(String data) {
+//			this.outputStream.writeUTF(StreamDataType.WATCH_PROFILE + "/" 
+//	   + this.playerDTO.getUser_uid() + "/"
+//					+ this.playerDTO.getFull_name() + "/" 
+//	   + this.playerDTO.getGender() + "/" 
+//					+ this.playerDTO.getEmail()
+//					+ "/" + this.playerDTO.getPassword() + 
+//					"/" + this.playerDTO.getDob() + "/"
+//					+ this.playerDTO.getTotal_matches() 
+//					+ "/" + this.playerDTO.getWin_streak_counts() + "/"
+//					+ this.playerDTO.getWin_matches() + "/"
+//					+ this.playerDTO.getLost_matches() + "/"
+//					+ this.playerDTO.getElo_rating_points() 
+//					+ "/" + this.playerDTO.getPlayer_img_path() + "/"
+//					+ this.playerDTO.getBiography() + "/" 
+//					+ this.playerDTO.getJoined_date() + "/"
+//					+ this.playerDTO.getRank_id());
+			
 	        String[] dataParts = data.split("/");
 	        String fullName = dataParts[2];
 	        String gender = dataParts[3];
@@ -195,5 +221,6 @@ public class ProfileFrame extends JFrame {
 	        lblRankid.setText(rankId);
 	        lblTotalMatch.setText(totalMatches);
 	        lblWinStreak.setText(winStreakCounts);
+	        txPassword.setText(dataParts[5]);
 	    }
 }

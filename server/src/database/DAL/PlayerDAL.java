@@ -105,18 +105,27 @@ public class PlayerDAL {
 
 	}
 
-	public void updateProfilePlayer(PlayerDTO player) {
-		try {
-			Connector connector = new Connector();
-			LocalDate dob = player.getDob();
-			String sql = "UPDATE players" + " SET gender = " + player.getGender() + "," + " dob =" + Date.valueOf(dob)
-					+ ", full_name=" + player.getFull_name() + ", player_img_file_path =" + player.getPlayer_img_path()
-					+ "," + " biography = " + player.getBiography() + ", password = " + player.getPassword()
-					+ " WHERE user_uid = " + player.getUser_uid();
-			connector.executeNonQuery(sql);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+	public boolean updateProfilePlayer(PlayerDTO player) {
+	    try {
+	        Connector connector = new Connector();
+	        LocalDate dob = player.getDob();
+	        String sql = "UPDATE players SET gender = ?, dob = ?, full_name = ?, player_img_file_path = ?, biography = ?, password = ? WHERE user_uid = ?";
+
+	        PreparedStatement ps = connector.getConnection().prepareStatement(sql);
+	        ps.setString(1, player.getGender());
+	        ps.setDate(2, Date.valueOf(dob));
+	        ps.setString(3, player.getFull_name());
+	        ps.setString(4, player.getPlayer_img_path());
+	        ps.setString(5, player.getBiography());
+	        ps.setString(6, player.getPassword());
+	        ps.setString(7, player.getUser_uid());
+
+	        int rowSelected = ps.executeUpdate();
+	        return rowSelected > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+
 }
