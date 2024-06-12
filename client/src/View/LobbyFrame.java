@@ -179,7 +179,7 @@ public class LobbyFrame extends JFrame {
 		rdEasy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot(0);
+				startBoardVsBot("easy");
 			}
 		});
 		rdEasy.setBounds(90, 146, 280, 50);
@@ -195,7 +195,7 @@ public class LobbyFrame extends JFrame {
 		rdMedium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot(1);
+				startBoardVsBot("medium");
 			}
 		});
 		rdMedium.setBounds(90, 213, 280, 50);
@@ -211,7 +211,7 @@ public class LobbyFrame extends JFrame {
 		rdHard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot(2);
+				startBoardVsBot("hard");
 			}
 		});
 		rdHard.setBounds(90, 287, 280, 50);
@@ -241,7 +241,7 @@ public class LobbyFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot(4);
+//				startBoardVsBot(4);
 			}
 		});
 		rdEnterChooseRoom.setBounds(80, 304, 280, 50);
@@ -427,8 +427,8 @@ public class LobbyFrame extends JFrame {
 						JOptionPane.YES_NO_OPTION);
 
 				if (choice == JOptionPane.YES_OPTION) {
-					Login login = new Login();
-					login.setVisible(true);
+					Entry.login = new Login();
+					Entry.login.setVisible(true);
 					dispose();
 				}
 			}
@@ -495,7 +495,7 @@ public class LobbyFrame extends JFrame {
 		rdvsPlayer.setForeground(Color.WHITE);
 		rdvsPlayer.setBorderColor(new Color(0xFFFFFF));
 		rdvsPlayer.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -563,11 +563,11 @@ public class LobbyFrame extends JFrame {
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 	}
 
-	void startBoardVsBot(int level) {
+	void startBoardVsBot(String level) {
 		// 0 is easy
 		// 1 is medium
 		// 2 is hard
-		CaroBoard cb = new CaroBoard();
+		CaroBoardClient cb = new CaroBoardClient(level);
 		cb.setVisible(true);
 		dispose();
 

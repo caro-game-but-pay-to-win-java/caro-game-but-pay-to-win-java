@@ -25,7 +25,6 @@ public class SocketHandler {
 	public SocketHandler() {
 		// TODO Auto-generated constructor stub
 	}
-
 	public Boolean connect() {
 		try {
 			// InetAddress inetAddress = InetAddress.getByName();
@@ -84,6 +83,10 @@ public class SocketHandler {
 					onReceivedMatchLost(receivedData);
 				} else if (streamDataType == StreamDataType.SEND_MESSAGE_IN_MATCH) {
 					onReceivedMessageInMatch(receivedData);
+				} else if (streamDataType == StreamDataType.LOGIN_FAILED) {
+					onLoginFailed();
+				} else if (streamDataType == StreamDataType.OUT_OF_CLIENT_UI) {
+					onOutOfClientUI();
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -92,21 +95,39 @@ public class SocketHandler {
 		}
 	}
 
+	public void onLoginFailed() {
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Đã có người đăng nhập tài khoản này và đang chơi một trận đấu!\nVui lòng đăng nhập lại sau.",
+				"Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void onOutOfClientUI() {
+		Entry.onOutOfClientUI();
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Một người khác đã đăng nhập vào tài khoản này!\nBạn sẽ bị mất kết nối.", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void onDisconnectedToServer() {
+		JOptionPane.showMessageDialog(new JFrame(), "Không thể kết nối tới máy chủ!", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
 	public void onReceivedSigup(String receivedData) {
 		String data = receivedData;
 		System.out.println("socket " + data);
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
-			JOptionPane.showConfirmDialog(new JFrame(), "Đăng ký thành công");
+			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky thanh cong");
 
 		} else {
-			JOptionPane.showConfirmDialog(new JFrame(), "Đăng ký không thành công");
+			JOptionPane.showConfirmDialog(new JFrame(), "Dang ky khong thanh cong");
 		}
 	}
 
 	public void onReceivedMessage(String receivedData) {
 		String data = receivedData.split("/")[1];
 		System.out.println(receivedData);
-	//	Test.Paint(data);
+//		Entry.Paint(data);
 	}
 
 	public void onReceivedLogin(String receivedData) {
@@ -139,6 +160,7 @@ public class SocketHandler {
 			Entry.matchingDialog.isCancel = true;
 			Entry.matchingDialog.dispose();
 			Entry.onMatchAccepted(playerMoveMark);
+			Thread.sleep(100);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -196,7 +218,7 @@ public class SocketHandler {
 			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thắng!\nElo của bạn: " + currentElo + " + " + gainElo);
 			Entry.onMatchEnd();
 		} catch (Exception ex) {
-			
+
 		}
 	}
 
@@ -210,10 +232,10 @@ public class SocketHandler {
 			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thua!\nElo của bạn: " + currentElo + " - " + gainElo);
 			Entry.onMatchEnd();
 		} catch (Exception ex) {
-			
+
 		}
 	}
-	
+
 	public void onReceivedMessageInMatch(String receivedData) {
 		try {
 			String name = receivedData.split("/")[1];
@@ -288,7 +310,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void sendMessageInMatch(String message) {
 		try {
 			String sendingString = StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + message;
@@ -298,7 +320,7 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void sendTimeOutSignal() {
 		try {
 			String sendingString = StreamDataType.GAME_EVENT_TIMEOUT + "/";

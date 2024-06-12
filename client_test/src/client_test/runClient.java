@@ -32,7 +32,6 @@ public class runClient {
 		socketHandler = new SocketHandler();
 		socketHandler.connect();
 		test.dispose();
-		;
 		login = new Login();
 		login.setVisible(true);
 	}

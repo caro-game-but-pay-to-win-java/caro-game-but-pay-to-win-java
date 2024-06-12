@@ -18,8 +18,8 @@ import Entry.Entry;
 
 public class CaroBoard extends JFrame {
 	private JPanel CaroBoard;
-	private JPanel panel_TimeBorderPlayer1;
-	private JPanel panel_TimeBorderPlayer2;
+	private JPanel panel_TimeBorderPlayerP;
+	private JPanel panel_TimeBorderPlayerO;
 	private ButtonBoard[][] squares;
 	private boolean playerPlay = false; // sử dụng để đánh dấu mốc đến lượt người chơi , false là x , true là o
 	JLabel lblTimePlay; // Hiển thị thời gian trận đấu
@@ -28,7 +28,7 @@ public class CaroBoard extends JFrame {
 	JLabel lblAvatarPlayer2;
 	JLabel lblResult;
 	boolean flagTimeWarning = false; // sử dụng để cảnh báo thời gian
-	private int timePlay; // sử dụng cho bàn cờ
+	boolean flagPaint = false;
 	private int timeLess; // sử dụng để đếm thời gian đánh của người chơi
 	Timer timerLess; // sử dụng để bắt đầu đếm thời gian
 	private Image img_setting = new ImageIcon(LobbyFrame.class.getResource("/img/setting_img.png")).getImage()
@@ -97,7 +97,7 @@ public class CaroBoard extends JFrame {
 		panelContainer.setLayout(null);
 		// textField.setColumns(10);
 
-	    btnSend = new RadiusButton();
+		btnSend = new RadiusButton();
 		btnSend.setRadius(30);
 		btnSend.setText("SEND");
 		btnSend.addActionListener(new ActionListener() {
@@ -108,16 +108,16 @@ public class CaroBoard extends JFrame {
 				}
 			}
 		});
-		
-		 lbl_oMark = new JLabel("X");
-		 lbl_oMark.setHorizontalAlignment(SwingConstants.LEFT);
-		 lbl_oMark.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		 lbl_oMark.setBounds(985, 475, 50, 20);
-		 panelContainer.add(lbl_oMark);
+
+		lbl_oMark = new JLabel("X");
+		lbl_oMark.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_oMark.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_oMark.setBounds(985, 475, 50, 20);
+		panelContainer.add(lbl_oMark);
 		lbl_pMark_.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
-			lbl_pMark_.setBounds(985, 310, 50, 20);
-			panelContainer.add(lbl_pMark_);
+
+		lbl_pMark_.setBounds(985, 310, 50, 20);
+		panelContainer.add(lbl_pMark_);
 		btnSend.setBounds(1100, 763, 80, 34);
 		panelContainer.add(btnSend);
 
@@ -130,21 +130,21 @@ public class CaroBoard extends JFrame {
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
-				 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					 if (!txChat.getText().equals("")) {
-							Entry.socketHandler.sendMessageInMatch(txChat.getText());
-							txChat.setText("");
-						}
-	                }
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					if (!txChat.getText().equals("")) {
+						Entry.socketHandler.sendMessageInMatch(txChat.getText());
+						txChat.setText("");
+					}
+				}
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		panelContainer.add(txChat);
@@ -155,19 +155,17 @@ public class CaroBoard extends JFrame {
 		lbl_pElo.setVerticalAlignment(JLabel.CENTER);
 		panelContainer.add(lbl_pElo);
 
-		panel_TimeBorderPlayer1 = new JPanel() {
+		panel_TimeBorderPlayerP = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				if (!playerPlay) {
-					borderClock(g, panel_TimeBorderPlayer1);
-				}
+				borderClock(g, panel_TimeBorderPlayerP);
 			}
 		};
-		panel_TimeBorderPlayer1.setOpaque(false);
+		panel_TimeBorderPlayerP.setOpaque(false);
 
-		panel_TimeBorderPlayer1.setBounds(915, 241, 165, 100);
-		panelContainer.add(panel_TimeBorderPlayer1);
+		panel_TimeBorderPlayerP.setBounds(915, 241, 165, 100);
+		panelContainer.add(panel_TimeBorderPlayerP);
 
 		lbl_oName = new JLabel();
 		lbl_oName.setBounds(935, 432, 150, 28);
@@ -241,8 +239,8 @@ public class CaroBoard extends JFrame {
 		panel_1.setBounds(1021, 19, 179, 89);
 		panelContainer.add(panel_1);
 		panel_1.setLayout(null);
-		
-	    chatTextPane = new JTextPane() {
+
+		chatTextPane = new JTextPane() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -254,16 +252,16 @@ public class CaroBoard extends JFrame {
 				int shadowOffset = 4;
 				int cornerRadius = 20;
 				g2d.setColor(shadowColor);
-				g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2, getHeight() - shadowOffset * 2,
-						cornerRadius, cornerRadius);
+				g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2,
+						getHeight() - shadowOffset * 2, cornerRadius, cornerRadius);
 				g2d.dispose();
 			}
 		};
-		
-		chatTextPane.setFont(new Font("Tahoma",Font.BOLD,12));
+
+		chatTextPane.setFont(new Font("Tahoma", Font.BOLD, 12));
 		chatTextPane.setDisabledTextColor(Color.black);
 		chatTextPane.setOpaque(false);
-		//CustomPanel panel = new CustomPanel();
+		// CustomPanel panel = new CustomPanel();
 		chatTextPane.setEditable(false);
 		chatTextPane.setBorder(null);
 		chatTextPane.setBounds(806, 533, 369, 217);
@@ -283,13 +281,13 @@ public class CaroBoard extends JFrame {
 		lblTilteTimePlay.setHorizontalAlignment(JLabel.CENTER);
 		lblTilteTimePlay.setVerticalAlignment(JLabel.CENTER);
 
-		lblTimePlay = new JLabel();
-		lblTimePlay.setBounds(35, 40, 89, 17);
-		panel_2.add(lblTimePlay);
-		lblTimePlay.setForeground(new Color(0xfffffff));
-		lblTimePlay.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTimePlay.setHorizontalAlignment(JLabel.CENTER);
-		lblTimePlay.setVerticalAlignment(JLabel.CENTER);
+		lbl_matchTimer = new JLabel();
+		lbl_matchTimer.setBounds(35, 40, 89, 17);
+		panel_2.add(lbl_matchTimer);
+		lbl_matchTimer.setForeground(new Color(0xfffffff));
+		lbl_matchTimer.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lbl_matchTimer.setHorizontalAlignment(JLabel.CENTER);
+		lbl_matchTimer.setVerticalAlignment(JLabel.CENTER);
 
 		CustomPanelGradients panel_3 = new CustomPanelGradients();
 		panel_3.setBounds(915, 241, 165, 99);
@@ -300,46 +298,23 @@ public class CaroBoard extends JFrame {
 		panel_4.setBounds(915, 408, 165, 99);
 		panelContainer.add(panel_4);
 		panel_4.setLayout(null);
-		
-				panel_TimeBorderPlayer2 = new JPanel() {
-					@Override
-					protected void paintComponent(Graphics g) {
-						super.paintComponent(g);
-						if (playerPlay) {
-							borderClock(g, panel_TimeBorderPlayer2);
-						}
-		
-					}
-				};
-				panel_TimeBorderPlayer2.setBounds(0, 0, 165, 100);
-				panel_4.add(panel_TimeBorderPlayer2);
-				panel_TimeBorderPlayer2.setOpaque(false);
-		if (!playerPlay) {
-			initTimeBorder(panel_TimeBorderPlayer1);
-		}
+
+		panel_TimeBorderPlayerO = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				borderClock(g, panel_TimeBorderPlayerO);
+			}
+		};
+		panel_TimeBorderPlayerO.setBounds(0, 0, 165, 100);
+		panel_4.add(panel_TimeBorderPlayerO);
+		panel_TimeBorderPlayerO.setOpaque(false);
 		setVisible(true);
-		setupClock();
+		init();
 	}
 
 	private void squareClicked(int row, int col) {
 		JOptionPane.showMessageDialog(this, "Square clicked: " + (char) ('A' + col) + (19 - row));
-	}
-
-	protected void initTimeBorder(JPanel panel) {
-		if (timerLess != null && timerLess.isRunning()) {
-			timerLess.stop();
-			timerLess.setInitialDelay(0);
-			timeLess = 0;
-		}
-		timeLess = 0;
-		timerLess = new Timer(1000, e -> {
-			timeLess++;
-			panel.repaint();
-			System.out.println(timeLess);
-			panel.setVisible(true);
-		});
-
-		timerLess.start();
 	}
 
 	void initBG(Graphics g) {
@@ -354,21 +329,6 @@ public class CaroBoard extends JFrame {
 		int shadowOpacity = 90;
 		Color shadowColor = new Color(0, 0, 0, shadowOpacity);
 		g2d.setColor(shadowColor);
-	}
-
-	private void setupClock() {
-		Timer timer = new Timer(1000, e -> {
-			timePlay++;
-			int hours = timePlay / 3600;
-			int minutes = (timePlay % 3600) / 60;
-			int seconds = timePlay % 60;
-			String timeString = String.format("%02d:%02d", minutes, seconds);
-			lblTimePlay.setText(timeString);
-		});
-
-		timer.setInitialDelay(0);
-		timer.start();
-
 	}
 
 	private void borderClock(Graphics g, JPanel j) {
@@ -408,21 +368,6 @@ public class CaroBoard extends JFrame {
 			g.fillRect(0, 0, (timeLess - 35) * 13, 5);
 
 		}
-		if (timeLess == 40) {
-			JOptionPane.showConfirmDialog(this, "Hết thời gian đánh");
-			return;
-		}
-	}
-
-	private void switchPanel() {
-		if (playerPlay) {
-			initTimeBorder(panel_TimeBorderPlayer2);
-			panel_TimeBorderPlayer1.setVisible(false);
-		} else {
-			initTimeBorder(panel_TimeBorderPlayer1);
-			panel_TimeBorderPlayer2.setVisible(false);
-
-		}
 	}
 
 	void initBoardCaro() {
@@ -444,7 +389,6 @@ public class CaroBoard extends JFrame {
 				// click
 				squares[i][j].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						// switchPanel();
 						Entry.socketHandler.sendGameEventMove(row, col, playerMoveMark);
 					}
 				});
@@ -466,8 +410,8 @@ public class CaroBoard extends JFrame {
 		});
 		mTimer.start();
 		resetCalendar();
-		lbl_pRTime.setText("__:__");
-		lbl_oRTime.setText("__:__");
+//		lbl_pRTime.setText("__:__");
+//		lbl_oRTime.setText("__:__");
 		lbl_matchTimer.setText("__:__");
 	}
 
@@ -475,6 +419,7 @@ public class CaroBoard extends JFrame {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 40);
+		timeLess = 0;
 	}
 
 	public void setMoveMark(Integer playerMoveMark) {
@@ -495,12 +440,16 @@ public class CaroBoard extends JFrame {
 		pTimer = new Timer(1000, (ActionListener) new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				panel_TimeBorderPlayerP.setVisible(true);
+				timeLess++;
+				panel_TimeBorderPlayerP.repaint();
 				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
 				if (calendar.get(Calendar.SECOND) <= 10) {
 					lbl_pRTime.setForeground(Color.red);
 				} else {
 					lbl_pRTime.setForeground(Color.black);
 				}
+
 				lbl_pRTime.setText(sdf.format(calendar.getTime()));
 				calendar.add(Calendar.SECOND, -1);
 				System.out.println("PLAYER HAVE LEFT " + calendar.get(Calendar.SECOND));
@@ -522,12 +471,16 @@ public class CaroBoard extends JFrame {
 		oTimer = new Timer(1000, (ActionListener) new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				panel_TimeBorderPlayerO.setVisible(true);
+				timeLess++;
+				panel_TimeBorderPlayerO.repaint();
 				SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
 				if (calendar.get(Calendar.SECOND) <= 10) {
 					lbl_oRTime.setForeground(Color.red);
 				} else {
 					lbl_oRTime.setForeground(Color.black);
 				}
+
 				lbl_oRTime.setText(sdf.format(calendar.getTime()));
 				calendar.add(Calendar.SECOND, -1);
 				System.out.println("OPPONENT HAVE LEFT " + calendar.get(Calendar.SECOND));
@@ -539,20 +492,21 @@ public class CaroBoard extends JFrame {
 	public void blockPTimer() {
 		try {
 			pTimer.stop();
-			lbl_pRTime.setText("__:__");
+			panel_TimeBorderPlayerP.setVisible(false);
 		} catch (Exception ex) {
 
 		}
 	}
 
 	public void printMessage(String message) {
-		this.chatTextPane.setText(this.chatTextPane.getText() + "\n" +"  "+ message);
+		this.chatTextPane.setText(this.chatTextPane.getText() + "\n" + "  " + message);
 	}
 
 	public void blockOTimer() {
 		try {
 			oTimer.stop();
-			lbl_oRTime.setText("__:__");
+			panel_TimeBorderPlayerO.setVisible(false);
+
 		} catch (Exception ex) {
 
 		}
