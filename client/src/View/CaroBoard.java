@@ -75,6 +75,7 @@ public class CaroBoard extends JFrame {
 				initBG(g);
 			}
 		};
+		setResizable(false);
 		panelContainer.setBounds(0, 0, 1200, 850);
 		getContentPane().add(panelContainer);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -309,6 +310,8 @@ public class CaroBoard extends JFrame {
 		panel_TimeBorderPlayerO.setBounds(0, 0, 165, 100);
 		panel_4.add(panel_TimeBorderPlayerO);
 		panel_TimeBorderPlayerO.setOpaque(false);
+		panel_TimeBorderPlayerP.setVisible(false);
+		panel_TimeBorderPlayerO.setVisible(false);
 		setVisible(true);
 		init();
 	}
