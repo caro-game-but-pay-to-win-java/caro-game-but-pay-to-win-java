@@ -179,7 +179,7 @@ public class LobbyFrame extends JFrame {
 		rdEasy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot("easy");
+				startBoardVsBot("EASY");
 			}
 		});
 		rdEasy.setBounds(90, 146, 280, 50);
@@ -195,7 +195,7 @@ public class LobbyFrame extends JFrame {
 		rdMedium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot("medium");
+				startBoardVsBot("MEDIUM");
 			}
 		});
 		rdMedium.setBounds(90, 213, 280, 50);
@@ -211,7 +211,7 @@ public class LobbyFrame extends JFrame {
 		rdHard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				musicAction(flagMusicAction);
-				startBoardVsBot("hard");
+				startBoardVsBot("HARD");
 			}
 		});
 		rdHard.setBounds(90, 287, 280, 50);
@@ -542,6 +542,12 @@ public class LobbyFrame extends JFrame {
 		panel_container.add(panelcustomTopRight);
 
 		CustomPanelGradients panelcustomToppLeft = new CustomPanelGradients();
+		panelcustomToppLeft.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				Entry.
+			}
+		});
 		panelcustomToppLeft.setBounds(0, 20, 230, 67);
 		panel_container.add(panelcustomToppLeft);
 

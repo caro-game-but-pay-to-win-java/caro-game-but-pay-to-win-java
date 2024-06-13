@@ -24,6 +24,7 @@ public class CaroBoardClient extends JFrame {
 	private JPanel panel_TimeBorderPlayerP;
 	private JPanel panel_TimeBorderPlayerO;
 	private ButtonBoard[][] squares;
+	private String[][] squaresValues;
 	private static final int BOARD_SIZE = 19;
 	private static final int WIN_CONDITION = 5;
 	private static final String EMPTY = " ";
@@ -65,6 +66,7 @@ public class CaroBoardClient extends JFrame {
 	public CaroBoardClient(String level) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CaroBoard.class.getResource("/img/logo.png")));
 		this.level = level;
+		
 		setTitle("Caro Game");
 		setSize(1200, 850);
 		JPanel panelContainer = new JPanel() {
@@ -243,8 +245,10 @@ public class CaroBoardClient extends JFrame {
 	}
 
 	void initBoardCaro() {
+		squaresValues = new String[BOARD_SIZE][BOARD_SIZE];
 		for (int i = 0; i < 19; i++) {
 			for (int j = 0; j < 19; j++) {
+				squaresValues[i][j] = EMPTY;
 				squares[i][j] = new ButtonBoard();
 				squares[i][j].setContentAreaFilled(false);
 				squares[i][j].setSize(30, 30);
@@ -265,10 +269,11 @@ public class CaroBoardClient extends JFrame {
 	private void squareClicked(int row, int col) {
 		if (squares[row][col].getText().equals(EMPTY)) {
 			squares[row][col].setText(PLAYER);
+			squaresValues[row][col] = PLAYER;
 			squares[row][col].setForeground(Color.red);
 			squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
 			// Check for a winner after each move
-			String winner = checkWinner(squares);
+			String winner = checkWinner(squaresValues);
 			if (!winner.equals(EMPTY)) {
 				JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
 				Entry.lobbyFrame = new LobbyFrame();
@@ -282,13 +287,13 @@ public class CaroBoardClient extends JFrame {
 		}
 	}
 
-	private static String checkWinner(JButton[][] board) {
+	private static String checkWinner(String[][] board) {
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				if (!board[i][j].getText().equals(EMPTY)
+				if (!board[i][j].equals(EMPTY)
 						&& (checkDirection(board, i, j, 1, 0) || checkDirection(board, i, j, 0, 1)
 								|| checkDirection(board, i, j, 1, 1) || checkDirection(board, i, j, 1, -1))) {
-					return board[i][j].getText();
+					return board[i][j];
 				}
 			}
 		}
@@ -298,13 +303,17 @@ public class CaroBoardClient extends JFrame {
 	private void computerMove() {
 		Thread aiThread = new Thread(() -> {
 	        long startTime = System.currentTimeMillis();
-	        int[] move = bestMove(squares, "HARD", startTime);
+	        
+	        int[] move = bestMove(squaresValues, level.toLowerCase(), startTime);
 	        if (move != null) {
 	            SwingUtilities.invokeLater(() -> {
 	                int row = move[0];
 	                int col = move[1];
+	                squaresValues[row][col]=COMPUTER;
 	                squares[row][col].setText(COMPUTER);
-	                String winner = checkWinner(squares);
+	                squares[row][col].setForeground(Color.BLUE);
+	    			squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
+	                String winner = checkWinner(squaresValues);
 	                if (!winner.equals(EMPTY)) {
 	                    JOptionPane.showMessageDialog(null, "Computer " + winner + " wins!");
 	                }
@@ -315,21 +324,21 @@ public class CaroBoardClient extends JFrame {
 
 	}
 
-	private static boolean checkDirection(JButton[][] board, int x, int y, int dx, int dy) {
-		String current = board[x][y].getText();
+	private static boolean checkDirection(String[][]board, int x, int y, int dx, int dy) {
+		String current = board[x][y];
 		for (int i = 0; i < WIN_CONDITION; i++) {
 			int nx = x + i * dx, ny = y + i * dy;
-			if (nx < 0 || ny < 0 || nx >= BOARD_SIZE || ny >= BOARD_SIZE || !board[nx][ny].getText().equals(current)) {
+			if (nx < 0 || ny < 0 || nx >= BOARD_SIZE || ny >= BOARD_SIZE || !board[nx][ny].equals(current)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private static boolean isFull(JButton[][] board) {
+	private static boolean isFull(String[][]  board) {
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				if (board[i][j].getText().equals(EMPTY)) {
+				if (board[i][j].equals(EMPTY)) {
 					return false;
 				}
 			}
@@ -337,17 +346,17 @@ public class CaroBoardClient extends JFrame {
 		return true;
 	}
 
-	private static int evaluateBoard(JButton[][] board) {
+	private static int evaluateBoard(String[][] board) {
 		int score = 0;
 		score += evaluateLines(board, COMPUTER) - evaluateLines(board, PLAYER);
 		return score;
 	}
 
-	private static int evaluateLines(JButton[][] board, String player) {
+	private static int evaluateLines(String[][] board, String player) {
 		int score = 0;
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				if (board[i][j].getText().equals(player)) {
+				if (board[i][j].equals(player)) {
 					score += evaluateDirection(board, i, j, 1, 0, player);
 					score += evaluateDirection(board, i, j, 0, 1, player);
 					score += evaluateDirection(board, i, j, 1, 1, player);
@@ -358,11 +367,11 @@ public class CaroBoardClient extends JFrame {
 		return score;
 	}
 
-	private static int evaluateDirection(JButton[][] board, int x, int y, int dx, int dy, String player) {
+	private static int evaluateDirection(String[][] board, int x, int y, int dx, int dy, String player) {
 		int count = 0;
 		for (int i = 0; i < WIN_CONDITION; i++) {
 			int nx = x + i * dx, ny = y + i * dy;
-			if (nx < 0 || ny < 0 || nx >= BOARD_SIZE || ny >= BOARD_SIZE || !board[nx][ny].getText().equals(player)) {
+			if (nx < 0 || ny < 0 || nx >= BOARD_SIZE || ny >= BOARD_SIZE || !board[nx][ny].equals(player)) {
 				break;
 			}
 			count++;
@@ -378,7 +387,7 @@ public class CaroBoardClient extends JFrame {
 		return 0;
 	}
 
-	private static int minimax(JButton[][] board, int depth, boolean isMaximizing, int alpha, int beta, int maxDepth,
+	private static int minimax(String[][] board, int depth, boolean isMaximizing, int alpha, int beta, int maxDepth,
 			long startTime) {
 		if (System.currentTimeMillis() - startTime > MAX_TIME) {
 			return 0; // Return neutral score if out of time
@@ -395,12 +404,12 @@ public class CaroBoardClient extends JFrame {
 		int bestEval = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				if (board[i][j].getText().equals(EMPTY) && hasNeighbor(board, i, j)) {
+				if (board[i][j].equals(EMPTY) && hasNeighbor(board, i, j)) {
 
 					String temp = isMaximizing ? COMPUTER : PLAYER;
-					board[i][j].setText(temp);
+					board[i][j]=(temp);
 					int eval = minimax(board, depth + 1, !isMaximizing, alpha, beta, maxDepth, startTime);
-					board[i][j].setText(EMPTY);
+					board[i][j]=(EMPTY);
 					if (isMaximizing) {
 						bestEval = Math.max(bestEval, eval);
 						alpha = Math.max(alpha, eval);
@@ -416,12 +425,12 @@ public class CaroBoardClient extends JFrame {
 		return bestEval;
 	}
 
-	private static boolean hasNeighbor(JButton[][] board, int x, int y) {
+	private static boolean hasNeighbor(String[][] board, int x, int y) {
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
 				int nx = x + i, ny = y + j;
 				if (nx >= 0 && ny >= 0 && nx < BOARD_SIZE && ny < BOARD_SIZE
-						&& !board[nx][ny].getText().equals(EMPTY)) {
+						&& !board[nx][ny].equals(EMPTY)) {
 					return true;
 				}
 			}
@@ -429,13 +438,13 @@ public class CaroBoardClient extends JFrame {
 		return false;
 	}
 
-	private static int[] bestMove(JButton[][] board, String difficulty, long startTime) {
+	private static int[] bestMove(String[][] board, String difficulty, long startTime) {
 		Random random = new Random();
 		if (difficulty.equals("easy") || (difficulty.equals("medium") && random.nextDouble() < 0.5)) {
 			List<int[]> availableMoves = new ArrayList<>();
 			for (int i = 0; i < BOARD_SIZE; i++) {
 				for (int j = 0; j < BOARD_SIZE; j++) {
-					if (board[i][j].getText().equals(EMPTY) && hasNeighbor(board, i, j)) {
+					if (board[i][j].equals(EMPTY) && hasNeighbor(board, i, j)) {
 						availableMoves.add(new int[] { i, j });
 					}
 				}
@@ -453,8 +462,8 @@ public class CaroBoardClient extends JFrame {
 		int[] bestMove = null;
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				if (board[i][j].getText().equals(EMPTY) && hasNeighbor(board, i, j)) {
-					board[i][j].setText(COMPUTER);
+				if (board[i][j].equals(EMPTY) && hasNeighbor(board, i, j)) {
+					board[i][j]=COMPUTER;
 
 					int moveVal = 0;
 					for (int depth = 1; depth <= maxDepth; depth++) {
@@ -462,7 +471,7 @@ public class CaroBoardClient extends JFrame {
 						if (System.currentTimeMillis() - startTime > MAX_TIME)
 							break;
 					}
-					board[i][j].setText(EMPTY);
+					board[i][j]=EMPTY;
 					if (moveVal > bestVal) {
 						bestMove = new int[] { i, j };
 						bestVal = moveVal;
@@ -476,7 +485,7 @@ public class CaroBoardClient extends JFrame {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new CaroBoardClient("kho");
+				new CaroBoardClient("hard");
 			}
 		});
 	}

@@ -212,14 +212,15 @@ public class Player implements Runnable {
 
 	public void onWatchProfile() {
 		try {
-					
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+
 			this.outputStream.writeUTF(StreamDataType.WATCH_PROFILE + "/" + this.playerDTO.getUser_uid() + "/"
 					+ this.playerDTO.getFull_name() + "/" + this.playerDTO.getGender() + "/" + this.playerDTO.getEmail()
-					+ "/" + this.playerDTO.getPassword() + "/" + this.playerDTO.getDob() + "/"
+					+ "/" + this.playerDTO.getPassword() + "/" + this.playerDTO.getDob().format(formatter) + "/"
 					+ this.playerDTO.getTotal_matches() + "/" + this.playerDTO.getWin_streak_counts() + "/"
 					+ this.playerDTO.getWin_matches() + "/" + this.playerDTO.getLost_matches() + "/"
 					+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path() + "/"
-					+ this.playerDTO.getBiography() + "/" + this.playerDTO.getJoined_date() + "/"
+					+ this.playerDTO.getBiography() + "/" + this.playerDTO.getJoined_date().format(formatter) + "/"
 					+ this.playerDTO.getRank_id());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
