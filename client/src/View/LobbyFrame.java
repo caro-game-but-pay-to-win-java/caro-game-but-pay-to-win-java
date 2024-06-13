@@ -545,7 +545,7 @@ public class LobbyFrame extends JFrame {
 		panelcustomToppLeft.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				Entry.
+			Entry.socketHandler.sendWatchProfile();
 			}
 		});
 		panelcustomToppLeft.setBounds(0, 20, 230, 67);

@@ -213,7 +213,7 @@ public class Player implements Runnable {
 	public void onWatchProfile() {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-
+			
 			this.outputStream.writeUTF(StreamDataType.WATCH_PROFILE + "/" + this.playerDTO.getUser_uid() + "/"
 					+ this.playerDTO.getFull_name() + "/" + this.playerDTO.getGender() + "/" + this.playerDTO.getEmail()
 					+ "/" + this.playerDTO.getPassword() + "/" + this.playerDTO.getDob().format(formatter) + "/"

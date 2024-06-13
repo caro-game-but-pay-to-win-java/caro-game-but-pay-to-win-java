@@ -5,6 +5,7 @@ import Socket.SocketHandler;
 import View.CaroBoard;
 import View.LobbyFrame;
 import View.Login;
+import View.ProfileFrame;
 import View.SignUp;
 import music.MusicUtils;
 
@@ -15,7 +16,7 @@ public class Entry {
 	public static SignUp signUp;
 	public static LobbyFrame lobbyFrame;
 	public static CaroBoard caroboard;
-
+	public static ProfileFrame profile;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		socketHandler = new SocketHandler();
@@ -61,5 +62,11 @@ public class Entry {
 		caroboard.dispose();
 		lobbyFrame.setVisible(true);
 	}
-
+	public static void onShowProfile(String data)
+	{
+		profile = new ProfileFrame();
+		profile.setLocationRelativeTo(lobbyFrame);
+		profile.setVisible(true);
+		profile.setProfile(data);
+	}
 }
