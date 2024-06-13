@@ -31,6 +31,7 @@ public class ProfileFrame extends JFrame {
 	    private JLabel lblTotalMatch;
 	    private JLabel lblWinStreak;
 	    private JTextField textField;
+	    private JTextField txU_Uid;
 	/**
 	 * Launch the application.
 	 */
@@ -175,6 +176,11 @@ public class ProfileFrame extends JFrame {
 		txPassword.setBounds(477, 33, 86, 20);
 		contentPane.add(txPassword);
 		txPassword.setColumns(10);
+		
+		txU_Uid = new JTextField();
+		txU_Uid.setBounds(300, 257, 106, 20);
+		contentPane.add(txU_Uid);
+		txU_Uid.setColumns(10);
 	}
 
 	   public void setProfile(String data) {
@@ -208,7 +214,7 @@ public class ProfileFrame extends JFrame {
 	        String rankId = dataParts[15];
 	        String totalMatches = dataParts[7];
 	        String winStreakCounts = dataParts[8];
-
+	        txU_Uid.setText(dataParts[1]);
 	        txtName.setText(fullName);
 	        txGender.setText(gender);
 	        txDob.setText(dob);

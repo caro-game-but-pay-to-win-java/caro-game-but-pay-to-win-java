@@ -1,6 +1,8 @@
 package utils;
 
+import java.sql.Date;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +35,14 @@ public class ObjectMapping {
 			return players;
 		}
 	}
-
 	public static PlayerDTO mapFirstPlayer(ResultSet resultSet) {
 		try {
-			if (resultSet.next()) {				
+			if (resultSet.next()) {			
+			Date dob = resultSet.getDate(7);
+			Date joinDate = resultSet.getDate(15);
 				return new PlayerDTO(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getInt(8), resultSet.getInt(9),
-						resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12));
+						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), dob.toLocalDate(), resultSet.getInt(8), resultSet.getInt(9),
+						resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12),resultSet.getString(13),resultSet.getString(14),joinDate.toLocalDate(),resultSet.getInt(16));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
