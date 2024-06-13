@@ -3,8 +3,6 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import global.StreamDataType;
-
 public class PlayerManager {
 
 	private List<Player> players;
