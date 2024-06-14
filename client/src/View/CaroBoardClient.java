@@ -267,23 +267,31 @@ public class CaroBoardClient extends JFrame {
 	}
 
 	private void squareClicked(int row, int col) {
-		if (squares[row][col].getText().equals(EMPTY)) {
-			squares[row][col].setText(PLAYER);
-			squaresValues[row][col] = PLAYER;
-			squares[row][col].setForeground(Color.red);
-			squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
-			// Check for a winner after each move
-			String winner = checkWinner(squaresValues);
-			if (!winner.equals(EMPTY)) {
-				JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
-				Entry.lobbyFrame = new LobbyFrame();
-				Entry.lobbyFrame.setVisible(true);
-				dispose();
+		if(!playerPlay)
+		{
+			if (squares[row][col].getText().equals(EMPTY)) {
+				squares[row][col].setText(PLAYER);
+				squaresValues[row][col] = PLAYER;
+				squares[row][col].setForeground(Color.red);
+				squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
+				// Check for a winner after each move
+				String winner = checkWinner(squaresValues);
+				playerPlay = true;
+				if (!winner.equals(EMPTY)) {
+					JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
+					Entry.lobbyFrame = new LobbyFrame();
+					Entry.lobbyFrame.setVisible(true);
+					dispose();
+				} else {
+					computerMove();
+				}
 			} else {
-				computerMove();
+				JOptionPane.showMessageDialog(this, "Square already taken!");
 			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Square already taken!");
+		}
+		else {
+			JOptionPane.showMessageDialog(this, "Đừng vội!");
+
 		}
 	}
 
@@ -311,12 +319,13 @@ public class CaroBoardClient extends JFrame {
 	                int col = move[1];
 	                squaresValues[row][col]=COMPUTER;
 	                squares[row][col].setText(COMPUTER);
-	                squares[row][col].setForeground(Color.BLUE);
+	                squares[row][col].setForeground(Color.WHITE);
 	    			squares[row][col].setFont(new Font("Tahoma", Font.BOLD, 25));
 	                String winner = checkWinner(squaresValues);
 	                if (!winner.equals(EMPTY)) {
 	                    JOptionPane.showMessageDialog(null, "Computer " + winner + " wins!");
 	                }
+	                playerPlay = false;
 	            });
 	        }
 	    });

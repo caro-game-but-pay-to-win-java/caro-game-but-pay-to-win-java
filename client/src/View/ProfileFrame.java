@@ -17,7 +17,9 @@ import Entry.Entry;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
@@ -81,7 +83,21 @@ public class ProfileFrame extends JFrame {
 		setBounds(10, 34, 387, 310);
 		setUndecorated(true);
 		setResizable(false);
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+			@Override
+			public void paintComponents(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponents(g);
+				Graphics2D g2d = (Graphics2D) g;
+				GradientPaint gradient = new GradientPaint(0, 0, new Color(0x5170FF), // Màu bắt đầu (#ff8a00)#5170ff
+						getWidth(), getHeight(), new Color(0xff66c4) // Màu kết thúc (#e52e71)#ff66c4
+				);
+
+				// Sơn gradient trên JPanel
+				g2d.setPaint(gradient);
+				g2d.fillRect(0, 0, getWidth(), getHeight());
+			}
+		};
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
