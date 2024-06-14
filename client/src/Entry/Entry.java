@@ -26,9 +26,10 @@ public class Entry {
 		login.setVisible(true);
 	}
 
-	public static void onLoginSuccess() {
+	public static void onLoginSuccess(String data) {
 		lobbyFrame = new LobbyFrame();
 		login.dispose();
+		lobbyFrame.setData(data);
 		lobbyFrame.setVisible(true);
 	}
 
@@ -69,4 +70,5 @@ public class Entry {
 		profile.setVisible(true);
 		profile.setProfile(data);
 	}
+	
 }

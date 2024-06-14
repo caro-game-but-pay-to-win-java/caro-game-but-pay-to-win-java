@@ -164,7 +164,7 @@ public class Player implements Runnable {
 				}
 				this.playerDTO = player;
 				this.outputStream
-						.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name());
+						.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name() +"/"+ this.playerDTO.getElo_rating_points()+"/" + this.playerDTO.getPlayer_img_path());
 			} else {
 				this.outputStream.writeUTF(StreamDataType.LOGIN + "/" + "FAILED");
 			}
@@ -247,8 +247,6 @@ public class Player implements Runnable {
 
 	public void onEditProfile(String receiveData) {
 		try {
-//			String message = fullname + "/" + gender + "/" + dob +"/" + img_file_path +"/"+bio+"/"+password;
-//			String sendString = StreamDataType.EDIT_PROFILE+"/"+message;
 			String fullname = receiveData.split("/")[1];
 			String gender = receiveData.split("/")[2];
 			String dob = receiveData.split("/")[3];
@@ -268,7 +266,7 @@ public class Player implements Runnable {
 			PlayerDAL playerDAL = PlayerDAL.getInstance();
 			boolean flag = playerDAL.updateProfilePlayer(playerDTO);
 			if (flag) {
-				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getEmail());
+				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "SUCCESSFULLY" + "/"+ this.playerDTO.getFull_name() +"/"+ this.playerDTO.getElo_rating_points()+"/" + this.playerDTO.getPlayer_img_path());
 			}
 			else {
 				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "FAILED");

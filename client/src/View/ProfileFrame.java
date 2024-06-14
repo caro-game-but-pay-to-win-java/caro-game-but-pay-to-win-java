@@ -46,7 +46,6 @@ public class ProfileFrame extends JFrame {
 	private String txPassword;
 
 	private String pathAvatarPlayer;
-	private String pathAvatarRank;
 	JLabel lblLostMatch;
 	JLabel lblWinStreak;
 	JLabel lblTotalMatch;
@@ -58,7 +57,7 @@ public class ProfileFrame extends JFrame {
 	JButton btnDong;
 	JComboBox comboBox;
 	private Image img_Avatar;
-
+	String playerImgPath;
 	/**
 	 * Launch the application.
 	 */
@@ -92,8 +91,6 @@ public class ProfileFrame extends JFrame {
 				GradientPaint gradient = new GradientPaint(0, 0, new Color(0x5170FF), // Màu bắt đầu (#ff8a00)#5170ff
 						getWidth(), getHeight(), new Color(0xff66c4) // Màu kết thúc (#e52e71)#ff66c4
 				);
-
-				// Sơn gradient trên JPanel
 				g2d.setPaint(gradient);
 				g2d.fillRect(0, 0, getWidth(), getHeight());
 			}
@@ -203,15 +200,14 @@ public class ProfileFrame extends JFrame {
 		btnLuu = new JButton("Lưu");
 		btnLuu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 String[] avatarParts = pathAvatarPlayer.split("\\\\");
-			        
-			        String avatarPath;
-			        if (avatarParts.length > 7) {
-			            avatarPath = avatarParts[7];
-			        } else {
-			            avatarPath = pathAvatarPlayer;
-			        }
+				String[] avatarParts = pathAvatarPlayer.split("\\\\");
 
+				String avatarPath;
+				if (avatarParts.length > 7) {
+					avatarPath = avatarParts[7];
+				} else {
+					avatarPath = playerImgPath;
+				}
 			        Entry.socketHandler.sendEditProfile(
 			            txFullName.getText(), 
 			            comboBox.getSelectedItem().toString(), 
@@ -220,7 +216,7 @@ public class ProfileFrame extends JFrame {
 			            txBio.getText(),
 			            txPassword
 			        );
-
+			
 			}
 		});
 		btnLuu.setBounds(28, 253, 91, 23);
@@ -249,7 +245,7 @@ public class ProfileFrame extends JFrame {
 		String gender = dataParts[3];
 		String dob = dataParts[6];
 		String biography = dataParts[13];
-		String playerImgPath = dataParts[12];
+		 playerImgPath = dataParts[12];
 		String winMatches = dataParts[9];
 		String lostMatches = dataParts[10];
 		String eloRatingPoints = dataParts[11];

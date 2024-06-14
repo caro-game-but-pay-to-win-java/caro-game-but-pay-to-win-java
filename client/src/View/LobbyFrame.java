@@ -55,8 +55,7 @@ public class LobbyFrame extends JFrame {
 			.getScaledInstance(59, 60, Image.SCALE_SMOOTH);
 	private Image img_setting = new ImageIcon(LobbyFrame.class.getResource("/img/setting_img.png")).getImage()
 			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-	private Image img_man = new ImageIcon(LobbyFrame.class.getResource("/img/man_img.png")).getImage()
-			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+	private Image img_man;
 	private Image img_token = new ImageIcon(LobbyFrame.class.getResource("/img/token_img.png")).getImage()
 			.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
 	private Image img_Shop = new ImageIcon(LobbyFrame.class.getResource("/img/shop_img.png")).getImage()
@@ -77,10 +76,13 @@ public class LobbyFrame extends JFrame {
 	private JLabel lblTitleChoose;
 	private CustomTextFiled txtIdRoom;
 	private RadiusButton rdEnterChooseRoom;
+	private JLabel lblNameUser;
 	JLabel labelId;
 	int flagMusicAction = 1;
 	int flagMusicTheme = 0;
-
+	JLabel lblElo;
+	JLabel img_user;
+	JLabel lblAvatarUser;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -336,17 +338,17 @@ public class LobbyFrame extends JFrame {
 		cbAllMusic.setBounds(25, 91, 178, 21);
 		panelSetting.add(cbAllMusic);
 
-		JLabel lblUser = new JLabel("ADMIN");
-		lblUser.setBounds(105, 15, 230, 67);
-		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblUser.setForeground(Color.black);
-		panel_container.add(lblUser);
+		lblNameUser = new JLabel("ADMIN");
+		lblNameUser.setBounds(95, 25, 120, 36);
+		lblNameUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNameUser.setForeground(Color.black);
+		panel_container.add(lblNameUser);
 
-		JLabel lblTextToken = new JLabel("2,000");
-		lblTextToken.setBounds(65, 113, 80, 20);
-		lblTextToken.setFont(new Font("Lily Script One", Font.PLAIN, 20));
-		lblTextToken.setForeground(Color.black);
-		panel_container.add(lblTextToken);
+		 lblElo = new JLabel("2,000");
+		lblElo.setBounds(65, 113, 80, 20);
+		lblElo.setFont(new Font("Lily Script One", Font.PLAIN, 20));
+		lblElo.setForeground(Color.black);
+		panel_container.add(lblElo);
 
 		JLabel lblTextRanking = new JLabel("Ranking");
 		lblTextRanking.setBounds(908, 352, 70, 30);
@@ -388,10 +390,10 @@ public class LobbyFrame extends JFrame {
 		lblToken.setIcon(new ImageIcon(img_token));
 		panel_container.add(lblToken);
 
-		JLabel lblMan = new JLabel();
-		lblMan.setBounds(20, 25, 60, 60);
-		lblMan.setIcon(new ImageIcon(img_man));
-		panel_container.add(lblMan);
+		 lblAvatarUser = new JLabel();
+		lblAvatarUser.setBounds(20, 25, 60, 60);
+		
+		panel_container.add(lblAvatarUser);
 
 		JLabel lblNewLabel = new JLabel("CARO GAME");
 		lblNewLabel.setFont(new Font("Knewave", Font.PLAIN, 48));
@@ -545,7 +547,7 @@ public class LobbyFrame extends JFrame {
 		panelcustomToppLeft.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-			Entry.socketHandler.sendWatchProfile();
+				Entry.socketHandler.sendWatchProfile();
 			}
 		});
 		panelcustomToppLeft.setBounds(0, 20, 230, 67);
@@ -558,6 +560,7 @@ public class LobbyFrame extends JFrame {
 		TitledBorder titledBorderBXH = new TitledBorder(null, "Bảng xếp hạng", TitledBorder.CENTER, TitledBorder.TOP,
 				null, null);
 		titledBorderBXH.setTitleFont(new Font("Tahoma", Font.BOLD, 20));
+		musicAction(1);
 	}
 
 	void initBG(Graphics g) {
@@ -581,7 +584,7 @@ public class LobbyFrame extends JFrame {
 	void setVisibleButtonChooseLevel(boolean condi) {
 		lblTitleChoose.setText("Choose Level");
 		rdEasy.setVisible(condi);
-		rdMedium.setVisible(condi);	
+		rdMedium.setVisible(condi);
 		rdHard.setVisible(condi);
 		txtIdRoom.setVisible(!condi);
 		labelId.setVisible(!condi);
@@ -604,4 +607,33 @@ public class LobbyFrame extends JFrame {
 	static void startMusic() {
 		musicTheme.playCurrentSong();
 	}
+
+	public void setData(String data) {
+		String fullname = data.split("/")[2];
+		String elo = data.split("/")[3];
+		String path = data.split("/")[4];
+
+		lblNameUser.setText(fullname);
+		lblElo.setText(elo);
+		path = "/img/" + path;
+		java.net.URL imgUrl = LobbyFrame.class.getResource(path);
+		if (imgUrl != null) {
+			img_man = new ImageIcon(imgUrl).getImage().getScaledInstance(60,60, Image.SCALE_SMOOTH);
+		} else {
+			imgUrl = LobbyFrame.class.getResource("/img/beoj.jpg");
+			if (imgUrl != null) {
+				img_man = new ImageIcon(imgUrl).getImage().getScaledInstance(60,60, Image.SCALE_SMOOTH);
+			} else {
+				System.err.println("Default image not found.");
+			}
+		}
+
+		if (img_man != null) {
+			lblAvatarUser.setIcon(new ImageIcon(img_man));
+		} else {
+			lblAvatarUser.setIcon(null);
+		}
+
+	}
+	
 }

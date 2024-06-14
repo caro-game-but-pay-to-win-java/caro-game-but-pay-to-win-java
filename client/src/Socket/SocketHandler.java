@@ -147,10 +147,13 @@ public class SocketHandler {
 	{
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {	
-			JOptionPane.showMessageDialog(new JFrame(), "Cap nhat thanh cong");
-			Entry.onLoginSuccess();
+			JOptionPane.showMessageDialog(new JFrame(), "Cập nhật thành công");
+			Entry.lobbyFrame.dispose();
+			Entry.profile.dispose();
+			System.out.println("2: "+data);
+			Entry.onLoginSuccess(data);
 		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "Sai mật khẩu hoặc tên đăng nhập!", "Thông báo",
+			JOptionPane.showMessageDialog(new JFrame(), "Cập nhật thất bại!", "Thông báo",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -163,8 +166,10 @@ public class SocketHandler {
 	public void onReceivedLogin(String receivedData) {
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
+			System.out.println("2:L "+data);
 			CurrentAccount.getInstance().setEmail(data.split("/")[2]);
-			Entry.onLoginSuccess();
+			System.out.println(receivedData);
+			Entry.onLoginSuccess(receivedData);
 		} else {
 			JOptionPane.showMessageDialog(new JFrame(), "Sai mật khẩu hoặc tên đăng nhập!", "Thông báo",
 					JOptionPane.ERROR_MESSAGE);

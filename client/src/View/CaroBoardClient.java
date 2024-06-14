@@ -30,7 +30,7 @@ public class CaroBoardClient extends JFrame {
 	private static final String EMPTY = " ";
 	private static final String PLAYER = "X";
 	private static final String COMPUTER = "O";
-	private static final int MAX_TIME = 5000;
+	private static final int MAX_TIME = 10000;
 	private boolean playerPlay = false; // sử dụng để đánh dấu mốc đến lượt người chơi , false là x , true là o
 	JLabel lblTimePlay; // Hiển thị thời gian trận đấu
 	JLabel lblAvatarPlayer1;
@@ -286,7 +286,7 @@ public class CaroBoardClient extends JFrame {
 					computerMove();
 				}
 			} else {
-				JOptionPane.showMessageDialog(this, "Square already taken!");
+				JOptionPane.showMessageDialog(this, "?!");
 			}
 		}
 		else {
@@ -324,6 +324,9 @@ public class CaroBoardClient extends JFrame {
 	                String winner = checkWinner(squaresValues);
 	                if (!winner.equals(EMPTY)) {
 	                    JOptionPane.showMessageDialog(null, "Computer " + winner + " wins!");
+	                	Entry.lobbyFrame = new LobbyFrame();
+						Entry.lobbyFrame.setVisible(true);
+						dispose();
 	                }
 	                playerPlay = false;
 	            });
@@ -399,7 +402,7 @@ public class CaroBoardClient extends JFrame {
 	private static int minimax(String[][] board, int depth, boolean isMaximizing, int alpha, int beta, int maxDepth,
 			long startTime) {
 		if (System.currentTimeMillis() - startTime > MAX_TIME) {
-			return 0; // Return neutral score if out of time
+			return 0;
 		}
 
 		String winner = checkWinner(board);
@@ -464,7 +467,7 @@ public class CaroBoardClient extends JFrame {
 		int maxDepth = switch (difficulty) {
 		case "easy" -> 1;
 		case "medium" -> 2;
-		default -> 3;
+		default ->3;
 		};
 
 		int bestVal = Integer.MIN_VALUE;

@@ -217,10 +217,10 @@ public class CaroBoard extends JFrame {
 						"Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if (result == JOptionPane.YES_OPTION) {
-					timerLess.stop();
-					LobbyFrame lobby = new LobbyFrame();
-					lobby.setVisible(true);
-					dispose();
+					Entry.lobbyFrame = new LobbyFrame();
+					Entry.lobbyFrame.setVisible(true);
+					Entry.caroboard.dispose();
+				
 				}
 			}
 		});
@@ -530,7 +530,7 @@ public class CaroBoard extends JFrame {
 		String oName = data.split("/")[4];
 		String oMark = data.split("/")[5];
 		String oElo = data.split("/")[6];
-
+//		String imgP= 
 		lbl_pName.setText(pName);
 		if (Integer.valueOf(pMark) == MOVE.X_MOVE) {
 			lbl_pMark_.setText("X");
