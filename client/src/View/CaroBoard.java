@@ -24,8 +24,8 @@ public class CaroBoard extends JFrame {
 	private boolean playerPlay = false; // sử dụng để đánh dấu mốc đến lượt người chơi , false là x , true là o
 	JLabel lblTimePlay; // Hiển thị thời gian trận đấu
 	private CustomTextFiled txChat;
-	JLabel lblAvatarPlayer1;
-	JLabel lblAvatarPlayer2;
+	JLabel lblPAvatar;
+	JLabel lblOAvatar;
 	JLabel lblResult;
 	boolean flagTimeWarning = false; // sử dụng để cảnh báo thời gian
 	boolean flagPaint = false;
@@ -35,9 +35,9 @@ public class CaroBoard extends JFrame {
 			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 	private Image img_logout = new ImageIcon(LobbyFrame.class.getResource("/img/logout_img.png")).getImage()
 			.getScaledInstance(59, 60, Image.SCALE_SMOOTH);
-	private Image img_man = new ImageIcon(LobbyFrame.class.getResource("/img/man_img.png")).getImage()
+	private Image img_O = new ImageIcon(LobbyFrame.class.getResource("/img/man_img.png")).getImage()
 			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-	private Image img_girl = new ImageIcon(LobbyFrame.class.getResource("/img/girl_img.png")).getImage()
+	private Image img_P = new ImageIcon(LobbyFrame.class.getResource("/img/girl_img.png")).getImage()
 			.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 	Integer playerMoveMark = null;
 	Integer opponentMoveMark = null;
@@ -192,15 +192,13 @@ public class CaroBoard extends JFrame {
 		lbl_pName.setFont(new Font("Tahoma", Font.BOLD, 10));
 		panelContainer.add(lbl_pName);
 
-		lblAvatarPlayer1 = new JLabel("New label");
-		lblAvatarPlayer1.setBounds(925, 264, 55, 55);
-		lblAvatarPlayer1.setIcon(new ImageIcon(img_girl));
-		panelContainer.add(lblAvatarPlayer1);
+		lblPAvatar = new JLabel();
+		lblPAvatar.setBounds(925, 264, 55, 55);
+		panelContainer.add(lblPAvatar);
 
-		lblAvatarPlayer2 = new JLabel("New label");
-		lblAvatarPlayer2.setBounds(925, 431, 55, 55);
-		lblAvatarPlayer2.setIcon(new ImageIcon(img_man));
-		panelContainer.add(lblAvatarPlayer2);
+		lblOAvatar = new JLabel();
+		lblOAvatar.setBounds(925, 431, 55, 55);
+		panelContainer.add(lblOAvatar);
 
 		lblResult = new JLabel("VS");
 		lblResult.setBounds(925, 320, 155, 104);
@@ -217,10 +215,7 @@ public class CaroBoard extends JFrame {
 						"Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if (result == JOptionPane.YES_OPTION) {
-					Entry.lobbyFrame = new LobbyFrame();
-					Entry.lobbyFrame.setVisible(true);
-					Entry.caroboard.dispose();
-				
+					Entry.socketHandler.onDisconnectedToServer();
 				}
 			}
 		});
@@ -527,11 +522,12 @@ public class CaroBoard extends JFrame {
 		String pName = data.split("/")[1];
 		String pMark = data.split("/")[2];
 		String pElo = data.split("/")[3];
-		String oName = data.split("/")[4];
-		String oMark = data.split("/")[5];
-		String oElo = data.split("/")[6];
-//		String imgP= 
-		lbl_pName.setText(pName);
+		String pImg = data.split("/")[4];
+		String oName = data.split("/")[5];
+		String oMark = data.split("/")[6];
+		String oElo = data.split("/")[7];
+		String oImg = data.split("/")[8];
+
 		if (Integer.valueOf(pMark) == MOVE.X_MOVE) {
 			lbl_pMark_.setText("X");
 			lbl_pMark_.setForeground(Color.blue);
@@ -546,6 +542,34 @@ public class CaroBoard extends JFrame {
 		lbl_pElo.setText(pElo);
 		lbl_oName.setText(oName);
 		lbl_oElo.setText(oElo);
+		lbl_pName.setText(pName);
+		java.net.URL OimgUrl = CaroBoard.class.getResource("/imgAvatar/" + oImg);
+		if (OimgUrl != null) {
+			img_O = new ImageIcon(OimgUrl).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		} else {
+			OimgUrl = CaroBoard.class.getResource("/imgAvatar/beoj.jpg");
+			if (OimgUrl != null) {
+				img_O = new ImageIcon(OimgUrl).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+			} else {
+				System.err.println("Default image not found.");
+			}
+		}
+		
+		java.net.URL PimgUrl = CaroBoard.class.getResource("/imgAvatar/" +pImg);
+		if (PimgUrl != null) {
+			img_P = new ImageIcon(PimgUrl).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		} else {
+			PimgUrl = CaroBoard.class.getResource("/imgAvatar/beoj.jpg");
+			if (PimgUrl != null) {
+				img_P = new ImageIcon(PimgUrl).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+			} else {
+				System.err.println("Default image not found.");
+			}
+		}
+		
+		lblOAvatar.setIcon(new ImageIcon(img_O));
+		lblPAvatar.setIcon(new ImageIcon(img_P));
+	
 	}
 
 	public void paint(int x, int y, Integer move) {

@@ -287,7 +287,7 @@ public class ProfileFrame extends JFrame {
 	}
 
 	private void selectImage() {
-		JFileChooser fileChooser = new JFileChooser(ProfileFrame.class.getResource("/img/").getFile());
+		JFileChooser fileChooser = new JFileChooser(ProfileFrame.class.getResource("/imgAvatar/").getFile());
 		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
 		fileChooser.setFileFilter(imageFilter);
 

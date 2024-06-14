@@ -163,8 +163,9 @@ public class Player implements Runnable {
 					cplayer.remove();
 				}
 				this.playerDTO = player;
-				this.outputStream
-						.writeUTF(StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name() +"/"+ this.playerDTO.getElo_rating_points()+"/" + this.playerDTO.getPlayer_img_path());
+				this.outputStream.writeUTF(
+						StreamDataType.LOGIN + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name() + "/"
+								+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path());
 			} else {
 				this.outputStream.writeUTF(StreamDataType.LOGIN + "/" + "FAILED");
 			}
@@ -212,7 +213,7 @@ public class Player implements Runnable {
 	public void onWatchProfile() {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-			
+
 			this.outputStream.writeUTF(StreamDataType.WATCH_PROFILE + "/" + this.playerDTO.getUser_uid() + "/"
 					+ this.playerDTO.getFull_name() + "/" + this.playerDTO.getGender() + "/" + this.playerDTO.getEmail()
 					+ "/" + this.playerDTO.getPassword() + "/" + this.playerDTO.getDob().format(formatter) + "/"
@@ -266,9 +267,10 @@ public class Player implements Runnable {
 			PlayerDAL playerDAL = PlayerDAL.getInstance();
 			boolean flag = playerDAL.updateProfilePlayer(playerDTO);
 			if (flag) {
-				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "SUCCESSFULLY" + "/"+ this.playerDTO.getFull_name() +"/"+ this.playerDTO.getElo_rating_points()+"/" + this.playerDTO.getPlayer_img_path());
-			}
-			else {
+				this.outputStream.writeUTF(
+						StreamDataType.EDIT_PROFILE + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getFull_name() + "/"
+								+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path());
+			} else {
 				this.outputStream.writeUTF(StreamDataType.EDIT_PROFILE + "/" + "FAILED");
 			}
 		} catch (Exception e) {
@@ -303,14 +305,19 @@ public class Player implements Runnable {
 							Thread.sleep(200);
 							this.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
 									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
-									+ this.playerDTO.getElo_rating_points() + "/"
-									+ this.opponentPlayer.playerDTO.getFull_name() + "/" + this.opponentPlayer.move
-									+ "/" + this.opponentPlayer.playerDTO.getElo_rating_points() + "/");
+									+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path()
+									+ "/" + this.opponentPlayer.playerDTO.getFull_name() + "/"
+									+ this.opponentPlayer.move + "/"
+									+ this.opponentPlayer.playerDTO.getElo_rating_points() + "/"
+									+ this.opponentPlayer.playerDTO.getPlayer_img_path() + "/");
+
 							this.opponentPlayer.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
 									+ this.opponentPlayer.playerDTO.getFull_name() + "/" + this.opponentPlayer.move
 									+ "/" + this.opponentPlayer.playerDTO.getElo_rating_points() + "/"
+									+ this.opponentPlayer.playerDTO.getPlayer_img_path() + "/"
 									+ this.playerDTO.getFull_name() + "/" + this.move + "/"
-									+ this.playerDTO.getElo_rating_points() + "/");
+									+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path()
+									+ "/");
 
 							LocalTime time = LocalTime.now();
 							Random random = new Random();

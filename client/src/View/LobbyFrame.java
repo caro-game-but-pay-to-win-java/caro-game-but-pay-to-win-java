@@ -615,12 +615,12 @@ public class LobbyFrame extends JFrame {
 
 		lblNameUser.setText(fullname);
 		lblElo.setText(elo);
-		path = "/img/" + path;
+		path = "/imgAvatar/" + path;
 		java.net.URL imgUrl = LobbyFrame.class.getResource(path);
 		if (imgUrl != null) {
 			img_man = new ImageIcon(imgUrl).getImage().getScaledInstance(60,60, Image.SCALE_SMOOTH);
 		} else {
-			imgUrl = LobbyFrame.class.getResource("/img/beoj.jpg");
+			imgUrl = LobbyFrame.class.getResource("/imgAvatar/beoj.jpg");
 			if (imgUrl != null) {
 				img_man = new ImageIcon(imgUrl).getImage().getScaledInstance(60,60, Image.SCALE_SMOOTH);
 			} else {

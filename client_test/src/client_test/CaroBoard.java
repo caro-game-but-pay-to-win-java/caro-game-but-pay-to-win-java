@@ -302,9 +302,11 @@ public class CaroBoard extends JFrame {
 		String pName = data.split("/")[1];
 		String pMark = data.split("/")[2];
 		String pElo = data.split("/")[3];
-		String oName = data.split("/")[4];
-		String oMark = data.split("/")[5];
-		String oElo = data.split("/")[6];
+		String pImg = data.split("/")[4];
+		String oName = data.split("/")[5];
+		String oMark = data.split("/")[6];
+		String oElo = data.split("/")[7];
+		String oImg = data.split("/")[8];
 		
 		lbl_pName.setText(pName);
 		if (Integer.valueOf(pMark) == MOVE.X_MOVE) {			
