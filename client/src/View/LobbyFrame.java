@@ -341,7 +341,7 @@ public class LobbyFrame extends JFrame {
 		lblNameUser = new JLabel("ADMIN");
 		lblNameUser.setBounds(95, 25, 120, 36);
 		lblNameUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNameUser.setForeground(Color.black);
+		lblNameUser.setForeground(Color.WHITE);
 		panel_container.add(lblNameUser);
 
 		 lblElo = new JLabel("2,000");
