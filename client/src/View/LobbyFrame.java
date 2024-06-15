@@ -350,41 +350,6 @@ public class LobbyFrame extends JFrame {
 		lblElo.setForeground(Color.black);
 		panel_container.add(lblElo);
 
-		JLabel lblTextRanking = new JLabel("Ranking");
-		lblTextRanking.setBounds(908, 352, 70, 30);
-		lblTextRanking.setFont(new Font("Lily Script One", Font.PLAIN, 16));
-		lblTextRanking.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTextRanking.setForeground(Color.white);
-		panel_container.add(lblTextRanking);
-
-		JLabel lblTextAddFriend = new JLabel("Add friends");
-		lblTextAddFriend.setBounds(899, 533, 82, 30);
-		lblTextAddFriend.setFont(new Font("Lily Script One", Font.PLAIN, 16));
-		lblTextAddFriend.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTextAddFriend.setForeground(Color.white);
-		panel_container.add(lblTextAddFriend);
-
-		JLabel lblTextInbox = new JLabel("Inbox");
-		lblTextInbox.setBounds(908, 440, 70, 30);
-		lblTextInbox.setFont(new Font("Lily Script One", Font.PLAIN, 16));
-		lblTextInbox.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTextInbox.setForeground(Color.white);
-		panel_container.add(lblTextInbox);
-
-		JLabel lblTextFriends = new JLabel("Friends");
-		lblTextFriends.setBounds(904, 624, 82, 30);
-		lblTextFriends.setFont(new Font("Lily Script One", Font.PLAIN, 16));
-		lblTextFriends.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTextFriends.setForeground(Color.white);
-		panel_container.add(lblTextFriends);
-
-		JLabel lblTextShop = new JLabel("Shop");
-		lblTextShop.setBounds(33, 386, 41, 28);
-		lblTextShop.setFont(new Font("Lily Script One", Font.PLAIN, 20));
-		lblTextShop.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTextShop.setForeground(Color.white);
-		panel_container.add(lblTextShop);
-
 		JLabel lblToken = new JLabel();
 		lblToken.setBounds(15, 100, 45, 45);
 		lblToken.setIcon(new ImageIcon(img_token));
@@ -438,41 +403,6 @@ public class LobbyFrame extends JFrame {
 		lblLogout.setIcon(new ImageIcon(img_logout));
 		lblLogout.setBounds(930, 25, 60, 60);
 		panel_container.add(lblLogout);
-
-		JLabel lblListFriends = new JLabel();
-
-		lblListFriends.setBounds(918, 567, 53, 53);
-		lblListFriends.setIcon(new ImageIcon(img_friends));
-		panel_container.add(lblListFriends);
-
-		JLabel lblAddFriend = new JLabel();
-		lblAddFriend.setBounds(921, 474, 60, 60);
-		lblAddFriend.setIcon(new ImageIcon(img_Add_friend));
-		panel_container.add(lblAddFriend);
-
-		JLabel lblMessage = new JLabel();
-		lblMessage.setBounds(913, 381, 60, 60);
-		lblMessage.setIcon(new ImageIcon(img_Message));
-		panel_container.add(lblMessage);
-
-		JLabel lblRank = new JLabel();
-		lblRank.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				musicAction(flagMusicAction);
-				RankingFrame rk = new RankingFrame();
-				rk.setVisible(true);
-
-			}
-		});
-		lblRank.setBounds(914, 290, 62, 62);
-		lblRank.setIcon(new ImageIcon(img_Rank));
-		panel_container.add(lblRank);
-
-		JLabel lblShop = new JLabel();
-		lblShop.setBounds(23, 330, 60, 60);
-		lblShop.setIcon(new ImageIcon(img_Shop));
-		panel_container.add(lblShop);
 
 		rdvsBot = new RadiusButton();
 		rdvsBot.addMouseListener(new MouseAdapter() {
@@ -530,14 +460,6 @@ public class LobbyFrame extends JFrame {
 		rdChooseRoom.setText("CHOOSE ROOM");
 		rdChooseRoom.setBounds(368, 542, 280, 50);
 		panel_container.add(rdChooseRoom);
-
-		CustomPanel panelcustomLeft = new CustomPanel();
-		panelcustomLeft.setBounds(10, 320, 87, 93);
-		panel_container.add(panelcustomLeft);
-
-		CustomPanel panelcustomRight = new CustomPanel();
-		panelcustomRight.setBounds(880, 288, 120, 394);
-		panel_container.add(panelcustomRight);
 
 		CustomPanel panelcustomTopRight = new CustomPanel();
 		panelcustomTopRight.setBounds(803, 20, 197, 70);

@@ -46,7 +46,7 @@ public class MatchingDialog extends JDialog {
 			public void run() {
 				while (!isCancel) {
 					try {
-						Thread.sleep(10000);
+						Thread.sleep(500);
 						Entry.socketHandler.sendMatchingRequest();
 					} catch (Exception ex) {
 						ex.printStackTrace();
