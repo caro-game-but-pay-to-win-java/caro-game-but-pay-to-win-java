@@ -24,7 +24,7 @@ public class runServer {
 			serverSocket = new ServerSocket(GVAR.SERVER_PORT);
 			playerManager = new PlayerManager();
 			System.out.println("Server is running at port " + GVAR.SERVER_PORT + ".");
-
+			
 			ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 100, 10, TimeUnit.SECONDS,
 					new ArrayBlockingQueue<>(8));
 

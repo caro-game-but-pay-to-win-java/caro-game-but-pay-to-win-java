@@ -197,9 +197,8 @@ public class Player implements Runnable {
 				PlayerDAL playerDAL = PlayerDAL.getInstance();
 				boolean flag = playerDAL.createPlayer(player);
 				if (flag) {
-					this.playerDTO = player;
 					this.outputStream
-							.writeUTF(StreamDataType.SIGNUP + "/" + "SUCCESSFULLY" + "/" + this.playerDTO.getEmail());
+							.writeUTF(StreamDataType.SIGNUP + "/" + "SUCCESSFULLY" + "/" + player.getEmail());
 				} else {
 					this.outputStream.writeUTF(StreamDataType.SIGNUP + "/" + "FAILED");
 				}
