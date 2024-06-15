@@ -37,11 +37,11 @@ public class Entry {
 	}
 
 	public static void onOutOfClientUI() {
+		login = new Login();
+		login.setVisible(true);
 		socketHandler = new SocketHandler();
 		socketHandler.connect();
 		lobbyFrame.dispose();
-		login = new Login();
-		login.setVisible(true);
 	}
 	
 	public static void onSurrender() {

@@ -426,6 +426,15 @@ public class SocketHandler {
 			e.printStackTrace();
 		}
 	}
+	
+	public void sendLogOutSignal() {
+		try {
+			String sendingString = StreamDataType.LOGOUT + "/";
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void sendCreateRoomSignal() {
 		try {

@@ -394,7 +394,7 @@ public class LobbyFrame extends JFrame {
 				int choice = JOptionPane.showConfirmDialog(getContentPane(), "Bạn có muốn đăng xuất không?", "Xác nhận",
 						JOptionPane.YES_NO_OPTION);
 				if (choice == JOptionPane.YES_OPTION) {
-					Entry.socketHandler.onOutOfClientUI();
+					Entry.socketHandler.sendLogOutSignal();
 					dispose();
 				}
 			}

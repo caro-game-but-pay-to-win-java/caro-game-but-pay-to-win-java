@@ -126,10 +126,7 @@ public class Player implements Runnable {
 		try {
 			this.outputStream.writeUTF(StreamDataType.LOGOUT + "/");
 			Thread.sleep(100);
-			this.inputStream.close();
-			this.outputStream.close();
-			this.socket.close();
-			runServer.playerManager.remove(this);
+			this.playerDTO = null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
