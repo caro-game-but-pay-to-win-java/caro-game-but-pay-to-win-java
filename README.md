@@ -60,11 +60,11 @@
 - Realtime In-game chatting: Đã hoàn thành.
 - Reatime Matching & Matching Algorithm: Đã hoàn thành.
 - Realtime In-game gameplay: Đã hoàn thành.
-- Realtime Server-Client broadcasting: 99%.
-- Elo Calculation: 70%.
-- Achievements System: 0%.
-- Ranking System: 0%.
-- Player Profile Editing: 0%.
+- Realtime Server-Client broadcasting: Đã hoàn thành.
+- Elo Calculation: Đã hoàn thành.
+- Achievements System: Dư thừa, không làm.
+- Ranking System: Dư thừa, không làm.
+- Player Profile Editing: Đã hoàn thành.
 
 ## Giấy phép
 
