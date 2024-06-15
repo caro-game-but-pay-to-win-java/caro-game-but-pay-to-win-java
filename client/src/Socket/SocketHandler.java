@@ -273,12 +273,14 @@ public class SocketHandler {
 	public void onReceivedMatchWin(String receivedData) {
 		try {
 			String currentElo = receivedData.split("/")[1];
+			String gainElo = receivedData.split("/")[2];
+			Integer elo = Integer.valueOf(currentElo) + Integer.valueOf(gainElo);
 			Entry.caroboard.blockPTimer();
 			Entry.caroboard.blockOTimer();
 			Entry.caroboard.blockMatchTimer();
-			String gainElo = receivedData.split("/")[2];
 			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thắng!\nElo của bạn: " + currentElo + " + " + gainElo);
 			Entry.onMatchEnd();
+			Entry.lobbyFrame.setElo(String.valueOf(elo));
 		} catch (Exception ex) {
 
 		}
@@ -288,11 +290,14 @@ public class SocketHandler {
 		try {
 			String currentElo = receivedData.split("/")[1];
 			String gainElo = receivedData.split("/")[2];
+			Integer elo = Integer.valueOf(currentElo) - Integer.valueOf(gainElo);
+			
 			Entry.caroboard.blockPTimer();
 			Entry.caroboard.blockOTimer();
 			Entry.caroboard.blockMatchTimer();
 			JOptionPane.showMessageDialog(new JFrame(), "Bạn đã thua!\nElo của bạn: " + currentElo + " - " + gainElo);
 			Entry.onMatchEnd();
+			Entry.lobbyFrame.setElo(String.valueOf(elo));
 		} catch (Exception ex) {
 
 		}

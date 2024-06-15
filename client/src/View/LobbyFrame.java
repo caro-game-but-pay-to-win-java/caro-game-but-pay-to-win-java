@@ -544,6 +544,10 @@ public class LobbyFrame extends JFrame {
 	static void startMusic() {
 		musicTheme.playCurrentSong();
 	}
+	
+	public void setElo(String data) {
+		lblElo.setText(data);
+	}
 
 	public void setData(String data) {
 		String fullname = data.split("/")[2];
