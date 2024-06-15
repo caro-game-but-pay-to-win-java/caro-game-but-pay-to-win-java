@@ -94,6 +94,10 @@ public class SocketHandler {
 					onReceivedEditProfile(receivedData);
 				} else if (streamDataType == StreamDataType.LOGOUT) {
 					onLogOut();
+				} else if (streamDataType == StreamDataType.CREATE_ROOM) {
+					onCreateRoom(receivedData);
+				} else if (streamDataType == StreamDataType.ROOM_NOT_FOUND) {
+					onRoomNotFound();
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -102,9 +106,23 @@ public class SocketHandler {
 			}
 		}
 	}
-	
+
+	public void onCreateRoom(String receivedData) {
+		try {
+			Thread.sleep(300);
+			Entry.roomDialog.setPassword(receivedData.split("/")[1]);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public void onLogOut() {
 		Entry.onOutOfClientUI();
+	}
+
+	public void onRoomNotFound() {
+		JOptionPane.showMessageDialog(new JFrame(), "Không tìm thấy phòng!", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void onLoginFailed() {
@@ -196,8 +214,13 @@ public class SocketHandler {
 	public void onReceivedMatchAccepted(String receivedData) {
 		try {
 			Integer playerMoveMark = Integer.valueOf(receivedData.split("/")[1]);
-			Entry.matchingDialog.isCancel = true;
-			Entry.matchingDialog.dispose();
+			if (Entry.matchingDialog != null) {
+				Entry.matchingDialog.isCancel = true;
+				Entry.matchingDialog.dispose();
+			}
+			if (Entry.roomDialog != null) {
+				Entry.roomDialog.dispose();
+			}
 			Entry.onMatchAccepted(playerMoveMark);
 			Thread.sleep(100);
 		} catch (Exception ex) {
@@ -389,13 +412,40 @@ public class SocketHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sendSurrenderSignal() {
 		try {
 			String sendingString = StreamDataType.GAME_EVENT_SURRENDER + "/";
 			this.outputStream.writeUTF(sendingString);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void sendCreateRoomSignal() {
+		try {
+			String sendingString = StreamDataType.CREATE_ROOM + "/";
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void sendCancelRoomSignal() {
+		try {
+			String sendingString = StreamDataType.CANCEL_ROOM + "/";
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void sendJoinRoomSignal(String password) {
+		try {
+			String sendingString = StreamDataType.JOIN_ROOM + "/" + password;
+			this.outputStream.writeUTF(sendingString);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 }

@@ -27,6 +27,10 @@ public class StreamDataType {
 	public static final Integer OUT_OF_CLIENT_UI = 22;
 	public static final Integer DISCONNECTED = 23;
 	public static final Integer LOGOUT = 24;
+	public static final Integer CREATE_ROOM = 25;
+	public static final Integer CANCEL_ROOM = 26;
+	public static final Integer JOIN_ROOM = 27;
+	public static final Integer ROOM_NOT_FOUND = 28;
 	
 	public static Integer getTypeFromData(String receivedData) {
 		String type = receivedData.split("/")[0];
