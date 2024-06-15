@@ -16,6 +16,7 @@ import CustomComponents.CustomPanel;
 import CustomComponents.CustomPanelGradients;
 import CustomComponents.CustomTextFiled;
 import CustomComponents.RadiusButton;
+
 import Socket.MOVE;
 import Entry.Entry;
 
@@ -30,7 +31,7 @@ public class CaroBoardClient extends JFrame {
 	private static final String EMPTY = " ";
 	private static final String PLAYER = "X";
 	private static final String COMPUTER = "O";
-	private static final int MAX_TIME = 10000;
+	private static final int MAX_TIME = 20000;
 	private boolean playerPlay = false; // sử dụng để đánh dấu mốc đến lượt người chơi , false là x , true là o
 	JLabel lblTimePlay; // Hiển thị thời gian trận đấu
 	JLabel lblAvatarPlayer1;
@@ -227,6 +228,8 @@ public class CaroBoardClient extends JFrame {
 		panel_TimeBorderPlayerO.setBounds(0, 0, 165, 100);
 		panel_4.add(panel_TimeBorderPlayerO);
 		panel_TimeBorderPlayerO.setOpaque(false);
+		
+		
 		setVisible(true);
 	}
 
@@ -279,7 +282,7 @@ public class CaroBoardClient extends JFrame {
 				playerPlay = true;
 				if (!winner.equals(EMPTY)) {
 					JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
-					Entry.lobbyFrame = new LobbyFrame();
+//					Entry.lobbyFrame 
 					Entry.lobbyFrame.setVisible(true);
 					dispose();
 				} else {
