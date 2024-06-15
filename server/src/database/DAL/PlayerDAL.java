@@ -63,7 +63,7 @@ public class PlayerDAL {
 		try {
 			Connector connector = new Connector();
 			String sql = "INSERT INTO players (user_uid, full_name, gender, email, password, dob, total_matches, win_streak_counts, win_matches, lost_matches, elo_rating_points, player_img_file_path, biography, joined_date, rank_id) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 500, '/HinhAnh.png', ' ', ?, 1)";
+					+ "VALUES (?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 500, 'HinhAnh.png', ' ', ?, 1)";
 
 			PreparedStatement ps = connector.getConnection().prepareStatement(sql);
 			ps.setString(1, player.getUser_uid());

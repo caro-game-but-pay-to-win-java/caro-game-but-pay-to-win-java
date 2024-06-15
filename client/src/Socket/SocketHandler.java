@@ -32,7 +32,7 @@ public class SocketHandler {
 
 			// this.socket = new Socket();
 
-			this.socket = new Socket("127.0.0.1", 9123);
+			this.socket = new Socket("192.168.1.100", 9123);
 
 			this.outputStream = new DataOutputStream(this.socket.getOutputStream());
 			this.inputStream = new DataInputStream(this.socket.getInputStream());

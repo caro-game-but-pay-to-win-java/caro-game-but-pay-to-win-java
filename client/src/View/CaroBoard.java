@@ -119,12 +119,12 @@ public class CaroBoard extends JFrame {
 
 		lbl_pMark_.setBounds(985, 310, 50, 20);
 		panelContainer.add(lbl_pMark_);
-		btnSend.setBounds(1100, 763, 80, 34);
+		btnSend.setBounds(1100, 740, 80, 34);
 		panelContainer.add(btnSend);
 
 		txChat = new CustomTextFiled();
 		txChat.setForeground(Color.WHITE);
-		txChat.setBounds(825, 763, 265, 34);
+		txChat.setBounds(825, 740, 265, 34);
 		txChat.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txChat.addKeyListener(new KeyListener() {
 			@Override
@@ -151,7 +151,7 @@ public class CaroBoard extends JFrame {
 		panelContainer.add(txChat);
 
 		lbl_pElo = new JLabel("1,000 point");
-		lbl_pElo.setBounds(960, 457, 100, 20);
+		lbl_pElo.setBounds(960, 290, 100, 20);
 		lbl_pElo.setHorizontalAlignment(JLabel.CENTER);
 		lbl_pElo.setVerticalAlignment(JLabel.CENTER);
 		panelContainer.add(lbl_pElo);
@@ -179,7 +179,7 @@ public class CaroBoard extends JFrame {
 		panelContainer.add(lbl_oName);
 
 		lbl_oElo = new JLabel("1,000 point");
-		lbl_oElo.setBounds(960, 279, 100, 51);
+		lbl_oElo.setBounds(960, 450, 100, 20);
 		lbl_oElo.setHorizontalAlignment(JLabel.CENTER);
 		lbl_oElo.setVerticalAlignment(JLabel.CENTER);
 		panelContainer.add(lbl_oElo);
@@ -260,7 +260,7 @@ public class CaroBoard extends JFrame {
 		// CustomPanel panel = new CustomPanel();
 		chatTextPane.setEditable(false);
 		chatTextPane.setBorder(null);
-		chatTextPane.setBounds(806, 533, 369, 217);
+		chatTextPane.setBounds(806, 520, 369, 217);
 		panelContainer.add(chatTextPane);
 		chatTextPane.setLayout(null);
 
