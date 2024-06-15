@@ -5,6 +5,7 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import Entry.Entry;
@@ -30,7 +31,7 @@ public class Login extends JFrame {
 	private Image BackgroundLogin = new ImageIcon(Login.class.getResource("/img/bg_login.jpg")).getImage()
 			.getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
 	private JTextField txtUsername;
-	private JTextField txtPassword;
+	private JPasswordField txtPassword;
 
 	/**
 	 * Launch the application.
@@ -112,7 +113,7 @@ public class Login extends JFrame {
 		lblNewLabel_1_1.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		login_layout.add(lblNewLabel_1_1);
 
-		txtPassword = new JTextField();
+		txtPassword = new JPasswordField();
 		sl_login_layout.putConstraint(SpringLayout.NORTH, txtPassword, 23, SpringLayout.SOUTH, txtUsername);
 		sl_login_layout.putConstraint(SpringLayout.WEST, txtPassword, 116, SpringLayout.WEST, login_layout);
 		sl_login_layout.putConstraint(SpringLayout.EAST, txtPassword, -24, SpringLayout.EAST, login_layout);
@@ -120,6 +121,7 @@ public class Login extends JFrame {
 		txtPassword.setBackground(Color.BLACK);
 		sl_login_layout.putConstraint(SpringLayout.EAST, lblNewLabel_1_1, -25, SpringLayout.WEST, txtPassword);
 		txtPassword.setColumns(10);
+		txtPassword.setForeground(Color.WHITE);
 		login_layout.add(txtPassword);
 
 		JButton btnLogin = new JButton("LOGIN");
