@@ -215,7 +215,9 @@ public class CaroBoard extends JFrame {
 						"Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if (result == JOptionPane.YES_OPTION) {
-					Entry.socketHandler.onDisconnectedToServer();
+					Entry.socketHandler.sendSurrenderSignal();
+					Entry.onSurrender();
+					dispose();
 				}
 			}
 		});

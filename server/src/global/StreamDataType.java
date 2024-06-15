@@ -26,6 +26,7 @@ public class StreamDataType {
 	public static final Integer LOGIN_FAILED = 21;
 	public static final Integer OUT_OF_CLIENT_UI = 22;
 	public static final Integer DISCONNECTED = 23;
+	public static final Integer LOGOUT = 24;
 
 	public static Integer getTypeFromData(String receivedData) {
 		String type = receivedData.split("/")[0];

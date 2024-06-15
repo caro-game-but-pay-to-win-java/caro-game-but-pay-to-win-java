@@ -40,6 +40,10 @@ public class Entry {
 		login = new Login();
 		login.setVisible(true);
 	}
+	
+	public static void onSurrender() {
+		lobbyFrame.setVisible(true);
+	}
 
 	public static void onDisconnectedToServer() {
 		// code

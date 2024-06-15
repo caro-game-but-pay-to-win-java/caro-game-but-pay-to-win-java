@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import Entry.Entry;
 import Models.CurrentAccount;
 
-import View.LobbyFrame;
 import View.Login;
 
 public class SocketHandler {
@@ -26,13 +25,14 @@ public class SocketHandler {
 	public SocketHandler() {
 		// TODO Auto-generated constructor stub
 	}
+
 	public Boolean connect() {
 		try {
 			// InetAddress inetAddress = InetAddress.getByName();
 
 			// this.socket = new Socket();
 
-			this.socket = new Socket("192.168.1.100", 9123);
+			this.socket = new Socket("127.0.0.1", 9123);
 
 			this.outputStream = new DataOutputStream(this.socket.getOutputStream());
 			this.inputStream = new DataInputStream(this.socket.getInputStream());
@@ -88,20 +88,23 @@ public class SocketHandler {
 					onLoginFailed();
 				} else if (streamDataType == StreamDataType.OUT_OF_CLIENT_UI) {
 					onOutOfClientUI();
-				}
-				else if(streamDataType==StreamDataType.WATCH_PROFILE)
-				{
+				} else if (streamDataType == StreamDataType.WATCH_PROFILE) {
 					onReceivedWatchProfile(receivedData);
-				}
-				else if(streamDataType==StreamDataType.EDIT_PROFILE)
-				{
+				} else if (streamDataType == StreamDataType.EDIT_PROFILE) {
 					onReceivedEditProfile(receivedData);
+				} else if (streamDataType == StreamDataType.LOGOUT) {
+					onLogOut();
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				isRunning = false;
+				onDisconnectedToServer();
 			}
 		}
+	}
+	
+	public void onLogOut() {
+		Entry.onOutOfClientUI();
 	}
 
 	public void onLoginFailed() {
@@ -120,6 +123,7 @@ public class SocketHandler {
 	public void onDisconnectedToServer() {
 		JOptionPane.showMessageDialog(new JFrame(), "Không thể kết nối tới máy chủ!", "Thông báo",
 				JOptionPane.INFORMATION_MESSAGE);
+		Entry.onOutOfClientUI();
 	}
 
 	public void onReceivedSigup(String receivedData) {
@@ -134,8 +138,8 @@ public class SocketHandler {
 			JOptionPane.showMessageDialog(new JFrame(), "Dang ky khong thanh cong");
 		}
 	}
-	public void onReceivedWatchProfile(String receivedData)
-	{
+
+	public void onReceivedWatchProfile(String receivedData) {
 		try {
 			Entry.onShowProfile(receivedData);
 		} catch (Exception e) {
@@ -143,20 +147,20 @@ public class SocketHandler {
 			e.printStackTrace();
 		}
 	}
-	public void onReceivedEditProfile(String receivedData)
-	{
+
+	public void onReceivedEditProfile(String receivedData) {
 		String data = receivedData;
-		if (data.split("/")[1].equals("SUCCESSFULLY")) {	
+		if (data.split("/")[1].equals("SUCCESSFULLY")) {
 			JOptionPane.showMessageDialog(new JFrame(), "Cập nhật thành công");
 			Entry.lobbyFrame.dispose();
 			Entry.profile.dispose();
-			System.out.println("2: "+data);
+			System.out.println("2: " + data);
 			Entry.onLoginSuccess(data);
 		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "Cập nhật thất bại!", "Thông báo",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), "Cập nhật thất bại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
 	public void onReceivedMessage(String receivedData) {
 		String data = receivedData.split("/")[1];
 		System.out.println(receivedData);
@@ -166,7 +170,7 @@ public class SocketHandler {
 	public void onReceivedLogin(String receivedData) {
 		String data = receivedData;
 		if (data.split("/")[1].equals("SUCCESSFULLY")) {
-			System.out.println("2:L "+data);
+			System.out.println("2:L " + data);
 			CurrentAccount.getInstance().setEmail(data.split("/")[2]);
 			System.out.println(receivedData);
 			Entry.onLoginSuccess(receivedData);
@@ -309,7 +313,7 @@ public class SocketHandler {
 					+ gender;
 			System.out.println("SENDING OUT DATA: " + sendingString);
 			this.outputStream.writeUTF(sendingString);
-				
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -365,21 +369,31 @@ public class SocketHandler {
 			ex.printStackTrace();
 		}
 	}
-	public void sendWatchProfile()
-	{
+
+	public void sendWatchProfile() {
 		try {
-			String sendingString = StreamDataType.WATCH_PROFILE+"/";
+			String sendingString = StreamDataType.WATCH_PROFILE + "/";
 			this.outputStream.writeUTF(sendingString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public void sendEditProfile(String fullname,String gender,String dob,String img_file_path,String bio , String password)
-	{
+
+	public void sendEditProfile(String fullname, String gender, String dob, String img_file_path, String bio,
+			String password) {
 		try {
-			String message = fullname + "/" + gender + "/" + dob +"/" + img_file_path +"/"+bio+"/"+password;
-			String sendString = StreamDataType.EDIT_PROFILE+"/"+message;
+			String message = fullname + "/" + gender + "/" + dob + "/" + img_file_path + "/" + bio + "/" + password;
+			String sendString = StreamDataType.EDIT_PROFILE + "/" + message;
 			this.outputStream.writeUTF(sendString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendSurrenderSignal() {
+		try {
+			String sendingString = StreamDataType.GAME_EVENT_SURRENDER + "/";
+			this.outputStream.writeUTF(sendingString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

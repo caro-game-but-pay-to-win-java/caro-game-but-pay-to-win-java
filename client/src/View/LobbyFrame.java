@@ -394,8 +394,7 @@ public class LobbyFrame extends JFrame {
 						JOptionPane.YES_NO_OPTION);
 
 				if (choice == JOptionPane.YES_OPTION) {
-					Entry.login = new Login();
-					Entry.login.setVisible(true);
+					Entry.socketHandler.onOutOfClientUI();
 					dispose();
 				}
 			}

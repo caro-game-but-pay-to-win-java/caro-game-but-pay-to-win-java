@@ -76,6 +76,10 @@ public class Player implements Runnable {
 					onWatchProfile();
 				} else if (streamDataType == StreamDataType.EDIT_PROFILE) {
 					onEditProfile(receivedData);
+				} else if (streamDataType == StreamDataType.LOGOUT) {
+					onLogOut();
+				} else if (streamDataType == StreamDataType.GAME_EVENT_SURRENDER) {
+					onGameEventSurrender(receivedData);
 				}
 			} catch (Exception ex) {
 				try {
@@ -103,6 +107,62 @@ public class Player implements Runnable {
 	public void remove() {
 		synchronized (this) {
 			runServer.playerManager.remove(this);
+		}
+	}
+	
+	public void onLogOut() {
+		try {
+			this.outputStream.writeUTF(StreamDataType.LOGOUT + "/");
+			Thread.sleep(100);
+			this.inputStream.close();
+			this.outputStream.close();
+			this.socket.close();
+			runServer.playerManager.remove(this);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void onGameEventSurrender(String receivedData) {
+		try {
+			LocalTime time = LocalTime.now();
+			this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+					+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+					+ "Người chơi " + this.playerDTO.getFull_name() + " đã đầu hàng! "
+					+ "Nước mắt anh rơi, trò chơi kết thúc. Xin chúc mừng " + this.opponentPlayer.playerDTO.getFull_name()
+					+ " đã chiến thắng!");
+
+			double pEloRatio = (double) this.opponentPlayer.playerDTO.getElo_rating_points()
+					/ this.playerDTO.getElo_rating_points();
+			double oEloRatio = (double) this.playerDTO.getElo_rating_points()
+					/ this.opponentPlayer.playerDTO.getElo_rating_points();
+			int OPp = (int) (1 * 22.5 * pEloRatio);
+			int OPo = (int) (1 * 22.5 * oEloRatio);
+
+			PlayerDAL.getInstance().updateElo(this.playerDTO, -OPp);
+			PlayerDAL.getInstance().updateElo(this.opponentPlayer.playerDTO, OPo);
+
+			this.outputStream.writeUTF(StreamDataType.GAME_EVENT_LOST + "/"
+					+ this.playerDTO.getElo_rating_points() + "/" + OPp);
+			this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_WIN + "/"
+					+ this.opponentPlayer.playerDTO.getElo_rating_points() + "/" + OPo);
+
+			this.playerDTO = PlayerDAL.getInstance()
+					.updateCurrentPlayerDTOByUserUID(this.playerDTO.getUser_uid());
+			this.opponentPlayer.playerDTO = PlayerDAL.getInstance()
+					.updateCurrentPlayerDTOByUserUID(this.opponentPlayer.playerDTO.getUser_uid());
+
+			this.match = null;
+			this.move = null;
+
+			this.opponentPlayer.match = null;
+			this.opponentPlayer.move = null;
+			this.opponentPlayer.opponentPlayer = null;
+			this.opponentPlayer = null;
+
+			return;
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
