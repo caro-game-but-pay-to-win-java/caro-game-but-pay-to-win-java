@@ -67,6 +67,7 @@ public class CaroBoardClient extends JFrame {
 	public CaroBoardClient(String level) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CaroBoard.class.getResource("/img/logo.png")));
 		this.level = level;
+		setResizable(false);
 
 		setTitle("Caro Game");
 		setSize(1200, 850);

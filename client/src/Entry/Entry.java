@@ -32,6 +32,8 @@ public class Entry {
 		login.dispose();
 		lobbyFrame.setData(data);
 		lobbyFrame.setVisible(true);
+		lobbyFrame.musicAction(1);
+		lobbyFrame.startMusic();
 	}
 
 	public static void onOutOfClientUI() {

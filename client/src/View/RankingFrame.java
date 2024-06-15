@@ -68,6 +68,7 @@ public class RankingFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 		setUndecorated(true);
+		setResizable(false);
 		getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel() {

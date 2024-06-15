@@ -108,7 +108,7 @@ public class LobbyFrame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
-
+		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		LineBorder lineBorder = new LineBorder(new Color(0, 0, 0), 1);
@@ -541,7 +541,7 @@ public class LobbyFrame extends JFrame {
 		}
 	}
 
-	static void startMusic() {
+	public static void startMusic() {
 		musicTheme.playCurrentSong();
 	}
 	

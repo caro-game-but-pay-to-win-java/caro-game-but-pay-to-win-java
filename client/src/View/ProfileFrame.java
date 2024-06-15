@@ -46,12 +46,8 @@ public class ProfileFrame extends JFrame {
 	private String txPassword;
 
 	private String pathAvatarPlayer;
-	JLabel lblLostMatch;
-	JLabel lblWinStreak;
-	JLabel lblTotalMatch;
 	JLabel lblJoinDate;
 	JLabel lblElo;
-	JLabel lblWinMatch;
 	JLabel lblAvatar;
 	JButton btnLuu;
 	JButton btnDong;
@@ -79,7 +75,7 @@ public class ProfileFrame extends JFrame {
 	 */
 	public ProfileFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(10, 34, 387, 310);
+		setBounds(10, 34, 387, 266);
 		setUndecorated(true);
 		setResizable(false);
 		contentPane = new JPanel() {
@@ -149,22 +145,6 @@ public class ProfileFrame extends JFrame {
 		txBio.setBounds(205, 104, 144, 20);
 		contentPane.add(txBio);
 
-		JLabel lblNewLabel_8_4 = new JLabel("win streaks count");
-		lblNewLabel_8_4.setBounds(197, 198, 96, 14);
-		contentPane.add(lblNewLabel_8_4);
-
-		lblWinStreak = new JLabel("New label");
-		lblWinStreak.setBounds(303, 198, 46, 14);
-		contentPane.add(lblWinStreak);
-
-		JLabel lblNewLabel_8_2 = new JLabel("totals matches");
-		lblNewLabel_8_2.setBounds(197, 173, 75, 14);
-		contentPane.add(lblNewLabel_8_2);
-
-		lblTotalMatch = new JLabel("New label");
-		lblTotalMatch.setBounds(303, 173, 46, 14);
-		contentPane.add(lblTotalMatch);
-
 		JLabel lblNewLabel_8 = new JLabel("join date");
 		lblNewLabel_8.setBounds(22, 154, 56, 14);
 		contentPane.add(lblNewLabel_8);
@@ -180,22 +160,6 @@ public class ProfileFrame extends JFrame {
 		lblElo = new JLabel("");
 		lblElo.setBounds(63, 129, 46, 14);
 		contentPane.add(lblElo);
-
-		JLabel lblNewLabel_6 = new JLabel("lost matches");
-		lblNewLabel_6.setBounds(22, 198, 75, 14);
-		contentPane.add(lblNewLabel_6);
-
-		lblLostMatch = new JLabel("New label");
-		lblLostMatch.setBounds(111, 198, 61, 14);
-		contentPane.add(lblLostMatch);
-
-		JLabel lblNewLabel_5 = new JLabel("win matches");
-		lblNewLabel_5.setBounds(22, 173, 63, 14);
-		contentPane.add(lblNewLabel_5);
-
-		lblWinMatch = new JLabel("New label");
-		lblWinMatch.setBounds(111, 173, 61, 14);
-		contentPane.add(lblWinMatch);
 
 		btnLuu = new JButton("Lưu");
 		btnLuu.addActionListener(new ActionListener() {
@@ -219,7 +183,7 @@ public class ProfileFrame extends JFrame {
 			
 			}
 		});
-		btnLuu.setBounds(28, 253, 91, 23);
+		btnLuu.setBounds(18, 189, 91, 23);
 		contentPane.add(btnLuu);
 
 		btnDong = new JButton("Đóng");
@@ -228,7 +192,7 @@ public class ProfileFrame extends JFrame {
 				dispose();
 			}
 		});
-		btnDong.setBounds(258, 253, 91, 23);
+		btnDong.setBounds(258, 189, 91, 23);
 
 		contentPane.add(btnDong);
 
@@ -278,12 +242,8 @@ public class ProfileFrame extends JFrame {
 			lblAvatar.setIcon(null);
 		}
 
-		lblWinMatch.setText(winMatches);
-		lblLostMatch.setText(lostMatches);
 		lblElo.setText(eloRatingPoints);
 		lblJoinDate.setText(joinedDate);
-		lblTotalMatch.setText(totalMatches);
-		lblWinStreak.setText(winStreakCounts);
 	}
 
 	private void selectImage() {

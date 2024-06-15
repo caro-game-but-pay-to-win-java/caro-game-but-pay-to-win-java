@@ -68,6 +68,7 @@ public class CaroBoard extends JFrame {
 
 		setTitle("Caro Game");
 		setSize(1200, 850);
+		
 		JPanel panelContainer = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -238,34 +239,6 @@ public class CaroBoard extends JFrame {
 		panelContainer.add(panel_1);
 		panel_1.setLayout(null);
 
-		chatTextPane = new JTextPane() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				int shadowSize = 4;
-				int shadowOpacity = 20;
-				Color shadowColor = new Color(0, 0, 0, shadowOpacity);
-				int shadowOffset = 4;
-				int cornerRadius = 20;
-				g2d.setColor(shadowColor);
-				g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2,
-						getHeight() - shadowOffset * 2, cornerRadius, cornerRadius);
-				g2d.dispose();
-			}
-		};
-
-		chatTextPane.setFont(new Font("Tahoma", Font.BOLD, 12));
-		chatTextPane.setDisabledTextColor(Color.black);
-		chatTextPane.setOpaque(false);
-		// CustomPanel panel = new CustomPanel();
-		chatTextPane.setEditable(false);
-		chatTextPane.setBorder(null);
-		chatTextPane.setBounds(806, 520, 369, 217);
-		panelContainer.add(chatTextPane);
-		chatTextPane.setLayout(null);
-
 		CustomPanel panel_2 = new CustomPanel();
 		panel_2.setBounds(825, 40, 162, 68);
 		panelContainer.add(panel_2);
@@ -307,9 +280,42 @@ public class CaroBoard extends JFrame {
 		panel_TimeBorderPlayerO.setBounds(0, 0, 165, 100);
 		panel_4.add(panel_TimeBorderPlayerO);
 		panel_TimeBorderPlayerO.setOpaque(false);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(810, 513, 369, 217);
+		panelContainer.add(scrollPane);
+		
+				chatTextPane = new JTextPane() {
+					@Override
+					protected void paintComponent(Graphics g) {
+						super.paintComponent(g);
+						Graphics2D g2d = (Graphics2D) g.create();
+						g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+						int shadowSize = 4;
+						int shadowOpacity = 20;
+						Color shadowColor = new Color(0, 0, 0, shadowOpacity);
+						int shadowOffset = 4;
+						int cornerRadius = 20;
+						g2d.setColor(shadowColor);
+						g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2,
+								getHeight() - shadowOffset * 2, cornerRadius, cornerRadius);
+						g2d.dispose();
+					}
+				};
+				scrollPane.setViewportView(chatTextPane);
+				
+						chatTextPane.setFont(new Font("Tahoma", Font.BOLD, 12));
+						chatTextPane.setDisabledTextColor(Color.black);
+						chatTextPane.setOpaque(false);
+						// CustomPanel panel = new CustomPanel();
+						chatTextPane.setEditable(false);
+						chatTextPane.setBorder(null);
+						chatTextPane.setLayout(null);
 		panel_TimeBorderPlayerP.setVisible(false);
 		panel_TimeBorderPlayerO.setVisible(false);
 		setVisible(true);
+		setResizable(false);
+
 		init();
 	}
 

@@ -241,6 +241,7 @@ public class SignUp extends JFrame {
 		background.setBounds(0, 0, 1000, 800);
 		background.setIcon(new ImageIcon(BackgroundLogin));
 		contentPane.add(background);
+		setResizable(false);
 
 	}
 
