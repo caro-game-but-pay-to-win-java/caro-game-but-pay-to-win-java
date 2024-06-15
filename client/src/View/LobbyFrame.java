@@ -154,7 +154,7 @@ public class LobbyFrame extends JFrame {
 			}
 		};
 		panel_chooseContainer.setVisible(false);
-		panel_chooseContainer.setBounds(284, 254, 420, 450);
+		panel_chooseContainer.setBounds(298, 207, 420, 450);
 		panel_container.add(panel_chooseContainer);
 		panel_chooseContainer.setLayout(null);
 
@@ -243,7 +243,8 @@ public class LobbyFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				musicAction(flagMusicAction);
-//				startBoardVsBot(4);
+				String password = txtIdRoom.getText();
+				Entry.socketHandler.sendJoinRoomSignal(password);
 			}
 		});
 		rdEnterChooseRoom.setBounds(80, 304, 280, 50);
@@ -392,7 +393,6 @@ public class LobbyFrame extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int choice = JOptionPane.showConfirmDialog(getContentPane(), "Bạn có muốn đăng xuất không?", "Xác nhận",
 						JOptionPane.YES_NO_OPTION);
-
 				if (choice == JOptionPane.YES_OPTION) {
 					Entry.socketHandler.onOutOfClientUI();
 					dispose();
@@ -477,6 +477,22 @@ public class LobbyFrame extends JFrame {
 		CustomPanelGradients panelcustomTopLeftBelow = new CustomPanelGradients();
 		panelcustomTopLeftBelow.setBounds(-7, 100, 157, 45);
 		panel_container.add(panelcustomTopLeftBelow);
+		
+		RadiusButton rdsbtnCreateRoom_1 = new RadiusButton();
+		rdsbtnCreateRoom_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Entry.socketHandler.sendCreateRoomSignal();
+				Entry.onRoomCreateClicked();
+			}
+		});
+		rdsbtnCreateRoom_1.setText("CREATE ROOM");
+		rdsbtnCreateRoom_1.setRadius(30);
+		rdsbtnCreateRoom_1.setForeground(Color.WHITE);
+		rdsbtnCreateRoom_1.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		rdsbtnCreateRoom_1.setBorderColor(Color.WHITE);
+		rdsbtnCreateRoom_1.setBackground(new Color(241, 154, 255));
+		rdsbtnCreateRoom_1.setBounds(368, 619, 280, 50);
+		panel_container.add(rdsbtnCreateRoom_1);
 
 		TitledBorder titledBorderBXH = new TitledBorder(null, "Bảng xếp hạng", TitledBorder.CENTER, TitledBorder.TOP,
 				null, null);
@@ -556,5 +572,4 @@ public class LobbyFrame extends JFrame {
 		}
 
 	}
-	
 }

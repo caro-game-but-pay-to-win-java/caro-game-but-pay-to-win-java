@@ -1,18 +1,19 @@
 package Entry;
 
 import Diaglog.MatchingDialog;
+import Diaglog.RoomDialog;
 import Socket.SocketHandler;
 import View.CaroBoard;
 import View.LobbyFrame;
 import View.Login;
 import View.ProfileFrame;
 import View.SignUp;
-import music.MusicUtils;
 
 public class Entry {
 	public static Login login;
 	public static SocketHandler socketHandler;
 	public static MatchingDialog matchingDialog;
+	public static RoomDialog roomDialog;
 	public static SignUp signUp;
 	public static LobbyFrame lobbyFrame;
 	public static CaroBoard caroboard;
@@ -47,6 +48,13 @@ public class Entry {
 
 	public static void onDisconnectedToServer() {
 		// code
+	}
+	
+	public static void onRoomCreateClicked() {
+		roomDialog = new RoomDialog();
+		roomDialog.setLocationRelativeTo(lobbyFrame);
+		roomDialog.setModal(true);
+		roomDialog.setVisible(true);
 	}
 
 	public static void onMatchingClicked() {

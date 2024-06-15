@@ -21,6 +21,7 @@ import database.DTO.PlayerDTO;
 import global.GVAR;
 import global.MOVE;
 import server.runServer;
+import utils.Generator;
 import global.StreamDataType;
 
 public class Player implements Runnable {
@@ -32,14 +33,19 @@ public class Player implements Runnable {
 	PlayerDTO playerDTO;
 
 	boolean isMatching = false;
+	boolean isCreatedRoom = false;
+	
+	String roomPassword = "";
+	
 	String matchingStatus = "CANCEL";
-
+	
 	Match match = null;
 	Player opponentPlayer = null;
 
 	Integer move = null;
 
 	Boolean isAbleToMove = false;
+	
 
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
@@ -80,6 +86,12 @@ public class Player implements Runnable {
 					onLogOut();
 				} else if (streamDataType == StreamDataType.GAME_EVENT_SURRENDER) {
 					onGameEventSurrender(receivedData);
+				} else if (streamDataType == StreamDataType.CREATE_ROOM) {
+					onCreateRoom(receivedData);
+				} else if (streamDataType == StreamDataType.CANCEL_ROOM) {
+					onCancelRoom(receivedData);
+				} else if (streamDataType == StreamDataType.JOIN_ROOM) {
+					onJoinRoom(receivedData);
 				}
 			} catch (Exception ex) {
 				try {
@@ -337,8 +349,101 @@ public class Player implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
+	public void onCreateRoom(String receivedData) {
+		try {
+			this.isCreatedRoom = true;
+			this.roomPassword = Generator.generateRandomWord(5);
+			this.outputStream.writeUTF(StreamDataType.CREATE_ROOM + "/" + this.roomPassword);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void onCancelRoom(String receivedData) {
+		try {
+			this.isCreatedRoom = false;
+			this.roomPassword = "";
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public synchronized void onJoinRoom(String receivedData) {
+		try {
+			Player player = runServer.playerManager.getPlayerByRoomPassword(receivedData.split("/")[1]);
+			if (player == null) {
+				this.outputStream.writeUTF(StreamDataType.ROOM_NOT_FOUND + "/");
+				return;
+			}
+			
+			player.isCreatedRoom = false;
+			player.roomPassword = "";
+			
+			this.isMatching = false;
+			player.isMatching = false;
+			this.move = MOVE.X_MOVE;
+			this.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + this.move + "/" + "/");
+			System.out.println("Match created for player one");
+			player.move = MOVE.O_MOVE;
+			player.outputStream.writeUTF(StreamDataType.FIND_MATCH + "/" + player.move + "/" + "/");
+			System.out.println("Match created for player two");
+			this.opponentPlayer = player;
+			player.opponentPlayer = this;
+			Match match = new Match(this, player);
+			this.match = match;
+			player.match = match;
+			Thread.sleep(200);
+			match.broadcast(StreamDataType.ACCEPT_MATCH + "/");
+			// SEND PRE-MATCH META DATA
+			Thread.sleep(200);
+			this.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
+					+ this.playerDTO.getFull_name() + "/" + this.move + "/"
+					+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path()
+					+ "/" + this.opponentPlayer.playerDTO.getFull_name() + "/"
+					+ this.opponentPlayer.move + "/"
+					+ this.opponentPlayer.playerDTO.getElo_rating_points() + "/"
+					+ this.opponentPlayer.playerDTO.getPlayer_img_path() + "/");
 
-	public synchronized void onMatching(String receiveData) {
+			this.opponentPlayer.outputStream.writeUTF(StreamDataType.PREMATCH_META_DATA + "/"
+					+ this.opponentPlayer.playerDTO.getFull_name() + "/" + this.opponentPlayer.move
+					+ "/" + this.opponentPlayer.playerDTO.getElo_rating_points() + "/"
+					+ this.opponentPlayer.playerDTO.getPlayer_img_path() + "/"
+					+ this.playerDTO.getFull_name() + "/" + this.move + "/"
+					+ this.playerDTO.getElo_rating_points() + "/" + this.playerDTO.getPlayer_img_path()
+					+ "/");
+
+			LocalTime time = LocalTime.now();
+			Random random = new Random();
+			Thread.sleep(200);
+			if (random.nextInt() % 2 == 0) {
+				this.opponentPlayer.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
+				this.outputStream.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+				this.opponentPlayer.isAbleToMove = true;
+				this.isAbleToMove = false;
+				this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+						+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+						+ "Trận đấu bắt đầu! Lượt đi đầu tiên thuộc về "
+						+ this.opponentPlayer.playerDTO.getFull_name() + "!");
+
+			} else {
+				this.opponentPlayer.outputStream
+						.writeUTF(StreamDataType.GAME_EVENT_UNABLE_TO_MOVE + "/");
+				this.outputStream.writeUTF(StreamDataType.GAME_EVENT_ABLE_TO_MOVE + "/");
+				this.opponentPlayer.isAbleToMove = false;
+				this.isAbleToMove = true;
+				this.match.broadcast(StreamDataType.SEND_MESSAGE_IN_MATCH + "/" + "Hệ thống" + "/"
+						+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/"
+						+ "Trận đấu bắt đầu! Lượt đi đầu tiên thuộc về " + this.playerDTO.getFull_name()
+						+ "!");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public synchronized void onMatching(String receivedData) {
 		synchronized (this) {
 			for (Player player : runServer.playerManager.getPlayers()) {
 				synchronized (player) {

@@ -22,6 +22,19 @@ public class PlayerManager {
 	public void remove(Player player) {
 		this.players.remove(player);
 	}
+	
+	public Player getPlayerByRoomPassword(String password) {
+		for (int i = 0; i < this.players.size(); ++i) {
+			try {
+				if (this.players.get(i).isCreatedRoom == true && this.players.get(i).roomPassword.equals(password)) {
+					return this.players.get(i);
+				}
+			} catch (Exception ex) {
+
+			}
+		}
+		return null;
+	}
 
 	public void broadcast(String sentData) {
 		try {
