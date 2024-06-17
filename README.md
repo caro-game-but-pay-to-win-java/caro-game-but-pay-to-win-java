@@ -37,7 +37,7 @@
         <td>2001215657</td>
         <td>Bồ Quang Diệu</td>
         <td>boquangdieu2003@gmail.com</td>
-        <td>Member (client-side, software consultant)</td>
+        <td>Member (Server-side)</td>
     </tr>
     <tr>
           <td>2001215661</td>
