@@ -8,6 +8,7 @@ import java.util.Calendar;
 
 import javax.swing.border.LineBorder;
 
+import CustomComponents.BtnChanChat;
 import CustomComponents.ButtonBoard;
 import CustomComponents.CustomPanel;
 import CustomComponents.CustomPanelGradients;
@@ -62,6 +63,8 @@ public class CaroBoard extends JFrame {
 	Timer pTimer;
 	Timer mTimer;
 	JLabel lbl_pMark_ = new JLabel("Y");
+	
+	public BtnChanChat rdsbtnChnChat = new BtnChanChat();
 
 	public CaroBoard() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CaroBoard.class.getResource("/img/logo.png")));
@@ -311,6 +314,16 @@ public class CaroBoard extends JFrame {
 						chatTextPane.setEditable(false);
 						chatTextPane.setBorder(null);
 						chatTextPane.setLayout(null);
+						
+						rdsbtnChnChat.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								rdsbtnChnChat.Click();
+							}
+						});
+						rdsbtnChnChat.setText("CHẶN CHAT");
+						rdsbtnChnChat.setRadius(30);
+						rdsbtnChnChat.setBounds(825, 119, 162, 34);
+						panelContainer.add(rdsbtnChnChat);
 		panel_TimeBorderPlayerP.setVisible(false);
 		panel_TimeBorderPlayerO.setVisible(false);
 		setVisible(true);
@@ -504,8 +517,15 @@ public class CaroBoard extends JFrame {
 		}
 	}
 
-	public void printMessage(String message) {
+	public Boolean printMessage(String message) {
 		this.chatTextPane.setText(this.chatTextPane.getText() + "\n" + "  " + message);
+		return true;
+//		if (rdsbtnChnChat.getStatus() == true) {			
+//			this.chatTextPane.setText(this.chatTextPane.getText() + "\n" + "  " + message);
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
 	public void blockOTimer() {
