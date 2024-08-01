@@ -45,7 +45,6 @@ public class Player implements Runnable {
 	Integer move = null;
 
 	Boolean isAbleToMove = false;
-	
 
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
@@ -624,6 +623,14 @@ public class Player implements Runnable {
 					+ time.truncatedTo(ChronoUnit.SECONDS).format(GVAR.DTFormatter) + "/" + message);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	public void onMuteOpponent() {
+		try {
+			
+		} catch (Exception ex) {
+			
 		}
 	}
 }
